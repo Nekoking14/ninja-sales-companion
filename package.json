@@ -12,6 +12,9 @@
     "start": "cross-env NODE_ENV=production electron .",
     "pack": "npm run build && electron-builder"
   },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3"
+  },
   "devDependencies": {
     "electron": "^28.3.3",
     "concurrently": "^8.2.2",
@@ -23,15 +26,19 @@
     "appId": "com.ninjaone.sales-companion",
     "productName": "NinjaOne Sales Companion",
     "asar": true,
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**"
+    ],
     "files": [
       "electron/**",
-      "client/dist/**"
+      "client/dist/**",
+      "node_modules/better-sqlite3/**"
     ],
     "extraResources": [
       {
         "from": "server",
         "to": "server",
-        "filter": ["**/*", "!node_modules/.cache/**", "!node_modules/.bin/**"]
+        "filter": ["**/*", "!node_modules/.cache/**", "!node_modules/.bin/**", "!node_modules/better-sqlite3/**"]
       }
     ],
     "win": {
