@@ -22,23 +22,23 @@
     "electron-builder": "^24.13.3",
     "wait-on": "^7.2.0"
   },
-  "build": {
+    "build": {
     "appId": "com.ninjaone.sales-companion",
     "productName": "NinjaOne Sales Companion",
-    "asar": true,
-    "asarUnpack": [
-      "node_modules/better-sqlite3/**"
-    ],
+    "asar": false,
     "files": [
       "electron/**",
-      "client/dist/**",
       "node_modules/better-sqlite3/**"
     ],
     "extraResources": [
       {
         "from": "server",
         "to": "server",
-        "filter": ["**/*", "!node_modules/.cache/**", "!node_modules/.bin/**", "!node_modules/better-sqlite3/**"]
+        "filter": ["**/*", "!node_modules/.cache/**", "!node_modules/.bin/**"]
+      },
+      {
+        "from": "client/dist",
+        "to": "client/dist"
       }
     ],
     "win": {

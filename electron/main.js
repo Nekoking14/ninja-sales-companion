@@ -1,108 +1,161 @@
-const { app, BrowserWindow, shell } = require('electron')
+const { app, BrowserWindow, shell, ipcMain } = require('electron')
 const path = require('path')
 
 const isDev = process.env.NODE_ENV !== 'production'
 const PORT  = 3001
-let mainWindow
+let launcherWindow
 
+// ── Start the Express server inline (no forking) ───────────────────────────
 function startServer () {
-  // Add root app node_modules to global search path
-  // so server code can find better-sqlite3 which lives there
   const Module = require('module')
+  // Make better-sqlite3 findable from server code
   Module.globalPaths.push(
     path.join(process.resourcesPath, 'app', 'node_modules')
   )
-
-  // Set env vars the server reads
-  process.env.PORT    = String(PORT)
+  process.env.PORT     = String(PORT)
   process.env.NODE_ENV = 'production'
   process.env.DB_PATH  = path.join(app.getPath('userData'), 'companions.db')
 
-  const serverPath = path.join(process.resourcesPath, 'server/index.js')
-
   try {
-    require(serverPath)
-    console.log('[main] server started at port', PORT)
+    require(path.join(process.resourcesPath, 'server/index.js'))
+    return true
   } catch (err) {
-    console.error('[main] server failed to start:', err)
+    console.error('[server failed]', err)
+    return false
   }
 }
 
-function createWindow () {
-  mainWindow = new BrowserWindow({
-    width: 1440,
-    height: 900,
-    minWidth: 1100,
-    minHeight: 700,
-    title: 'NinjaOne Sales Companion',
+// ── IPC handlers for launcher buttons ─────────────────────────────────────
+ipcMain.on('open-app', () => shell.openExternal(`http://localhost:${PORT}`))
+ipcMain.on('quit',     () => app.quit())
+
+// ── Small launcher window ──────────────────────────────────────────────────
+function createLauncher (serverOk) {
+  launcherWindow = new BrowserWindow({
+    width:     340,
+    height:    190,
+    resizable: false,
+    title:     'NinjaOne Sales Companion',
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true
+      nodeIntegration:  true,
+      contextIsolation: false
     },
-    show: false,
-    backgroundColor: '#08091A'
+    backgroundColor: '#08091A',
+    show: false
   })
 
-  mainWindow.setMenuBarVisibility(false)
+  launcherWindow.setMenuBarVisibility(false)
 
-  // Ctrl+Shift+I opens DevTools
-  mainWindow.webContents.on('before-input-event', (_, input) => {
-    if (input.control && input.shift && input.key === 'I') {
-      mainWindow.webContents.openDevTools()
-    }
-  })
+  const statusColor = serverOk ? '#22C55E' : '#EF4444'
+  const statusText  = serverOk ? 'Server running on port ' + PORT : 'Server failed to start'
 
-  const appUrl = isDev ? 'http://localhost:5173' : `http://localhost:${PORT}`
-
-  const tryLoad = (attempts = 0) => {
-    mainWindow.loadURL(appUrl).catch(err => {
-      if (attempts < 40) {
-        setTimeout(() => tryLoad(attempts + 1), 500)
-      } else {
-        mainWindow.loadURL('data:text/html,' + encodeURIComponent(`
-          <html><head><style>
-            body{margin:0;background:#08091A;display:flex;align-items:center;
-                 justify-content:center;height:100vh;font-family:system-ui;color:#E2E8F5;}
-            .box{text-align:center;max-width:500px;padding:32px;}
-            h2{color:#EF4444;margin-bottom:12px;}
-            p{color:#8A9CC0;font-size:14px;line-height:1.7;}
-            code{background:#1E2A44;padding:2px 8px;border-radius:4px;font-size:12px;}
-          </style></head>
-          <body><div class="box">
-            <h2>Could not connect to app server</h2>
-            <p>Press <code>Ctrl+Shift+I</code> to open DevTools,
-               then click the <strong>Console</strong> tab to see the exact error.</p>
-            <p style="font-size:12px;margin-top:16px;color:#3D4D70">
-              Last error: ${err?.message || 'timeout'}
-            </p>
-          </div></body></html>
-        `))
-      }
-    })
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #08091A;
+    color: #E2E8F5;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    gap: 14px;
+    user-select: none;
   }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo {
+    width: 32px; height: 32px;
+    background: #05C49A;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800; color: #042D22;
+  }
+  .title { font-size: 15px; font-weight: 600; }
+  .status {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; color: #8A9CC0;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: ${statusColor};
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; } 50% { opacity:0.4; }
+  }
+  .buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  button {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.15s;
+  }
+  button:hover { opacity: 0.85; }
+  .btn-open { background: #05C49A; color: #042D22; font-weight: 700; }
+  .btn-quit { background: #1E2A44; color: #8A9CC0; }
+</style>
+</head>
+<body>
+  <div class="logo-row">
+    <div class="logo">N</div>
+    <div class="title">NinjaOne Sales Companion</div>
+  </div>
+  <div class="status">
+    <div class="dot"></div>
+    <span>${statusText}</span>
+  </div>
+  <div class="buttons">
+    <button class="btn-open" onclick="openApp()">Open in browser</button>
+    <button class="btn-quit" onclick="quit()">Quit</button>
+  </div>
+  <script>
+    const { ipcRenderer } = require('electron')
+    function openApp() { ipcRenderer.send('open-app') }
+    function quit()    { ipcRenderer.send('quit') }
+  </script>
+</body>
+</html>`
 
-  mainWindow.once('ready-to-show', () => mainWindow.show())
+  launcherWindow.loadURL(
+    'data:text/html;charset=utf-8,' + encodeURIComponent(html)
+  )
 
-  // Short delay to let the server bind the port, then start loading
-  setTimeout(() => tryLoad(), 800)
-
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url)
-    return { action: 'deny' }
-  })
-
-  mainWindow.on('closed', () => { mainWindow = null })
+  launcherWindow.once('ready-to-show', () => launcherWindow.show())
+  launcherWindow.on('close', () => app.quit())
 }
 
+// ── App lifecycle ──────────────────────────────────────────────────────────
 app.whenReady().then(() => {
-  if (!isDev) startServer()
-  createWindow()
+  let serverOk = true
+  if (!isDev) serverOk = startServer()
+
+  createLauncher(serverOk)
+
+  // Auto-open browser after server has time to bind the port
+  if (serverOk) {
+    setTimeout(() => {
+      shell.openExternal(
+        isDev ? 'http://localhost:5173' : `http://localhost:${PORT}`
+      )
+    }, 1500)
+  }
 })
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit()
-})
-
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) createWindow()
-})
+app.on('window-all-closed', () => app.quit())
