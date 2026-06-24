@@ -1,7 +1,7 @@
 const { app, BrowserWindow, shell, ipcMain } = require('electron')
 const path = require('path')
 
-const isDev = process.env.NODE_ENV !== 'production'
+const isDev = !app.isPackaged
 const PORT  = 3001
 let launcherWindow
 
