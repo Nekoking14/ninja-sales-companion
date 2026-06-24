@@ -1,0 +1,53 @@
+{
+  "name": "ninja-sales-companion",
+  "version": "0.1.0",
+  "description": "NinjaOne Sales Companion — local call dashboard",
+  "main": "electron/main.js",
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev": "concurrently -n SERVER,CLIENT -c cyan,magenta \"node server/index.js\" \"cd client && npm run dev\"",
+    "electron": "wait-on http://localhost:5173 && electron .",
+    "build": "cd client && npm run build",
+    "start": "cross-env NODE_ENV=production electron .",
+    "pack": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "electron": "^28.3.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron-builder": "^24.13.3",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.ninjaone.sales-companion",
+    "productName": "NinjaOne Sales Companion",
+    "asar": true,
+    "files": [
+      "electron/**",
+      "server/**",
+      "client/dist/**",
+      "!**/node_modules/.cache",
+      "!**/*.{md,txt}"
+    ],
+    "extraResources": [
+      { "from": "data", "to": "data" }
+    ],
+    "mac": {
+      "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
+      "icon": "assets/icon.icns"
+    },
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "assets/icon.ico"
+    },
+    "linux": {
+      "target": [{ "target": "AppImage", "arch": ["x64"] }]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
