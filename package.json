@@ -10,8 +10,7 @@
     "electron": "wait-on http://localhost:5173 && electron .",
     "build": "npm --prefix client run build",
     "start": "cross-env NODE_ENV=production electron .",
-    "pack": "npm run build && electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "pack": "npm run build && electron-builder"
   },
   "devDependencies": {
     "electron": "^28.3.3",

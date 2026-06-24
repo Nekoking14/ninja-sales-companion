@@ -19,7 +19,7 @@ jobs:
           node-version: '20'
 
       - name: Install root dependencies
-        run: npm install
+        run: npm install --ignore-scripts
 
       - name: Install server dependencies
         working-directory: server
@@ -30,7 +30,7 @@ jobs:
         run: npm install
 
       - name: Rebuild native modules for Electron
-        run: npx electron-rebuild -f -w better-sqlite3 --module-dir server
+        run: npx electron-builder install-app-deps
 
       - name: Build React frontend
         working-directory: client
