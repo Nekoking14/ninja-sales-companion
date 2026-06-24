@@ -1,42 +1,24 @@
 const router = require('express').Router()
-const db = require('../database')
+const db     = require('../jsondb')
 
-function parse (v) { try { return JSON.parse(v) } catch { return v } }
-
-// GET /api/settings — all keys with optional ?prefix=fw_
 router.get('/', (req, res) => {
-  try {
-    const { prefix } = req.query
-    const rows = prefix
-      ? db.prepare("SELECT key, value FROM settings WHERE key LIKE ?").all(prefix + '%')
-      : db.prepare("SELECT key, value FROM settings").all()
-    res.json(rows.map(r => ({ key: r.key, value: parse(r.value) })))
-  } catch (err) { res.status(500).json({ error: err.message }) }
+  try { res.json(db.settings.list(req.query.prefix)) }
+  catch (e) { res.status(500).json({ error: e.message }) }
 })
 
-// GET /api/settings/:key
 router.get('/:key', (req, res) => {
-  try {
-    const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(req.params.key)
-    res.json({ value: row ? parse(row.value) : null })
-  } catch (err) { res.status(500).json({ error: err.message }) }
+  try { res.json({ value: db.settings.get(req.params.key) }) }
+  catch (e) { res.status(500).json({ error: e.message }) }
 })
 
-// PUT /api/settings/:key
 router.put('/:key', (req, res) => {
-  try {
-    const val = typeof req.body.value === 'string' ? req.body.value : JSON.stringify(req.body.value)
-    db.prepare("INSERT OR REPLACE INTO settings (key, value, updated_at) VALUES (?, ?, datetime('now'))").run(req.params.key, val)
-    res.json({ saved: true })
-  } catch (err) { res.status(500).json({ error: err.message }) }
+  try { db.settings.upsert(req.params.key, req.body.value); res.json({ saved: true }) }
+  catch (e) { res.status(500).json({ error: e.message }) }
 })
 
-// DELETE /api/settings/:key
 router.delete('/:key', (req, res) => {
-  try {
-    db.prepare('DELETE FROM settings WHERE key = ?').run(req.params.key)
-    res.json({ deleted: true })
-  } catch (err) { res.status(500).json({ error: err.message }) }
+  try { db.settings.delete(req.params.key); res.json({ deleted: true }) }
+  catch (e) { res.status(500).json({ error: e.message }) }
 })
 
 module.exports = router

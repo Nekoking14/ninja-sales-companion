@@ -1,34 +1,21 @@
 const router = require('express').Router()
-const db = require('../database')
+const db     = require('../jsondb')
 
-// POST /api/report-items
 router.post('/', (req, res) => {
   try {
-    const { session_id, prospect_id, framework, sub_selection, content } = req.body
-    if (!session_id || !prospect_id || !framework || !content) {
-      return res.status(400).json({ error: 'session_id, prospect_id, framework and content are required' })
-    }
-    const result = db.prepare(`
-      INSERT INTO report_items (session_id, prospect_id, framework, sub_selection, content)
-      VALUES (?, ?, ?, ?, ?)
-    `).run(session_id, prospect_id, framework, sub_selection || null, content)
-
-    const item = db.prepare('SELECT * FROM report_items WHERE id = ?').get(result.lastInsertRowid)
-    res.status(201).json(item)
-  } catch (err) {
-    res.status(500).json({ error: err.message })
-  }
+    const { session_id, prospect_id, framework, content } = req.body
+    if (!session_id || !prospect_id || !framework || !content)
+      return res.status(400).json({ error: 'Missing required fields' })
+    res.status(201).json(db.reportItems.create(req.body))
+  } catch (e) { res.status(500).json({ error: e.message }) }
 })
 
-// DELETE /api/report-items/:id
 router.delete('/:id', (req, res) => {
   try {
-    const result = db.prepare('DELETE FROM report_items WHERE id = ?').run(req.params.id)
-    if (result.changes === 0) return res.status(404).json({ error: 'Item not found' })
+    if (!db.reportItems.delete(Number(req.params.id)))
+      return res.status(404).json({ error: 'Not found' })
     res.json({ deleted: true })
-  } catch (err) {
-    res.status(500).json({ error: err.message })
-  }
+  } catch (e) { res.status(500).json({ error: e.message }) }
 })
 
 module.exports = router
