@@ -2,6 +2,7 @@
   "name": "ninja-sales-companion",
   "version": "0.1.0",
   "description": "NinjaOne Sales Companion — local call dashboard",
+  "author": "NinjaOne Sales Team",
   "main": "electron/main.js",
   "scripts": {
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
@@ -9,17 +10,15 @@
     "electron": "wait-on http://localhost:5173 && electron .",
     "build": "npm --prefix client run build",
     "start": "cross-env NODE_ENV=production electron .",
-    "pack": "npm run build && electron-builder"
-  },
-  "dependencies": {
-    "electron": "^28.3.3"
+    "pack": "npm run build && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "devDependencies": {
+    "electron": "^28.3.3",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "electron-builder": "^24.13.3",
-    "wait-on": "^7.2.0",
-    "@electron/rebuild": "^3.6.0"
+    "wait-on": "^7.2.0"
   },
   "build": {
     "appId": "com.ninjaone.sales-companion",
