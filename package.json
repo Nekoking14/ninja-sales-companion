@@ -7,7 +7,7 @@
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
     "dev": "concurrently -n SERVER,CLIENT -c cyan,magenta \"node server/index.js\" \"cd client && npm run dev\"",
     "electron": "wait-on http://localhost:5173 && electron .",
-    "build": "cd client && npm run build",
+    "build": "npm --prefix client run build",
     "start": "cross-env NODE_ENV=production electron .",
     "pack": "npm run build && electron-builder"
   },

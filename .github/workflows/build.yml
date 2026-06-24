@@ -34,7 +34,7 @@ jobs:
 
       - name: Build React frontend
         working-directory: client
-        run: npm run build
+        run: npx vite build
 
       - name: Package Windows installer
         run: npx electron-builder --win

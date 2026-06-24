@@ -1,82 +1,20 @@
-
 {
-  "name": "ninja-sales-companion",
+  "name": "ninja-sales-companion-client",
   "version": "0.1.0",
-  "description": "NinjaOne Sales Companion — local call dashboard",
-  "main": "electron/main.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "dev": "concurrently -n SERVER,CLIENT -c cyan,magenta \"node server/index.js\" \"cd client && npm run dev\"",
-    "electron": "wait-on http://localhost:5173 && electron .",
-    "build": "cd client && npm run build",
-    "start": "cross-env NODE_ENV=production electron .",
-    "pack": "npm run build && electron-builder"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "electron": "^28.3.3"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.22.3"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "cross-env": "^7.0.3",
-    "electron-builder": "^24.13.3",
-    "wait-on": "^7.2.0",
-    "@electron/rebuild": "^3.6.0"
-  },
-  "build": {
-    "appId": "com.ninjaone.sales-companion",
-    "productName": "NinjaOne Sales Companion",
-    "asar": true,
-    "files": [
-      "electron/**",
-      "client/dist/**"
-    ],
-    "extraResources": [
-      {
-        "from": "server",
-        "to": "server",
-        "filter": [
-          "**/*",
-          "!node_modules/.cache/**",
-          "!node_modules/.bin/**"
-        ]
-      }
-    ],
-    "mac": {
-      "target": [
-        {
-          "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
-        }
-      ],
-      "icon": "assets/icon.icns"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        }
-      ],
-      "icon": "assets/icon.ico"
-    },
-    "linux": {
-      "target": [
-        {
-          "target": "AppImage",
-          "arch": [
-            "x64"
-          ]
-        }
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    }
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.1.6"
   }
 }
