@@ -22,7 +22,7 @@
     "electron-builder": "^24.13.3",
     "wait-on": "^7.2.0"
   },
-    "build": {
+  "build": {
     "appId": "com.ninjaone.sales-companion",
     "productName": "NinjaOne Sales Companion",
     "asar": false,
@@ -39,6 +39,10 @@
       {
         "from": "client/dist",
         "to": "client/dist"
+      },
+      {
+        "from": "node_modules/better-sqlite3",
+        "to": "server/node_modules/better-sqlite3"
       }
     ],
     "win": {
