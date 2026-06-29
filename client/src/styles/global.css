@@ -171,3 +171,58 @@ textarea.input { resize: none; }
 .avatar-sq {
   border-radius: var(--radius);
 }
+
+/* ── Light mode ─────────────────────────────────────────────────────────── */
+html { transition: background 0.2s, color 0.2s; }
+
+[data-theme="light"] {
+  --bg:      #EEF2F7;
+  --surf:    #FFFFFF;
+  --card:    #FFFFFF;
+  --card2:   #F4F7FB;
+  --brd:     #DDE3EE;
+  --brd2:    #C8D1E2;
+
+  --acc:     #00C97D;
+  --acc2:    rgba(0, 201, 125, 0.14);
+  --acc3:    rgba(0, 201, 125, 0.07);
+
+  --blue:    #1E63D0;
+  --blue2:   rgba(30, 99, 208, 0.1);
+  --purple:  #6C29D4;
+  --purple2: rgba(108, 41, 212, 0.1);
+  --amber:   #C07C08;
+  --amber2:  rgba(192, 124, 8, 0.1);
+  --coral:   #D4500A;
+  --coral2:  rgba(212, 80, 10, 0.1);
+  --green:   #0F8A3A;
+  --green2:  rgba(15, 138, 58, 0.1);
+  --red:     #C42020;
+  --red2:    rgba(196, 32, 32, 0.1);
+
+  --txt:     #0D2240;
+  --txt2:    #3A5278;
+  --txt3:    #8499BB;
+}
+
+[data-theme="light"] body { background: var(--bg); color: var(--txt); }
+
+[data-theme="light"] .input {
+  background: #FFFFFF;
+  border-color: var(--brd2);
+  color: var(--txt);
+}
+[data-theme="light"] .input::placeholder { color: var(--txt3); }
+
+[data-theme="light"] .btn-ghost {
+  background: var(--brd);
+  color: var(--txt2);
+}
+
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: var(--brd2); }
+
+[data-theme="light"] select {
+  background: #FFFFFF;
+  color: var(--txt);
+  border-color: var(--brd2);
+}

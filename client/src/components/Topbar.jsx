@@ -18,7 +18,7 @@ function formatTime (sec) {
 
 export default function Topbar ({ onEndCall }) {
   const { state, dispatch } = useApp()
-  const { currentProspect, currentSession, callSeconds, activePersona } = state
+  const { currentProspect, currentSession, callSeconds, activePersona, darkMode } = state
   const navigate = useNavigate()
 
   return (
@@ -138,6 +138,25 @@ export default function Topbar ({ onEndCall }) {
           End call
         </button>
       )}
+
+      {/* Dark / light toggle */}
+      <button
+        onClick={() => dispatch({ type: 'SET_DARK_MODE', payload: !darkMode })}
+        title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        style={{
+          width: 32, height: 32,
+          background: 'var(--card2)',
+          border: '1px solid var(--brd)',
+          borderRadius: 8,
+          color: 'var(--txt2)',
+          fontSize: 15,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          cursor: 'pointer',
+          marginLeft: currentSession ? 0 : 'auto'
+        }}
+      >
+        {darkMode ? '☀' : '🌙'}
+      </button>
 
       {/* User avatar */}
       <div style={{

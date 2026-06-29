@@ -108,7 +108,8 @@ const sessions = {
 
   saveQual (id, data) {
     const i = db.sessions.findIndex(s => s.id === id); if (i < 0) return false
-    db.sessions[i].qualification_data = JSON.stringify(data)
+    const existing = JSON.parse(db.sessions[i].qualification_data || '{}')
+    db.sessions[i].qualification_data = JSON.stringify({ ...existing, ...data })
     save(); return true
   }
 }

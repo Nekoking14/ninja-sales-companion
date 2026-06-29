@@ -104,7 +104,7 @@ export default function Dashboard () {
     <div className="app-shell">
       <Topbar onEndCall={handleEndCall} />
       <div className="body-shell">
-        <Sidebar notes={notes} onAddNote={handleAddNote} onRemoveNote={handleRemoveNote} />
+        <Sidebar session={currentSession} prospect={currentProspect} />
 
         {/* Grid view */}
         {!openWidget && (

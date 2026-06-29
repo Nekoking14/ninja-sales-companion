@@ -2,15 +2,23 @@ import { useState, useEffect, useRef } from 'react'
 import { api } from '../api/index.js'
 
 const EMPTY = {
-  cloudOk: null, endpoints: '',
-  nameCorrect: null, emailCorrect: null, decisionMaker: null,
-  mobileEndpoints: '', timeline: '', useCase: '', msp: '',
+  prospectType:   null,  // 'msp' | 'it'
+  usesMsp:        null,  // 'yes' | 'no'  (only shown when prospectType === 'it')
+  mspPartner:     '',    // name of MSP if usesMsp === 'yes'
+  cloudOk:        null,
+  endpoints:      '',
+  nameCorrect:    null,
+  emailCorrect:   null,
+  decisionMaker:  null,
+  mobileEndpoints:'',
+  timeline:       '',
+  useCase:        '',
+  msp:            '',
   tools: {
     rmm: '', patching: '', thirdPartyPatching: '',
     remoteAccess: '', ticketing: '', mdm: '',
     backup: '', avEdr: '', monitoring: '', complianceTool: ''
-  },
-  notes: ''
+  }
 }
 
 export default function QualificationForm ({ session, prospect }) {
@@ -23,12 +31,24 @@ export default function QualificationForm ({ session, prospect }) {
     } catch { return EMPTY }
   })
 
-  // Save to localStorage immediately
+  // Reload when session changes
   useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(form))
+    try {
+      const saved = JSON.parse(localStorage.getItem(key))
+      if (saved) setForm({ ...EMPTY, ...saved, tools: { ...EMPTY.tools, ...saved.tools } })
+      else setForm(EMPTY)
+    } catch { setForm(EMPTY) }
+  }, [key])
+
+  // Save to localStorage (merge — don't overwrite notes set by Sidebar)
+  useEffect(() => {
+    try {
+      const existing = JSON.parse(localStorage.getItem(key)) || {}
+      localStorage.setItem(key, JSON.stringify({ ...existing, ...form, tools: form.tools }))
+    } catch {}
   }, [form, key])
 
-  // Debounce-save to DB (1 second after last change)
+  // Debounce save to DB (only qual fields, not notes)
   const debounce = useRef(null)
   useEffect(() => {
     if (!session?.id) return
@@ -42,39 +62,45 @@ export default function QualificationForm ({ session, prospect }) {
   const set     = (f, v) => setForm(p => ({ ...p, [f]: v }))
   const setTool = (f, v) => setForm(p => ({ ...p, tools: { ...p.tools, [f]: v } }))
 
-  function copySummary () {
-    const t = form.tools
-    const lines = [
-      `QUALIFICATION — ${prospect?.name || ''} / ${prospect?.company || ''}`,
-      `Date: ${new Date().toLocaleDateString()}`,
-      '',
-      `Cloud OK: ${form.cloudOk === 'yes' ? 'Yes — cloud fine' : form.cloudOk === 'no' ? 'No — on-prem required' : '—'}`,
-      `Endpoints: ${form.endpoints || '—'}`,
-      `Name/title correct: ${form.nameCorrect || '—'}`,
-      `Email correct: ${form.emailCorrect || '—'}`,
-      `Decision maker: ${form.decisionMaker || '—'}`,
-      '',
-      `Mobile endpoints: ${form.mobileEndpoints || '—'}`,
-      `Timeline / contract end: ${form.timeline || '—'}`,
-      `Use case / demo hook: ${form.useCase || '—'}`,
-      `MSP: ${form.msp || '—'}`,
-      '',
-      'TOOL STACK:',
-      `  RMM/EPM: ${t.rmm || '—'}  |  Patching: ${t.patching || '—'}  |  3rd Party: ${t.thirdPartyPatching || '—'}`,
-      `  Remote Access: ${t.remoteAccess || '—'}  |  Ticketing: ${t.ticketing || '—'}  |  MDM: ${t.mdm || '—'}`,
-      `  Backup: ${t.backup || '—'}  |  AV/EDR: ${t.avEdr || '—'}  |  Monitoring: ${t.monitoring || '—'}`,
-      `  Compliance Tool: ${t.complianceTool || '—'}`,
-      '',
-      `NOTES: ${form.notes || '—'}`
-    ]
-    navigator.clipboard.writeText(lines.join('\n'))
-      .then(() => alert('Qualification summary copied!'))
-  }
-
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px', background: 'var(--bg)' }}>
 
-      {/* Disqualifiers */}
+      {/* ── Prospect type ─────────────────────────────────── */}
+      <Block title="Prospect type">
+        <Label text="MSP OR INTERNAL IT?" />
+        <BtnGroup value={form.prospectType} onChange={v => set('prospectType', v)} options={[
+          { value: 'msp', label: 'MSP',          bg: 'var(--blue2)',   color: 'var(--blue)',  brd: 'var(--blue)'  },
+          { value: 'it',  label: 'Internal IT',  bg: 'var(--acc2)',    color: 'var(--acc)',   brd: 'var(--acc)'   }
+        ]} />
+
+        {form.prospectType === 'it' && (
+          <div style={{ marginTop: 10 }}>
+            <Label text="DO THEY USE AN MSP?" />
+            <BtnGroup value={form.usesMsp} onChange={v => set('usesMsp', v)} options={[
+              { value: 'yes', label: 'Yes — uses an MSP',    bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' },
+              { value: 'no',  label: 'No — self-managed',    bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' }
+            ]} />
+            {form.usesMsp === 'yes' && (
+              <div style={{ marginTop: 8 }}>
+                <Label text="MSP NAME" />
+                <Input value={form.mspPartner} onChange={v => set('mspPartner', v)} placeholder="e.g. Computacenter, SHI…" />
+              </div>
+            )}
+          </div>
+        )}
+
+        {form.prospectType === 'msp' && (
+          <div style={{
+            marginTop: 10, padding: '8px 12px',
+            background: 'var(--blue2)', borderRadius: 8,
+            fontSize: 12, color: 'var(--blue)', lineHeight: 1.5
+          }}>
+            MSP prospect — check if they manage endpoints for their clients. If so, do NOT pursue direct sale. Mark as DNC in Salesforce.
+          </div>
+        )}
+      </Block>
+
+      {/* ── Disqualifiers ──────────────────────────────────── */}
       <Block title="Disqualifiers — check first">
         <Label text="CLOUD OK?" />
         <BtnGroup value={form.cloudOk} onChange={v => set('cloudOk', v)} options={[
@@ -87,53 +113,45 @@ export default function QualificationForm ({ session, prospect }) {
         </div>
       </Block>
 
-      {/* Confirm from CRM */}
+      {/* ── Confirm from CRM ───────────────────────────────── */}
       <Block title="Confirm from CRM">
-        <Label text="NAME & TITLE CORRECT?" />
-        <BtnGroup value={form.nameCorrect} onChange={v => set('nameCorrect', v)} options={[
-          { value: 'confirmed', label: 'Confirmed',     bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
-          { value: 'update',    label: 'Update needed', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
-        ]} />
-        <div style={{ marginTop: 10 }}>
-          <Label text="EMAIL CORRECT?" />
-          <BtnGroup value={form.emailCorrect} onChange={v => set('emailCorrect', v)} options={[
-            { value: 'confirmed', label: 'Confirmed',     bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
-            { value: 'update',    label: 'Update needed', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
-          ]} />
-        </div>
-        <div style={{ marginTop: 10 }}>
-          <Label text="DECISION MAKER?" />
-          <BtnGroup value={form.decisionMaker} onChange={v => set('decisionMaker', v)} options={[
-            { value: 'dm',         label: 'Yes — DM',   bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
-            { value: 'no',         label: 'No',         bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   },
-            { value: 'influencer', label: 'Influencer', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
-          ]} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div>
+            <Label text="NAME & TITLE CORRECT?" />
+            <BtnGroup value={form.nameCorrect} onChange={v => set('nameCorrect', v)} options={[
+              { value: 'confirmed', label: 'Confirmed',     bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
+              { value: 'update',    label: 'Update needed', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
+            ]} />
+          </div>
+          <div>
+            <Label text="EMAIL CORRECT?" />
+            <BtnGroup value={form.emailCorrect} onChange={v => set('emailCorrect', v)} options={[
+              { value: 'confirmed', label: 'Confirmed',     bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
+              { value: 'update',    label: 'Update needed', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
+            ]} />
+          </div>
+          <div>
+            <Label text="DECISION MAKER?" />
+            <BtnGroup value={form.decisionMaker} onChange={v => set('decisionMaker', v)} options={[
+              { value: 'dm',         label: 'Yes — DM',   bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
+              { value: 'no',         label: 'No',         bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   },
+              { value: 'influencer', label: 'Influencer', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
+            ]} />
+          </div>
         </div>
       </Block>
 
-      {/* Qualification */}
+      {/* ── Qualification ──────────────────────────────────── */}
       <Block title="Qualification">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <div>
-            <Label text="MOBILE ENDPOINTS" />
-            <Input value={form.mobileEndpoints} onChange={v => set('mobileEndpoints', v)} placeholder="e.g. iOS 50, Android 30" />
-          </div>
-          <div>
-            <Label text="TIMELINE / CONTRACT END" />
-            <Input value={form.timeline} onChange={v => set('timeline', v)} placeholder="e.g. Q3 — contract ends Aug" />
-          </div>
+          <div><Label text="MOBILE ENDPOINTS" /><Input value={form.mobileEndpoints} onChange={v => set('mobileEndpoints', v)} placeholder="e.g. iOS 50, Android 30" /></div>
+          <div><Label text="TIMELINE / CONTRACT END" /><Input value={form.timeline} onChange={v => set('timeline', v)} placeholder="e.g. Q3 — contract ends Aug" /></div>
         </div>
-        <div style={{ marginTop: 10 }}>
-          <Label text="USE CASE — DEMO HOOK" />
-          <Input value={form.useCase} onChange={v => set('useCase', v)} placeholder="e.g. Patching compliance gaps, consolidate from 3 tools" />
-        </div>
-        <div style={{ marginTop: 10 }}>
-          <Label text="MSP?" />
-          <Input value={form.msp} onChange={v => set('msp', v)} placeholder="MSP name — or Internal IT" />
-        </div>
+        <div style={{ marginTop: 10 }}><Label text="USE CASE — DEMO HOOK" /><Input value={form.useCase} onChange={v => set('useCase', v)} placeholder="e.g. Patching compliance gaps, consolidate from 3 tools" /></div>
+        <div style={{ marginTop: 10 }}><Label text="MSP / PROVIDER NAME" /><Input value={form.msp} onChange={v => set('msp', v)} placeholder="MSP name — or Internal IT" /></div>
       </Block>
 
-      {/* Tool stack */}
+      {/* ── Tool stack ─────────────────────────────────────── */}
       <Block title="Current tool stack">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
           {[
@@ -147,10 +165,7 @@ export default function QualificationForm ({ session, prospect }) {
             { k: 'avEdr',              l: 'AV / EDR',           p: 'e.g. Defender'   },
             { k: 'monitoring',         l: 'Monitoring',         p: 'e.g. PRTG'       },
           ].map(({ k, l, p }) => (
-            <div key={k}>
-              <Label text={l} />
-              <Input value={form.tools[k]} onChange={v => setTool(k, v)} placeholder={p} small />
-            </div>
+            <div key={k}><Label text={l} /><Input value={form.tools[k]} onChange={v => setTool(k, v)} placeholder={p} small /></div>
           ))}
           <div style={{ gridColumn: '1 / -1' }}>
             <Label text="COMPLIANCE TOOL" />
@@ -159,90 +174,38 @@ export default function QualificationForm ({ session, prospect }) {
         </div>
       </Block>
 
-      {/* Notes */}
-      <Block title="Notes">
-        <textarea
-          className="input"
-          value={form.notes}
-          onChange={e => set('notes', e.target.value)}
-          placeholder="Pain points, contract dates, follow-up flags..."
-          style={{ height: 80, fontSize: 13 }}
-        />
-        <button
-          onClick={copySummary}
-          className="btn btn-ghost"
-          style={{ marginTop: 10, fontSize: 12 }}
-        >
-          Copy summary
-        </button>
-      </Block>
-
     </div>
   )
 }
 
-// ── Small helpers ─────────────────────────────────────────────────────────────
-
+/* ── Small helpers ─────────────────────────────────────────────────────── */
 function Block ({ title, children }) {
   return (
-    <div style={{
-      background: 'var(--card)', border: '1px solid var(--brd)',
-      borderRadius: 10, padding: '14px 16px', marginBottom: 10
-    }}>
-      <div style={{
-        fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
-        letterSpacing: '0.09em', color: 'var(--txt3)', marginBottom: 12
-      }}>
-        {title}
-      </div>
+    <div style={{ background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
+      <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--txt3)', marginBottom: 12 }}>{title}</div>
       {children}
     </div>
   )
 }
-
 function Label ({ text }) {
-  return (
-    <div style={{
-      fontSize: 10, fontWeight: 600, textTransform: 'uppercase',
-      letterSpacing: '0.08em', color: 'var(--txt3)', marginBottom: 5
-    }}>
-      {text}
-    </div>
-  )
+  return <div style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--txt3)', marginBottom: 5 }}>{text}</div>
 }
-
 function Input ({ value, onChange, placeholder, small }) {
-  return (
-    <input
-      className="input"
-      value={value}
-      onChange={e => onChange(e.target.value)}
-      placeholder={placeholder}
-      style={{ fontSize: small ? 12 : 13, padding: small ? '7px 10px' : '9px 12px' }}
-    />
-  )
+  return <input className="input" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} style={{ fontSize: small ? 12 : 13, padding: small ? '7px 10px' : '9px 12px' }} />
 }
-
 function BtnGroup ({ options, value, onChange }) {
   return (
     <div style={{ display: 'flex', gap: 6 }}>
       {options.map(opt => {
         const active = value === opt.value
         return (
-          <button
-            key={opt.value}
-            onClick={() => onChange(active ? null : opt.value)}
-            style={{
-              flex: 1, padding: '8px 10px', borderRadius: 8,
-              fontSize: 12, fontWeight: active ? 600 : 400,
-              background: active ? opt.bg  : '#0D1222',
-              color:      active ? opt.color : 'var(--txt2)',
-              border:     `1px solid ${active ? opt.brd : 'var(--brd2)'}`,
-              transition: 'all 0.12s'
-            }}
-          >
-            {opt.label}
-          </button>
+          <button key={opt.value} onClick={() => onChange(active ? null : opt.value)} style={{
+            flex: 1, padding: '8px 10px', borderRadius: 8, fontSize: 12, fontWeight: active ? 600 : 400,
+            background: active ? opt.bg : 'var(--card2)',
+            color: active ? opt.color : 'var(--txt2)',
+            border: `1px solid ${active ? opt.brd : 'var(--brd2)'}`,
+            transition: 'all 0.12s', cursor: 'pointer'
+          }}>{opt.label}</button>
         )
       })}
     </div>

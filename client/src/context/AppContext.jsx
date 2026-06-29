@@ -1,12 +1,13 @@
-import { createContext, useContext, useReducer } from 'react'
+import { createContext, useContext, useReducer, useEffect } from 'react'
 
 const AppContext = createContext(null)
 
 const initialState = {
-  currentProspect: null,   // { id, name, company, role, ... }
-  currentSession:  null,   // { id, prospect_id, started_at, ... }
+  currentProspect: null,
+  currentSession:  null,
   callSeconds:     0,
-  activePersona:   null,   // string — e.g. 'Head of IT', 'IT Manager'
+  activePersona:   null,
+  darkMode:        true,
 }
 
 function reducer (state, action) {
@@ -23,6 +24,8 @@ function reducer (state, action) {
       return { ...state, currentSession: action.payload }
     case 'SET_PERSONA':
       return { ...state, activePersona: action.payload }
+    case 'SET_DARK_MODE':
+      return { ...state, darkMode: action.payload }
     case 'TICK':
       return { ...state, callSeconds: state.callSeconds + 1 }
     case 'END_CALL':
@@ -49,6 +52,11 @@ function inferPersona (role) {
 
 export function AppProvider ({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light')
+  }, [state.darkMode])
+
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       {children}
