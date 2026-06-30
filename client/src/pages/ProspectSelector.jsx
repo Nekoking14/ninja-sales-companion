@@ -4,7 +4,7 @@ import { api } from '../api/index.js'
 
 const PERSONAS = [
   {
-    role: 'Head of IT',
+    role: 'Head of IT yolo',
     fullRole: 'Director / Head of IT',
     titles: 'CTO · CIO · VP of IT · IT Director',
     cares: 'Strategy, scalability, security posture, cost control',
