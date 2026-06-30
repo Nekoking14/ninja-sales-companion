@@ -2,12 +2,17 @@ import { createContext, useContext, useReducer, useEffect } from 'react'
 
 const AppContext = createContext(null)
 
+function loadDarkMode () {
+  const saved = localStorage.getItem('ninja_dark_mode')
+  return saved === null ? true : saved === 'true'
+}
+
 const initialState = {
   currentProspect: null,
   currentSession:  null,
   callSeconds:     0,
   activePersona:   null,
-  darkMode:        true,
+  darkMode:        loadDarkMode(),
 }
 
 function reducer (state, action) {
@@ -55,6 +60,7 @@ export function AppProvider ({ children }) {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light')
+    localStorage.setItem('ninja_dark_mode', String(state.darkMode))
   }, [state.darkMode])
 
   return (

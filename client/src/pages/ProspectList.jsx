@@ -331,7 +331,7 @@ export default function ProspectList () {
 
                   {/* Expanded detail */}
                   {isExpanded && (
-                    <div style={{ padding: '16px 18px 20px', borderTop: `1px solid ${color + '30'}`, background: '#0B1020', animation: 'fadeUp 0.18s ease' }}>
+                    <div style={{ padding: '16px 18px 20px', borderTop: `1px solid ${color + '30'}`, background: 'var(--card2)', animation: 'fadeUp 0.18s ease' }}>
 
                       {loadingExp && <div style={{ fontSize: 12, color: 'var(--txt3)' }}>Loading…</div>}
 
