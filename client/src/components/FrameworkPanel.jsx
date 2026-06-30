@@ -154,7 +154,7 @@ export default function FrameworkPanel ({ widget, onAddItem, addedIds, defaultTa
 
           if (typeof item === 'object' && item.pain) {
             return (
-              <div key={i} style={{ background: isDel ? 'transparent' : isAdded ? '#0E1D2E' : 'var(--card)', border: `1px solid ${isDel ? 'var(--red)' : isAdded ? color + '40' : 'var(--brd)'}`, borderRadius: 11, padding: '14px 16px', marginBottom: 10, opacity: isDel ? 0.4 : 1, position: 'relative' }}>
+              <div key={i} style={{ background: isDel ? 'transparent' : 'var(--card)', border: `1px solid ${isDel ? 'var(--red)' : 'var(--brd)'}`, borderRadius: 11, padding: '14px 16px', marginBottom: 10, opacity: isDel ? 0.4 : 1, position: 'relative' }}>
                 {editMode && (
                   <button onClick={() => isDel ? null : deleteBuiltIn(itemId)} style={{ position: 'absolute', top: 10, right: 10, background: isDel ? 'var(--green2)' : 'var(--red2)', color: isDel ? 'var(--green)' : 'var(--red)', border: 'none', borderRadius: 6, fontSize: 11, fontWeight: 600, padding: '3px 8px', cursor: 'pointer' }}>
                     {isDel ? 'Restore' : '✕ Remove'}
@@ -165,14 +165,30 @@ export default function FrameworkPanel ({ widget, onAddItem, addedIds, defaultTa
                   <Row label="Ask"            labelColor="var(--amber)" text={item.question} italic />
                   <Row label="NinjaOne value" labelColor="var(--green)" text={item.value} last />
                 </div>
-                {!editMode && <AddBtn isAdded={isAdded} color={color} onClick={() => onAddItem(itemId, item, tabLabel)} />}
+              </div>
+            )
+          }
+
+          if (typeof item === 'object' && item.risk) {
+            return (
+              <div key={i} style={{ background: isDel ? 'transparent' : 'var(--card)', border: `1px solid ${isDel ? 'var(--red)' : 'var(--brd)'}`, borderRadius: 11, padding: '14px 16px', marginBottom: 10, opacity: isDel ? 0.4 : 1, position: 'relative' }}>
+                {editMode && (
+                  <button onClick={() => isDel ? null : deleteBuiltIn(itemId)} style={{ position: 'absolute', top: 10, right: 10, background: isDel ? 'var(--green2)' : 'var(--red2)', color: isDel ? 'var(--green)' : 'var(--red)', border: 'none', borderRadius: 6, fontSize: 11, fontWeight: 600, padding: '3px 8px', cursor: 'pointer' }}>
+                    {isDel ? 'Restore' : '✕ Remove'}
+                  </button>
+                )}
+                <div style={{ flex: 1, paddingRight: editMode ? 80 : 0 }}>
+                  <Row label="Opening question" labelColor={color}          text={item.question} italic />
+                  <Row label="Risk"              labelColor="var(--red)"    text={item.risk} />
+                  <Row label="NinjaOne"          labelColor="var(--green)"  text={item.value} last />
+                </div>
               </div>
             )
           }
 
           if (typeof item === 'object' && item.A1) {
             return (
-              <div key={i} style={{ background: isDel ? 'transparent' : isAdded ? '#0E1D2E' : 'var(--card)', border: `1px solid ${isDel ? 'var(--red)' : isAdded ? color + '40' : 'var(--brd)'}`, borderRadius: 11, padding: '14px 16px', marginBottom: 10, opacity: isDel ? 0.4 : 1, position: 'relative' }}>
+              <div key={i} style={{ background: isDel ? 'transparent' : 'var(--card)', border: `1px solid ${isDel ? 'var(--red)' : 'var(--brd)'}`, borderRadius: 11, padding: '14px 16px', marginBottom: 10, opacity: isDel ? 0.4 : 1, position: 'relative' }}>
                 {editMode && (
                   <button onClick={() => deleteBuiltIn(itemId)} style={{ position: 'absolute', top: 10, right: 10, background: isDel ? 'var(--green2)' : 'var(--red2)', color: isDel ? 'var(--green)' : 'var(--red)', border: 'none', borderRadius: 6, fontSize: 11, fontWeight: 600, padding: '3px 8px', cursor: 'pointer' }}>
                     {isDel ? 'Restore' : '✕ Remove'}
@@ -187,21 +203,18 @@ export default function FrameworkPanel ({ widget, onAddItem, addedIds, defaultTa
                     </div>
                   ))}
                 </div>
-                {!editMode && <AddBtn isAdded={isAdded} color={color} onClick={() => onAddItem(itemId, item, tabLabel)} />}
               </div>
             )
           }
 
           const text = typeof item === 'string' ? item : item.text || ''
           return (
-            <div key={i} style={{ background: isDel ? 'transparent' : isAdded ? '#0E1D2E' : 'var(--card)', border: `1px solid ${isDel ? 'var(--red)' : isAdded ? color + '40' : 'var(--brd)'}`, borderRadius: 11, padding: '12px 16px', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12, opacity: isDel ? 0.4 : 1 }}>
+            <div key={i} style={{ background: isDel ? 'transparent' : 'var(--card)', border: `1px solid ${isDel ? 'var(--red)' : 'var(--brd)'}`, borderRadius: 11, padding: '12px 16px', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12, opacity: isDel ? 0.4 : 1 }}>
               <div style={{ flex: 1, fontSize: Math.round(13 * fontScale), lineHeight: 1.55 }}>{text}</div>
-              {editMode ? (
+              {editMode && (
                 <button onClick={() => isDel ? persistCustom({ ...custom, [tabKey]: { ...tabCustom, deleted: tabCustom.deleted.filter(d => d !== itemId) } }) : deleteBuiltIn(itemId)} style={{ flexShrink: 0, padding: '5px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: isDel ? 'var(--green2)' : 'var(--red2)', color: isDel ? 'var(--green)' : 'var(--red)', border: 'none', cursor: 'pointer' }}>
                   {isDel ? 'Restore' : '✕'}
                 </button>
-              ) : (
-                <AddBtn isAdded={isAdded} color={color} onClick={() => onAddItem(itemId, { text }, tabLabel)} />
               )}
             </div>
           )
@@ -209,13 +222,11 @@ export default function FrameworkPanel ({ widget, onAddItem, addedIds, defaultTa
 
         {/* Custom added items */}
         {tabCustom.added.map(item => (
-          <div key={item.id} style={{ background: 'var(--card)', border: `1px solid ${color}40`, borderRadius: 11, padding: '12px 16px', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ flex: 1, fontSize: 13, lineHeight: 1.55 }}>{item.text}</div>
+          <div key={item.id} style={{ background: 'var(--card)', border: `1px solid var(--brd)`, borderRadius: 11, padding: '12px 16px', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ flex: 1, fontSize: Math.round(13 * fontScale), lineHeight: 1.55 }}>{item.text}</div>
             <span style={{ fontSize: 10, background: color + '18', color, padding: '2px 7px', borderRadius: 999, flexShrink: 0 }}>Custom</span>
-            {editMode ? (
+            {editMode && (
               <button onClick={() => deleteCustomItem(item.id)} style={{ flexShrink: 0, padding: '5px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, background: 'var(--red2)', color: 'var(--red)', border: 'none', cursor: 'pointer' }}>✕</button>
-            ) : (
-              <AddBtn isAdded={addedIds?.has(`custom_${item.id}`)} color={color} onClick={() => onAddItem(`custom_${item.id}`, { text: item.text }, tabLabel)} />
             )}
           </div>
         ))}

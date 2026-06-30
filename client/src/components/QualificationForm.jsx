@@ -6,6 +6,7 @@ const EMPTY = {
   usesMsp:        null,  // 'yes' | 'no'  (only shown when prospectType === 'it')
   mspPartner:     '',    // name of MSP if usesMsp === 'yes'
   cloudOk:        null,
+  cloudFrankfurt: null,  // 'yes' | 'no' — only relevant when cloudOk === 'yes'
   endpoints:      '',
   nameCorrect:    null,
   emailCorrect:   null,
@@ -107,6 +108,15 @@ export default function QualificationForm ({ session, prospect }) {
           { value: 'yes', label: 'Yes — cloud fine',      bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
           { value: 'no',  label: 'No — on-prem required', bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   }
         ]} />
+        {form.cloudOk === 'yes' && (
+          <div style={{ marginTop: 10 }}>
+            <Label text="CLOUD HOSTED IN FRANKFURT, EU — OK?" />
+            <BtnGroup value={form.cloudFrankfurt} onChange={v => set('cloudFrankfurt', v)} options={[
+              { value: 'yes', label: 'Yes — Frankfurt OK',     bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
+              { value: 'no',  label: 'No — needs other region', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
+            ]} />
+          </div>
+        )}
         <div style={{ marginTop: 10 }}>
           <Label text="NUMBER OF ENDPOINTS" />
           <Input value={form.endpoints} onChange={v => set('endpoints', v)} placeholder="Enter number" />

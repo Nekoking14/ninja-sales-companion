@@ -67,7 +67,11 @@ function generateExport (session, persona, notes) {
     '',
     'QUALIFICATION',
     sep,
+    line('Prospect type',  q.prospectType === 'msp' ? 'MSP' : q.prospectType === 'it' ? 'Internal IT' : null),
+    line('Uses an MSP',    statusLabel(q.usesMsp, 'yes', 'no')),
+    line('MSP partner',    q.mspPartner),
     line('Cloud OK',       statusLabel(q.cloudOk, 'yes', 'no')),
+    line('Frankfurt OK',   statusLabel(q.cloudFrankfurt, 'yes', 'no')),
     line('Endpoints',      q.endpoints),
     line('Name correct',   statusLabel(q.nameCorrect, 'confirmed', 'update')),
     line('Email correct',  statusLabel(q.emailCorrect, 'confirmed', 'update')),
@@ -136,7 +140,15 @@ function QualSummary ({ data }) {
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
       <div>
         <div className="section-label" style={{ marginBottom: 8 }}>Status checks</div>
-        {[['Cloud OK', q.cloudOk], ['Name correct', q.nameCorrect], ['Email correct', q.emailCorrect], ['Decision maker', q.decisionMaker]].filter(([, v]) => v).map(([l, v]) => (
+        {q.prospectType && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+            <span style={{ fontSize: 12, color: 'var(--txt2)' }}>Prospect type</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: q.prospectType === 'msp' ? 'var(--blue)' : 'var(--acc)' }}>
+              {q.prospectType === 'msp' ? 'MSP' : 'Internal IT'}
+            </span>
+          </div>
+        )}
+        {[['Uses an MSP', q.usesMsp], ['Cloud OK', q.cloudOk], ['Frankfurt OK', q.cloudFrankfurt], ['Name correct', q.nameCorrect], ['Email correct', q.emailCorrect], ['Decision maker', q.decisionMaker]].filter(([, v]) => v).map(([l, v]) => (
           <div key={l} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
             <span style={{ fontSize: 12, color: 'var(--txt2)' }}>{l}</span>
             <span style={{ fontSize: 11, fontWeight: 600, color: sc(v) }}>{v}</span>

@@ -303,6 +303,71 @@ export const FRAMEWORKS = [
     ]
   },
   {
+    id: 'cyberessentials',
+    icon: '🛡',
+    color: 'var(--coral)',
+    tag: 'Compliance',
+    title: 'Cyber Essentials',
+    desc: 'UK framework positioning for IT teams & MSPs',
+    count: 4,
+    tabs: [
+      {
+        label: 'Framework basics',
+        description: 'UK government-backed certification scheme. Five technical controls prevent up to 80% of common cyber attacks. Delivered through NCSC, managed by IASME, 400+ certification bodies.',
+        items: [
+          'Cyber Essentials (self-assessment): catalogue of questions across 5 technical control themes — organisation self-certifies and submits for verification',
+          'Cyber Essentials+ (independently verified): all of CE, plus a technical audit, vulnerability scans, email & malware tests, and patching verification',
+          '1. Firewalls — control traffic between network and external threats. NinjaOne monitors firewall status and alerts on anomalies',
+          '2. Secure Configuration — reduce attack surface. NinjaOne scripts detect weak protocols and disabled BitLocker',
+          '3. Security Update Management — patch OS and 3rd party apps within 14 days of critical releases. NinjaOne patches 6,000+ applications',
+          '4. User Access Control — only authorised users access sensitive systems. MFA enforced platform-wide, admin accounts tracked',
+          '5. Malware Protection — AV and EDR monitored continuously, ensuring protection is installed, operational and up to date',
+          '"Willow" update (April 2025): 14-day critical patch window (CVSS 7.0+) is now an automatic fail with no exceptions',
+          'Willow: MFA is now mandatory across all platforms — admins, technicians, end users. Any gap is an automatic CE+ fail',
+          'Willow: all cloud services that store or process org data are now in scope — forgotten SaaS, old instances, shadow IT create gaps',
+          'Willow: CE is no longer a point-in-time exercise — it is now explicitly a test of ongoing, day-to-day operational control',
+          'Why now: 92% fewer insurance claims for CE-certified orgs (IASME/NCSC) · 43% of UK businesses breached in 2025/26 (CSBS) · 88% of SMB breaches involved ransomware (Verizon DBIR 2025)'
+        ]
+      },
+      {
+        label: 'Internal IT questions',
+        description: 'IT managers, IT directors, heads of infrastructure. Angle: make their job defensible, reduce personal exposure, help them win budget.',
+        items: [
+          { question: '"If your CEO asked you today whether you\u2019d pass a Cyber Essentials audit — what would you tell them?"', risk: 'IT leaders are increasingly accountable for outcomes, not effort. \u2018I don\u2019t know\u2019 is not a board-level answer — a breach with known unfixed gaps is regulatory exposure, not bad luck.', value: 'NinjaOne generates the evidence layer: patch compliance, device inventory, AV coverage, firewall status. Go from \u2018we think we\u2019re compliant\u2019 to \u2018here\u2019s the proof\u2019 — pulled in minutes.' },
+          { question: '"How much of your team\u2019s week is reactive — chasing patches, responding to alerts, cleaning up after incidents?"', risk: 'Reactive teams can\u2019t maintain proactive compliance. Every hour firefighting is an hour not closing the vulnerabilities CE requires patched within 14 days.', value: 'Policy-based automation handles routine CE tasks with no manual triggers. 71% of customers replace 4+ tools with NinjaOne. Patch deployment time drops 30%.' },
+          { question: '"Do you have a single place to see the security and patch status of every device — or are you pulling it from multiple tools?"', risk: 'Fragmented tooling means fragmented visibility. Under Willow, scope now includes all cloud services — making unified visibility harder and more critical at once.', value: 'NinjaOne consolidates hardware, software, patch status, AV, firewalls, and user accounts into one platform. CE reporting is built in, not a manual exercise.' },
+          { question: '"When your CE renewal comes around, how long does it take to prepare — and who does that work fall on?"', risk: 'Orgs treating CE as an annual sprint are non-compliant between renewals — they just haven\u2019t been tested. Willow\u2019s 14-day window makes this untenable.', value: 'NinjaOne turns CE from an annual fire drill into a continuous state. CVSS alerting flags vulnerabilities the moment they\u2019re published. By renewal — you\u2019re already there.' },
+          { question: '"If you had an incident today — ransomware, a compromised account, a rogue device — how fast would you actually know about it?"', risk: 'Without continuous monitoring, the average breach goes undetected for weeks. UK GDPR requires ICO notification within 72 hours of becoming aware.', value: 'NinjaOne monitors endpoints continuously — disabled firewalls, AV going offline, config drift. Integrates with SentinelOne/CrowdStrike. CE is prevention; NinjaOne is what happens when prevention isn\u2019t enough.' }
+        ]
+      },
+      {
+        label: 'MSP questions',
+        description: 'Owners, directors, heads of service delivery. Angle: commercial — every question maps to revenue capture, margin, client stickiness, or new business.',
+        items: [
+          { question: '"Are your clients asking about Cyber Essentials — and are you the one helping them get there, or are they going elsewhere?"', risk: 'MSPs not offering CE as a service risk losing the revenue to a specialist — and the trusted-advisor relationship that follows.', value: 'NinjaOne maps to 25 CE control categories with automated reporting, built once, deployed at scale. Go to market with a managed CE service — recurring revenue at defensible margin.' },
+          { question: '"If you\u2019re going to offer Cyber Essentials as a service, how are you planning to evidence compliance across every client without it becoming a manual job?"', risk: 'MSPs building CE delivery on manual processes see margin collapse as the client base grows. Inconsistent delivery creates liability if a client fails their audit.', value: 'Multi-tenant architecture lets you patch and report across your entire client base simultaneously. Meet the 14-day window for every client from one platform.' },
+          { question: '"How sticky are your client relationships right now — and what would it take for a client to justify switching to a different MSP?"', risk: 'MSPs competing on price or familiarity face constant commoditisation. Switching means the client loses compliance history and audit trails.', value: 'Audit trail and reporting build a compliance record that lives in your platform — patch history, device changes, user activity. Institutional knowledge the client can\u2019t walk away from.' },
+          { question: '"When one of your clients has a security incident, what does that cost your team — and how does it affect the profitability of that relationship?"', risk: 'A client ransomware event can consume hundreds of engineering hours, often at cost, under SLA pressure — with legal exposure if controls should have been maintained.', value: 'Continuous monitoring alerts your team proactively before incidents become crises. Fewer incidents means less reactive load, better margins, stronger renewal conversations.' },
+          { question: '"How are you currently winning new clients — and is cybersecurity compliance something you use as a differentiator in those conversations?"', risk: 'MSPs without a compliance-led offering compete on cost and lose on value. The first MSP offering \u2018we handle your Cyber Essentials\u2019 wins the relationship.', value: 'NinjaOne + IQ in IT (certified CE body, NinjaOne partner) gives a complete, credentialled offering — platform, automation, and certification body relationship in one.' }
+        ]
+      },
+      {
+        label: 'NinjaOne mapping',
+        description: 'NinjaOne covers 25 CE control categories, directly mapped to the CE assessment question set.',
+        items: [
+          'Firewalls — A4.11 Software Firewalls',
+          'Secure Config — A5.1 Remove Unused Software · A5.2 Remove User Accounts · A5.3 Change Default Passwords · A5.8 Auto-Run Disabled · A5.9–10 Device Locking',
+          'Update Management — A6.1 Supported OS · A6.2–6.6 Software & Updates (6 categories) · A6.4–6.5 Security Updates (4 categories)',
+          'User Access — A7.1 Account Creation · A7.3 Leavers Accounts · A7.6 Admin Account Use · A7.8 Admin Tracking · A7.10 Brute Force Protection',
+          'Malware Protection — A6.2.2 Malware Protection (AV/EDR monitoring)',
+          'Next step: run the discovery questions with your next IT or MSP prospect — even one question opens the gap',
+          'Next step: reference the IQ in IT partnership to give MSPs a credentialled pathway to offer CE as a managed service',
+          'Next step: use the NinjaOne 25-category mapping as leave-behind evidence of platform coverage'
+        ]
+      }
+    ]
+  },
+  {
     id: 'qual',
     icon: '✔',
     color: 'var(--blue)',
