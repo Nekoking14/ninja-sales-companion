@@ -257,3 +257,4 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => app.quit())
+"hello world"
