@@ -140,7 +140,7 @@ ipcMain.on('restart-update', () => {
 // ── Launcher window ────────────────────────────────────────────────────────
 function createLauncher (serverOk) {
   launcherWindow = new BrowserWindow({
-    width: 360, height: serverOk ? 210 : 220,
+    width: 360, height: serverOk ? 240 : 250,
     resizable: false,
     title: 'NinjaOne Sales Companion',
     webPreferences: { nodeIntegration: true, contextIsolation: false },
@@ -165,17 +165,23 @@ function createLauncher (serverOk) {
     .status{display:flex;align-items:center;gap:7px;font-size:12px;color:#8A9CC0}
     .dot{width:8px;height:8px;border-radius:50%;background:${dot};animation:p 2s infinite}
     @keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
-    .btns{display:flex;gap:8px}
+    .update-wrap{display:flex;flex-direction:column;gap:5px;width:100%}
+    .update-row{display:flex;align-items:center;gap:7px}
+    .update-dot{width:7px;height:7px;border-radius:50%;background:#3D4D70;flex-shrink:0}
+    .update-dot.checking{animation:p 1s infinite}
+    .update-dot.ok{background:#22C55E}
+    .update-dot.available{background:#F59E0B}
+    .update-label{font-size:11px;color:#8A9CC0;flex:1}
+    .progress-bar{width:100%;height:4px;background:#1E2A44;border-radius:999px;overflow:hidden;display:none}
+    .progress-fill{height:100%;width:0%;background:#05C49A;transition:width .2s}
+    .btns{display:flex;gap:8px;width:100%}
     button{padding:8px 16px;border-radius:8px;border:none;font-size:12px;font-weight:500;
-           cursor:pointer;font-family:inherit;transition:opacity .15s;white-space:nowrap}
-    button:hover{opacity:.85}
+           cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+    button:hover:not(:disabled){opacity:.85}
+    button:disabled{cursor:default;opacity:0.45}
     .open{background:#05C49A;color:#042D22;font-weight:700}
     .quit{background:#1E2A44;color:#8A9CC0}
-    .update{background:#F59E0B;color:#2A1B00;font-weight:700;display:none}
-    .progress-wrap{display:none;width:100%;flex-direction:column;gap:5px}
-    .progress-bar{width:100%;height:6px;background:#1E2A44;border-radius:999px;overflow:hidden}
-    .progress-fill{height:100%;width:0%;background:#05C49A;transition:width .2s}
-    .progress-label{font-size:11px;color:#8A9CC0;text-align:center}
+    .updbtn{background:#1E2A44;color:#8A9CC0;flex:1}
   </style></head><body>
     <div class="row">
       <div class="logo">N</div>
@@ -183,20 +189,25 @@ function createLauncher (serverOk) {
     </div>
     <div class="status"><div class="dot"></div><span>${label}</span></div>
 
-    <div class="progress-wrap" id="progressWrap">
-      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-      <div class="progress-label" id="progressLabel">Downloading update…</div>
+    <div class="update-wrap">
+      <div class="update-row">
+        <div class="update-dot checking" id="updDot"></div>
+        <span class="update-label" id="updLabel">Checking for updates…</span>
+      </div>
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
     </div>
 
     <div class="btns">
       ${serverOk ? '<button class="open" onclick="o()">Open in browser</button>' : ''}
-      <button class="update" id="updateBtn" onclick="onUpdateClick()">Update available</button>
+      <button class="updbtn" id="updateBtn" disabled onclick="onUpdateClick()">Checking…</button>
       <button class="quit" onclick="q()">Quit</button>
     </div>
 
     <script>
       const {ipcRenderer} = require('electron')
-      let updateState = 'idle' // idle | available | downloading | ready
+      let updateState = 'checking'
 
       function o(){ ipcRenderer.send('open-app') }
       function q(){ ipcRenderer.send('quit') }
@@ -204,8 +215,9 @@ function createLauncher (serverOk) {
       function onUpdateClick () {
         if (updateState === 'available') {
           updateState = 'downloading'
-          document.getElementById('updateBtn').style.display = 'none'
-          document.getElementById('progressWrap').style.display = 'flex'
+          document.getElementById('updateBtn').disabled = true
+          document.getElementById('updateBtn').textContent = 'Downloading…'
+          document.getElementById('progressBar').style.display = 'block'
           ipcRenderer.send('download-update')
         } else if (updateState === 'ready') {
           ipcRenderer.send('restart-update')
@@ -213,29 +225,56 @@ function createLauncher (serverOk) {
       }
 
       ipcRenderer.invoke('check-update').then(info => {
+        const dot   = document.getElementById('updDot')
+        const label = document.getElementById('updLabel')
+        const btn   = document.getElementById('updateBtn')
+        dot.classList.remove('checking')
         if (info) {
           updateState = 'available'
-          const btn = document.getElementById('updateBtn')
+          dot.classList.add('available')
+          label.textContent = 'Update available — ' + info.version
+          label.style.color = '#F59E0B'
           btn.textContent = 'Update to ' + info.version
-          btn.style.display = 'inline-block'
+          btn.style.background = '#F59E0B'
+          btn.style.color = '#2A1B00'
+          btn.style.fontWeight = '700'
+          btn.disabled = false
+        } else {
+          updateState = 'uptodate'
+          dot.classList.add('ok')
+          label.textContent = 'App is up to date'
+          btn.textContent = 'Up to date'
+          btn.disabled = true
         }
+      }).catch(() => {
+        document.getElementById('updDot').classList.remove('checking')
+        document.getElementById('updLabel').textContent = 'Could not check for updates'
+        document.getElementById('updateBtn').textContent = 'Check failed'
+        document.getElementById('updateBtn').disabled = true
       })
 
       ipcRenderer.on('update-progress', (_e, pct) => {
         document.getElementById('progressFill').style.width = pct + '%'
-        document.getElementById('progressLabel').textContent = 'Downloading update… ' + pct + '%'
+        document.getElementById('updLabel').textContent = 'Downloading… ' + pct + '%'
       })
 
       ipcRenderer.on('update-ready', () => {
         updateState = 'ready'
-        document.getElementById('progressLabel').textContent = 'Ready to install'
+        document.getElementById('progressBar').style.display = 'none'
+        document.getElementById('updDot').classList.remove('available')
+        document.getElementById('updDot').classList.add('ok')
+        document.getElementById('updLabel').textContent = 'Update downloaded — ready to install'
+        document.getElementById('updLabel').style.color = '#22C55E'
         const btn = document.getElementById('updateBtn')
         btn.textContent = 'Restart to update'
-        btn.style.display = 'inline-block'
+        btn.style.background = '#22C55E'
+        btn.style.color = '#042D22'
+        btn.disabled = false
       })
 
       ipcRenderer.on('update-error', (_e, msg) => {
-        document.getElementById('progressLabel').textContent = 'Update failed — try again later'
+        document.getElementById('updLabel').textContent = 'Download failed — try again later'
+        document.getElementById('updateBtn').textContent = 'Update failed'
       })
     </script>
   </body></html>`
@@ -257,4 +296,3 @@ app.whenReady().then(() => {
 })
 
 app.on('window-all-closed', () => app.quit())
-"hello world"
