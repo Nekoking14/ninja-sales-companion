@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext.jsx'
 import { api } from '../api/index.js'
+import { computeCallScore, scoreColor, scoreLabel } from '../utils/scoring.js'
 import Topbar  from '../components/Topbar.jsx'
 import Sidebar from '../components/Sidebar.jsx'
 
@@ -340,19 +341,29 @@ export default function ProspectList () {
                         return (
                           <>
                             {/* Session date header */}
-                            {sd && (
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, padding: '8px 14px', background: 'var(--card)', borderRadius: 9, border: '1px solid var(--brd)' }}>
-                                <div>
-                                  <span style={{ fontSize: 12, fontWeight: 600 }}>{fmtDate(sd.started_at)}</span>
-                                  <span style={{ fontSize: 12, color: 'var(--txt2)', marginLeft: 10 }}>{fmtTime(sd.started_at)}</span>
+                            {sd && (() => {
+                              let qual = null
+                              try { qual = sd.qualification_data ? JSON.parse(sd.qualification_data) : null } catch {}
+                              const score = computeCallScore(qual, qual?.notes || '')
+                              return (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, padding: '8px 14px', background: 'var(--card)', borderRadius: 9, border: '1px solid var(--brd)' }}>
+                                  <div>
+                                    <span style={{ fontSize: 12, fontWeight: 600 }}>{fmtDate(sd.started_at)}</span>
+                                    <span style={{ fontSize: 12, color: 'var(--txt2)', marginLeft: 10 }}>{fmtTime(sd.started_at)}</span>
+                                  </div>
+                                  {sd.duration_sec && (
+                                    <span style={{ fontSize: 11, color: 'var(--txt3)', marginLeft: 8 }}>
+                                      Duration: {fmtDuration(sd.duration_sec)}
+                                    </span>
+                                  )}
+                                  <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 7, background: scoreColor(score) + '15', border: `1px solid ${scoreColor(score)}40`, borderRadius: 999, padding: '4px 12px' }}>
+                                    <span style={{ fontSize: 11, color: 'var(--txt2)' }}>Call quality</span>
+                                    <span style={{ fontSize: 15, fontWeight: 800, color: scoreColor(score), fontVariantNumeric: 'tabular-nums' }}>{score}</span>
+                                    <span style={{ fontSize: 10, fontWeight: 600, color: scoreColor(score) }}>{scoreLabel(score)}</span>
+                                  </div>
                                 </div>
-                                {sd.duration_sec && (
-                                  <span style={{ fontSize: 11, color: 'var(--txt3)', marginLeft: 8 }}>
-                                    Duration: {fmtDuration(sd.duration_sec)}
-                                  </span>
-                                )}
-                              </div>
-                            )}
+                              )
+                            })()}
 
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 24 }}>
 

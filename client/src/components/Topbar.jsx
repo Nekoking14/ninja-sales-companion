@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext.jsx'
+import { scoreColor, scoreLabel } from '../utils/scoring.js'
 
 const PERSONAS = [
   'Head of IT',
@@ -16,7 +17,7 @@ function formatTime (sec) {
   return `${m}:${s}`
 }
 
-export default function Topbar ({ onEndCall }) {
+export default function Topbar ({ onEndCall, callScore = 0 }) {
   const { state, dispatch } = useApp()
   const { currentProspect, currentSession, callSeconds, activePersona, darkMode } = state
   const navigate = useNavigate()
@@ -73,6 +74,30 @@ export default function Topbar ({ onEndCall }) {
             fontVariantNumeric: 'tabular-nums'
           }}>
             {formatTime(callSeconds)}
+          </span>
+        </div>
+      )}
+
+      {/* Call quality score — live during session */}
+      {currentSession && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 6,
+          background: scoreColor(callScore) + '15',
+          border: `1px solid ${scoreColor(callScore)}40`,
+          borderRadius: 999, padding: '4px 12px',
+          transition: 'background 0.4s, border-color 0.4s'
+        }}>
+          <span style={{ fontSize: 11, color: 'var(--txt2)' }}>Call quality</span>
+          <span style={{
+            fontSize: 14, fontWeight: 800,
+            color: scoreColor(callScore),
+            fontVariantNumeric: 'tabular-nums',
+            minWidth: 26, textAlign: 'center'
+          }}>
+            {callScore}
+          </span>
+          <span style={{ fontSize: 10, fontWeight: 600, color: scoreColor(callScore) }}>
+            {scoreLabel(callScore)}
           </span>
         </div>
       )}

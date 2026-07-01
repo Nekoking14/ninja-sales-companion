@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext.jsx'
 import { api } from '../api/index.js'
 import { useFrameworks } from '../hooks/useFrameworks.js'
+import { computeCallScore } from '../utils/scoring.js'
 import Topbar             from '../components/Topbar.jsx'
 import Sidebar            from '../components/Sidebar.jsx'
 import FrameworkCard      from '../components/FrameworkCard.jsx'
@@ -29,6 +30,22 @@ export default function Dashboard () {
   const [reportItems, setReportItems] = useState([])
   const [notes,       setNotes]       = useState([])
   const [addedIds,    setAddedIds]    = useState(new Set())
+  const [callScore,   setCallScore]   = useState(0)
+
+  // Poll localStorage every 2s to keep call quality score live
+  useEffect(() => {
+    if (!currentSession?.id && !currentProspect?.id) return
+    const compute = () => {
+      try {
+        const key  = `qual_${currentSession?.id || currentProspect?.id || 'draft'}`
+        const qual = JSON.parse(localStorage.getItem(key)) || {}
+        setCallScore(computeCallScore(qual, qual.notes || ''))
+      } catch {}
+    }
+    compute()
+    const t = setInterval(compute, 2000)
+    return () => clearInterval(t)
+  }, [currentSession?.id, currentProspect?.id])
 
   useEffect(() => {
     if (!currentProspect) navigate('/', { replace: true })
@@ -102,7 +119,7 @@ export default function Dashboard () {
 
   return (
     <div className="app-shell">
-      <Topbar onEndCall={handleEndCall} />
+      <Topbar onEndCall={handleEndCall} callScore={callScore} />
       <div className="body-shell">
         <Sidebar session={currentSession} prospect={currentProspect} />
 
