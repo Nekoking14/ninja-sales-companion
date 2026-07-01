@@ -15,11 +15,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # needed so git rev-list --count HEAD is accurate
 
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Auto-set version from commit count
+        shell: bash
+        run: |
+          COUNT=$(git rev-list --count HEAD)
+          VERSION="1.0.$COUNT"
+          echo "Building version $VERSION"
+          node -e "
+            const fs = require('fs');
+            const p = JSON.parse(fs.readFileSync('./package.json','utf8'));
+            p.version = '$VERSION';
+            fs.writeFileSync('./package.json', JSON.stringify(p, null, 2));
+          "
+          echo "APP_VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Install root dependencies
         run: npm install
@@ -53,9 +69,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=$(node -p "require('./package.json').version")
-          gh release create "v$VERSION" dist/*.exe \
-            --title "v$VERSION" \
-            --notes "Automated build from commit ${{ github.sha }}" \
-            --repo ${{ github.repository }} \
-          || echo "Release v$VERSION already exists — bump the version in package.json to publish a new one."
+          gh release create "v${{ env.APP_VERSION }}" dist/*.exe \
+            --title "v${{ env.APP_VERSION }}" \
+            --notes "Built from commit ${{ github.sha }}" \
+            --repo ${{ github.repository }}
