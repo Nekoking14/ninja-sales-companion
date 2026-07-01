@@ -2,7 +2,6 @@ const { app, BrowserWindow, shell, ipcMain } = require('electron')
 const path  = require('path')
 const fs    = require('fs')
 const https = require('https')
-const { execFile } = require('child_process')
 
 const isDev = !app.isPackaged
 const PORT  = 3001
@@ -130,11 +129,11 @@ ipcMain.on('download-update', async () => {
   }
 })
 
-ipcMain.on('restart-update', () => {
+ipcMain.on('restart-update', async () => {
   if (downloadedInstallerPath) {
-    execFile(downloadedInstallerPath, [], { detached: true })
+    await shell.openPath(downloadedInstallerPath)
   }
-  app.quit()
+  setTimeout(() => app.quit(), 800) // small delay so shell has time to launch installer
 })
 
 // ── Launcher window ────────────────────────────────────────────────────────
