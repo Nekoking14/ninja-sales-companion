@@ -84,12 +84,14 @@ function generateExport (session, persona, notes) {
   ].filter(Boolean) : []
 
   const t = q?.tools || {}
+  // tool values may be arrays (new) or strings (old) — normalise for display
+  const tv = (v) => Array.isArray(v) ? v.join(', ') : (v || '')
   const toolEntries = [
-    ['RMM / EPM',    t.rmm], ['Patching',     t.patching],
-    ['3rd Party',    t.thirdPartyPatching], ['Remote Access', t.remoteAccess],
-    ['Ticketing',    t.ticketing], ['MDM',          t.mdm],
-    ['Backup',       t.backup], ['AV / EDR',     t.avEdr],
-    ['Monitoring',   t.monitoring], ['Compliance',   t.complianceTool],
+    ['RMM / EPM',    tv(t.rmm)], ['Patching',     tv(t.patching)],
+    ['3rd Party',    tv(t.thirdPartyPatching)], ['Remote Access', tv(t.remoteAccess)],
+    ['Ticketing',    tv(t.ticketing)], ['MDM',          tv(t.mdm)],
+    ['Backup',       tv(t.backup)], ['AV / EDR',     tv(t.avEdr)],
+    ['Monitoring',   tv(t.monitoring)], ['Compliance',   tv(t.complianceTool)],
   ].filter(([, v]) => v)
 
   const toolLines = toolEntries.length ? [
@@ -135,7 +137,9 @@ function QualSummary ({ data }) {
 
   const sc = v => v === 'yes' || v === 'confirmed' || v === 'dm' ? 'var(--green)' : v === 'no' || v === 'update' ? 'var(--red)' : 'var(--amber)'
   const t  = q.tools || {}
-  const tools = [['RMM/EPM', t.rmm], ['Patching', t.patching], ['3rd Party', t.thirdPartyPatching], ['Remote Access', t.remoteAccess], ['Ticketing', t.ticketing], ['MDM', t.mdm], ['Backup', t.backup], ['AV/EDR', t.avEdr], ['Monitoring', t.monitoring], ['Compliance', t.complianceTool]].filter(([, v]) => v)
+  const tools = [['RMM/EPM', t.rmm], ['Patching', t.patching], ['3rd Party', t.thirdPartyPatching], ['Remote Access', t.remoteAccess], ['Ticketing', t.ticketing], ['MDM', t.mdm], ['Backup', t.backup], ['AV/EDR', t.avEdr], ['Monitoring', t.monitoring], ['Compliance', t.complianceTool]]
+    .map(([l, v]) => [l, Array.isArray(v) ? v.join(', ') : v])
+    .filter(([, v]) => v)
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>

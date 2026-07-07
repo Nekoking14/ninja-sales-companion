@@ -51,23 +51,41 @@ export const EMPTY_QUAL = {
   useCase:        [],    // array for multi-select
   msp:            '',
   tools: {
-    rmm: '', patching: '', thirdPartyPatching: '',
-    remoteAccess: '', ticketing: '', mdm: '',
-    backup: '', avEdr: '', monitoring: '', complianceTool: ''
+    rmm: [], patching: [], thirdPartyPatching: [],
+    remoteAccess: [], ticketing: [], mdm: [],
+    backup: [], avEdr: [], monitoring: [], complianceTool: []
   }
 }
 
-// Normalise saved data (handles old string useCase, old mobileEndpoints)
+// Normalise tool value — old string → array, array → array
+function normTool (v) {
+  if (Array.isArray(v)) return v
+  if (v && typeof v === 'string' && v.trim() && v !== 'None') return [v]
+  return []
+}
+
+// Normalise saved data (handles old string useCase, old mobileEndpoints, old string tools)
 function normalise (saved) {
   if (!saved) return EMPTY_QUAL
+  const rawTools = saved.tools || {}
   return {
     ...EMPTY_QUAL,
     ...saved,
-    tools: { ...EMPTY_QUAL.tools, ...saved.tools },
+    tools: {
+      rmm:                normTool(rawTools.rmm),
+      patching:           normTool(rawTools.patching),
+      thirdPartyPatching: normTool(rawTools.thirdPartyPatching),
+      remoteAccess:       normTool(rawTools.remoteAccess),
+      ticketing:          normTool(rawTools.ticketing),
+      mdm:                normTool(rawTools.mdm),
+      backup:             normTool(rawTools.backup),
+      avEdr:              normTool(rawTools.avEdr),
+      monitoring:         normTool(rawTools.monitoring),
+      complianceTool:     normTool(rawTools.complianceTool),
+    },
     useCase: Array.isArray(saved.useCase)
       ? saved.useCase
       : (saved.useCase ? [saved.useCase] : []),
-    // keep backwards compat
     mobileIos:     saved.mobileIos     || '',
     mobileAndroid: saved.mobileAndroid || '',
   }
@@ -228,37 +246,30 @@ export default function QualificationForm ({ session, prospect }) {
 
       {/* Tool stack */}
       <Block title="Current tool stack">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
           {[
-            { k: 'rmm',                l: 'RMM / EPM'         },
-            { k: 'patching',           l: 'Patching'          },
-            { k: 'thirdPartyPatching', l: '3rd party patching'},
-            { k: 'remoteAccess',       l: 'Remote access'     },
-            { k: 'ticketing',          l: 'Ticketing'         },
-            { k: 'mdm',                l: 'MDM'               },
-            { k: 'backup',             l: 'Backup'            },
-            { k: 'avEdr',              l: 'AV / EDR'          },
-            { k: 'monitoring',         l: 'Monitoring'        },
-          ].map(({ k, l }) => (
-            <div key={k}>
+            { k: 'rmm',                l: 'RMM / EPM',           c: 'var(--purple)' },
+            { k: 'patching',           l: 'Patching',            c: 'var(--blue)'   },
+            { k: 'thirdPartyPatching', l: '3rd party patching',  c: 'var(--blue)'   },
+            { k: 'remoteAccess',       l: 'Remote access',       c: 'var(--acc)'    },
+            { k: 'ticketing',          l: 'Ticketing',           c: 'var(--amber)'  },
+            { k: 'mdm',                l: 'MDM',                 c: 'var(--coral)'  },
+            { k: 'backup',             l: 'Backup',              c: 'var(--green)'  },
+            { k: 'avEdr',              l: 'AV / EDR',            c: 'var(--red)'    },
+            { k: 'monitoring',         l: 'Monitoring',          c: 'var(--amber)'  },
+            { k: 'complianceTool',     l: 'Compliance tool',     c: 'var(--purple)' },
+          ].map(({ k, l, c }) => (
+            <div key={k} style={{ position: 'relative' }}>
               <Label text={l} />
-              <ToolSelect
+              <MultiSelect
                 value={form.tools[k]}
                 onChange={v => setTool(k, v)}
                 options={TOOL_OPTIONS[k]}
                 placeholder="Select or type…"
+                color={c}
               />
             </div>
           ))}
-          <div style={{ gridColumn: '1 / -1' }}>
-            <Label text="COMPLIANCE TOOL" />
-            <ToolSelect
-              value={form.tools.complianceTool}
-              onChange={v => setTool('complianceTool', v)}
-              options={TOOL_OPTIONS.complianceTool}
-              placeholder="Select or type…"
-            />
-          </div>
         </div>
       </Block>
 

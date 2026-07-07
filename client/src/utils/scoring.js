@@ -38,7 +38,9 @@ export function computeQualScore (qual) {
   const hasMobile = qual.mobileIos?.trim() || qual.mobileAndroid?.trim() || qual.mobileEndpoints?.trim()
   if (hasMobile) pts += 5
 
-  const filled = Object.values(qual.tools || {}).filter(v => v?.trim() && v !== 'None').length
+  const filled = Object.values(qual.tools || {}).filter(v =>
+    Array.isArray(v) ? v.length > 0 : (v?.trim() && v !== 'None')
+  ).length
   pts += Math.min(filled * 2, 16)
 
   return Math.round(Math.min((pts / 111) * 100, 100))
