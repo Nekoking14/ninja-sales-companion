@@ -48,21 +48,39 @@ function timeAgo (d) {
 
 // ── Export generator ──────────────────────────────────────────────────────────
 
-function generateExport (session, persona, notes) {
+function generateExport (session, persona) {
   let q = null
   try { q = session.qualification_data ? JSON.parse(session.qualification_data) : null } catch {}
 
-  const line = (label, val, width = 18) =>
+  const line = (label, val, width = 22) =>
     val ? `  ${(label + ':').padEnd(width)} ${val}` : null
 
-  const sep  = '─'.repeat(50)
-  const sep2 = '═'.repeat(50)
+  const sep  = '─'.repeat(54)
+  const sep2 = '═'.repeat(54)
 
   const statusLabel = (val, yes, no) => {
     if (val === yes) return `✓ ${val}`
     if (val === no)  return `✗ ${val}`
     return val || null
   }
+
+  // useCase may be array or old string
+  const useCaseStr = Array.isArray(q?.useCase)
+    ? q.useCase.join(', ')
+    : (q?.useCase || null)
+
+  // mobile — new split fields or old combined field
+  const mobileStr = q
+    ? (q.mobileIos && q.mobileAndroid
+        ? `iOS: ${q.mobileIos}  ·  Android: ${q.mobileAndroid}`
+        : q.mobileIos ? `iOS: ${q.mobileIos}`
+        : q.mobileAndroid ? `Android: ${q.mobileAndroid}`
+        : q.mobileEndpoints || null)
+    : null
+
+  // tool values may be arrays (new) or strings (old)
+  const tv = v => Array.isArray(v) ? v.join(', ') : (v || '')
+  const t = q?.tools || {}
 
   const qualLines = q ? [
     '',
@@ -77,15 +95,12 @@ function generateExport (session, persona, notes) {
     line('Name correct',   statusLabel(q.nameCorrect, 'confirmed', 'update')),
     line('Email correct',  statusLabel(q.emailCorrect, 'confirmed', 'update')),
     line('Decision maker', statusLabel(q.decisionMaker, 'dm', 'no')),
-    line('Mobile devices', q.mobileEndpoints),
+    line('Mobile devices', mobileStr),
     line('Timeline',       q.timeline),
-    line('Use case',       q.useCase),
-    line('MSP',            q.msp),
+    line('Use case',       useCaseStr),
+    line('MSP / provider', q.msp),
   ].filter(Boolean) : []
 
-  const t = q?.tools || {}
-  // tool values may be arrays (new) or strings (old) — normalise for display
-  const tv = (v) => Array.isArray(v) ? v.join(', ') : (v || '')
   const toolEntries = [
     ['RMM / EPM',    tv(t.rmm)], ['Patching',     tv(t.patching)],
     ['3rd Party',    tv(t.thirdPartyPatching)], ['Remote Access', tv(t.remoteAccess)],
@@ -101,11 +116,12 @@ function generateExport (session, persona, notes) {
     ...toolEntries.map(([l, v]) => line(l, v))
   ].filter(Boolean) : []
 
-  const noteLines = notes?.length ? [
+  // Notes now live in qualification_data.notes (sidebar textarea)
+  const noteLines = q?.notes?.trim() ? [
     '',
     'NOTES',
     sep,
-    ...notes.map(n => `  ${fmtTime(n.created_at)}  ${n.content}`)
+    ...q.notes.trim().split('\n').map(l => `  ${l}`)
   ] : []
 
   return [
@@ -291,11 +307,8 @@ export default function ProspectList () {
   function handleExport (p) {
     if (!expandedData) return
     const sd = expandedData.sessionDetail
-    const text = generateExport(
-      { ...sd, name: p.name, started_at: sd?.started_at },
-      p.name,
-      expandedData.notes
-    )
+    if (!sd) return
+    const text = generateExport(sd, p.name)
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
