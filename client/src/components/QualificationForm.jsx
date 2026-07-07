@@ -42,6 +42,7 @@ export const EMPTY_QUAL = {
   cloudOk:        null,
   cloudFrankfurt: null,
   endpoints:      '',
+  implTime:       '',
   nameCorrect:    null,
   emailCorrect:   null,
   decisionMaker:  null,
@@ -175,6 +176,22 @@ export default function QualificationForm ({ session, prospect }) {
         <div style={{ marginTop: 10 }}>
           <Label text="NUMBER OF ENDPOINTS" />
           <Input value={form.endpoints} onChange={v => set('endpoints', v)} placeholder="Enter number" />
+        </div>
+        <div style={{ marginTop: 10 }}>
+          <Label text="IMPLEMENTATION TIME (WEEKS)" />
+          <select
+            className="input"
+            value={form.implTime || ''}
+            onChange={e => set('implTime', e.target.value)}
+            style={{ fontSize: 13, padding: '9px 12px', cursor: 'pointer' }}
+          >
+            <option value="">Select timeframe…</option>
+            <option value="0–3 weeks">0–3 weeks</option>
+            <option value="3–6 weeks">3–6 weeks</option>
+            <option value="6–9 weeks">6–9 weeks</option>
+            <option value="9–12 weeks">9–12 weeks</option>
+            <option value="12+ weeks">12+ weeks</option>
+          </select>
         </div>
       </Block>
 

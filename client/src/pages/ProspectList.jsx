@@ -92,6 +92,7 @@ function generateExport (session, persona) {
     line('Cloud OK',       statusLabel(q.cloudOk, 'yes', 'no')),
     line('Frankfurt OK',   statusLabel(q.cloudFrankfurt, 'yes', 'no')),
     line('Endpoints',      q.endpoints),
+    line('Impl. time',     q.implTime),
     line('Name correct',   statusLabel(q.nameCorrect, 'confirmed', 'update')),
     line('Email correct',  statusLabel(q.emailCorrect, 'confirmed', 'update')),
     line('Decision maker', statusLabel(q.decisionMaker, 'dm', 'no')),
@@ -176,7 +177,7 @@ function QualSummary ({ data }) {
           </div>
         ))}
         <div className="section-label" style={{ marginTop: 14, marginBottom: 8 }}>Qualification</div>
-        {[['Endpoints', q.endpoints], ['Mobile', q.mobileEndpoints], ['Timeline', q.timeline], ['MSP', q.msp]].filter(([, v]) => v).map(([l, v]) => (
+        {[['Endpoints', q.endpoints], ['Impl. time', q.implTime], ['Timeline', q.timeline], ['MSP', q.msp]].filter(([, v]) => v).map(([l, v]) => (
           <div key={l} style={{ display: 'flex', gap: 8, marginBottom: 5 }}>
             <span style={{ fontSize: 11, color: 'var(--txt3)', minWidth: 70 }}>{l}</span>
             <span style={{ fontSize: 12 }}>{v}</span>
