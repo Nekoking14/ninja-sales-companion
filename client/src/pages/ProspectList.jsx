@@ -162,7 +162,32 @@ function QualSummary ({ data }) {
             <span style={{ fontSize: 12 }}>{v}</span>
           </div>
         ))}
-        {q.useCase && <div style={{ marginTop: 8 }}><div style={{ fontSize: 11, color: 'var(--txt3)', marginBottom: 3 }}>Use case</div><div style={{ fontSize: 12, color: 'var(--acc)', fontWeight: 500, lineHeight: 1.4 }}>{q.useCase}</div></div>}
+        {q.useCase && (
+          <div style={{ marginTop: 8 }}>
+            <div style={{ fontSize: 11, color: 'var(--txt3)', marginBottom: 3 }}>Use case</div>
+            {Array.isArray(q.useCase) ? (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                {q.useCase.map(u => (
+                  <span key={u} style={{ fontSize: 11, fontWeight: 500, color: 'var(--acc)', background: 'var(--acc2)', border: '1px solid var(--acc)40', borderRadius: 999, padding: '2px 8px' }}>{u}</span>
+                ))}
+              </div>
+            ) : (
+              <div style={{ fontSize: 12, color: 'var(--acc)', fontWeight: 500, lineHeight: 1.4 }}>{q.useCase}</div>
+            )}
+          </div>
+        )}
+        {(q.mobileIos || q.mobileAndroid || q.mobileEndpoints) && (
+          <div style={{ display: 'flex', gap: 8, marginTop: 5 }}>
+            <span style={{ fontSize: 11, color: 'var(--txt3)', minWidth: 70 }}>Mobile</span>
+            <span style={{ fontSize: 12 }}>
+              {q.mobileIos && q.mobileAndroid
+                ? `iOS: ${q.mobileIos} · Android: ${q.mobileAndroid}`
+                : q.mobileIos ? `iOS: ${q.mobileIos}`
+                : q.mobileAndroid ? `Android: ${q.mobileAndroid}`
+                : q.mobileEndpoints}
+            </span>
+          </div>
+        )}
       </div>
       <div>
         {tools.length > 0 && <>
@@ -200,11 +225,37 @@ export default function ProspectList () {
     finally { setLoading(false) }
   }
 
-  async function startCall (prospect) {
+  async function continueCall (prospect) {
+    // Get the most recent session for this prospect and restore its data
+    const full = await api.prospects.get(prospect.id)
+    const latestSession = full.sessions?.[0]
+
+    if (!latestSession) {
+      // No session yet — create one
+      dispatch({ type: 'SET_PROSPECT', payload: prospect })
+      dispatch({ type: 'SET_PERSONA',  payload: prospect.name })
+      const session = await api.sessions.start(prospect.id)
+      dispatch({ type: 'SET_SESSION',  payload: session })
+      navigate('/dashboard')
+      return
+    }
+
+    // Get full session with qual data
+    const sessionDetail = await api.sessions.get(latestSession.id)
+
+    // Restore qualification data to localStorage so the form pre-populates
+    if (sessionDetail.qualification_data) {
+      try {
+        const qualData = typeof sessionDetail.qualification_data === 'string'
+          ? JSON.parse(sessionDetail.qualification_data)
+          : sessionDetail.qualification_data
+        localStorage.setItem(`qual_${latestSession.id}`, JSON.stringify(qualData))
+      } catch {}
+    }
+
     dispatch({ type: 'SET_PROSPECT', payload: prospect })
     dispatch({ type: 'SET_PERSONA',  payload: prospect.name })
-    const session = await api.sessions.start(prospect.id)
-    dispatch({ type: 'SET_SESSION',  payload: session })
+    dispatch({ type: 'SET_SESSION',  payload: latestSession })
     navigate('/dashboard')
   }
 
@@ -318,8 +369,8 @@ export default function ProspectList () {
 
                     {/* Actions */}
                     <div style={{ display: 'flex', gap: 6, flexShrink: 0 }} onClick={e => e.stopPropagation()}>
-                      <button onClick={() => startCall(p)} style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, background: 'var(--acc)', color: '#042D22' }}>
-                        Call
+                      <button onClick={() => continueCall(p)} style={{ padding: '6px 12px', borderRadius: 8, fontSize: 12, fontWeight: 600, background: 'var(--acc)', color: '#042D22' }}>
+                        Continue call
                       </button>
                       <button
                         onClick={() => toggleExpand(p.id)}
@@ -365,7 +416,7 @@ export default function ProspectList () {
                               )
                             })()}
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: 24 }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 24 }}>
 
                               {/* Qualification */}
                               <div>
@@ -373,28 +424,30 @@ export default function ProspectList () {
                                 <QualSummary data={sd?.qualification_data} />
                               </div>
 
-                              {/* Notes */}
+                              {/* Qual notes — moved from sidebar */}
                               <div>
-                                <div className="section-label" style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
-                                  <span>Notes</span>
-                                  <span style={{ color: 'var(--txt3)', fontWeight: 400 }}>{expandedData.notes?.length || 0}</span>
-                                </div>
-                                {(!expandedData.notes?.length) && <div style={{ fontSize: 12, color: 'var(--txt3)' }}>No notes for this session</div>}
-                                {expandedData.notes?.map(note => (
-                                  <div key={note.id} style={{ background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: 8, padding: '9px 11px', marginBottom: 7 }}>
-                                    <div style={{ fontSize: 12, lineHeight: 1.45, marginBottom: 3 }}>{note.content}</div>
-                                    <div style={{ fontSize: 10, color: 'var(--txt3)' }}>
-                                      {fmtDate(note.created_at)} · {fmtTime(note.created_at)}
+                                <div className="section-label" style={{ marginBottom: 12 }}>Notes</div>
+                                {(() => {
+                                  let qualNotes = ''
+                                  try {
+                                    const q = sd?.qualification_data ? JSON.parse(sd.qualification_data) : null
+                                    qualNotes = q?.notes || ''
+                                  } catch {}
+                                  return qualNotes ? (
+                                    <div style={{ background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: 9, padding: '10px 12px', fontSize: 12, lineHeight: 1.6, color: 'var(--txt)', whiteSpace: 'pre-wrap' }}>
+                                      {qualNotes}
                                     </div>
-                                  </div>
-                                ))}
+                                  ) : (
+                                    <div style={{ fontSize: 12, color: 'var(--txt3)' }}>No notes for this session</div>
+                                  )
+                                })()}
                               </div>
                             </div>
 
                             {/* Footer actions */}
                             <div style={{ display: 'flex', gap: 8, marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--brd)', alignItems: 'center' }}>
-                              <button onClick={() => startCall(p)} className="btn btn-primary" style={{ fontSize: 12, padding: '7px 16px' }}>
-                                Start new call
+                              <button onClick={() => continueCall(p)} className="btn btn-primary" style={{ fontSize: 12, padding: '7px 16px' }}>
+                                Continue call
                               </button>
                               <button
                                 onClick={() => handleExport(p)}
