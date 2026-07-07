@@ -186,11 +186,11 @@ export default function QualificationForm ({ session, prospect }) {
             style={{ fontSize: 13, padding: '9px 12px', cursor: 'pointer' }}
           >
             <option value="">Select timeframe…</option>
-            <option value="0–3 months">0–3 weeks</option>
-            <option value="3–6 months">3–6 weeks</option>
-            <option value="6–9 months">6–9 weeks</option>
-            <option value="9–12 months">9–12 weeks</option>
-            <option value="12+ months">12+ weeks</option>
+            <option value="0–3 months">0–3 months</option>
+            <option value="3–6 months">3–6 months</option>
+            <option value="6–9 months">6–9 months</option>
+            <option value="9–12 months">9–12 months</option>
+            <option value="12+ months">12+ months</option>
           </select>
         </div>
       </Block>
