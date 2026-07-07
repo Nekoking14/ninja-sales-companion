@@ -178,7 +178,7 @@ export default function QualificationForm ({ session, prospect }) {
           <Input value={form.endpoints} onChange={v => set('endpoints', v)} placeholder="Enter number" />
         </div>
         <div style={{ marginTop: 10 }}>
-          <Label text="IMPLEMENTATION TIME (WEEKS)" />
+          <Label text="IMPLEMENTATION TIME (MONTHS)" />
           <select
             className="input"
             value={form.implTime || ''}
@@ -186,11 +186,11 @@ export default function QualificationForm ({ session, prospect }) {
             style={{ fontSize: 13, padding: '9px 12px', cursor: 'pointer' }}
           >
             <option value="">Select timeframe…</option>
-            <option value="0–3 weeks">0–3 weeks</option>
-            <option value="3–6 weeks">3–6 weeks</option>
-            <option value="6–9 weeks">6–9 weeks</option>
-            <option value="9–12 weeks">9–12 weeks</option>
-            <option value="12+ weeks">12+ weeks</option>
+            <option value="0–3 months">0–3 weeks</option>
+            <option value="3–6 months">3–6 weeks</option>
+            <option value="6–9 months">6–9 weeks</option>
+            <option value="9–12 months">9–12 weeks</option>
+            <option value="12+ months">12+ weeks</option>
           </select>
         </div>
       </Block>
