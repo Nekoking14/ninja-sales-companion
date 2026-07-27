@@ -22,16 +22,21 @@ const USE_CASE_OPTIONS = [
 ]
 
 const TOOL_OPTIONS = {
-  rmm:                ['Kaseya VSA', 'ConnectWise Automate', 'ManageEngine RMM', 'Datto RMM', 'N-Able N-sight', 'Atera', 'Syncro', 'Pulseway', 'Freshservice', 'None'],
-  patching:           ['Intune / SCCM', 'Ivanti Patch', 'ManageEngine Patch Manager', 'BigFix', 'SolarWinds Patch Manager', 'None'],
-  thirdPartyPatching: ['PDQ Deploy', 'Chocolatey', 'Heimdal', 'Automox', 'Patch My PC', 'None'],
-  remoteAccess:       ['TeamViewer', 'AnyDesk', 'Splashtop', 'LogMeIn', 'GoTo Resolve', 'RDP only', 'None'],
-  ticketing:          ['ServiceNow', 'Jira Service Management', 'Freshdesk', 'Zendesk', 'HaloITSM', 'Autotask', 'ConnectWise Manage', 'None'],
-  mdm:                ['Intune', 'Jamf', 'VMware Workspace ONE', 'Cisco Meraki', 'SOTI MobiControl', 'None'],
-  backup:             ['Veeam', 'Acronis', 'Datto Backup', 'Backup Exec', 'Azure Backup', 'Commvault', 'None'],
-  avEdr:              ['Microsoft Defender', 'CrowdStrike Falcon', 'SentinelOne', 'Sophos Intercept X', 'Carbon Black', 'Malwarebytes', 'Trend Micro', 'None'],
-  monitoring:         ['PRTG', 'Zabbix', 'Nagios', 'SolarWinds Observability', 'Datadog', 'Dynatrace', 'None'],
-  complianceTool:     ['Qualys', 'Tenable / Nessus', 'Rapid7 InsightVM', 'Orca Security', 'Wiz', 'None'],
+  rmm: ['ACMP','Acronis','Action1','Addigy','Atera','Automox','Baramundi','Barracuda Managed Workplace','BigFix','Comodo One','ConnectWise Automate','ConnectWise RMM','Datto RMM','Faronics','FreshService','GoTo','Goverlan','ITarian','Ivanti','Jamf Pro','Kabuto','Kaseya VSA','Lansweeper','Level.io','LogMeIn','ManageEngine Endpoint Central','ManageEngine RMM','Matrix42','Meraki','Microsoft Intune','Microsoft SCCM','Microsoft Intune + SCCM','N-Able N-Central','N-Able RMM','Naverisk','Nexthink','NinjaRMM','No RMM Tool','Optitune','PacketTrap MSP','PDQ','Pulseway','Quest KACE','RG System','Riverbird','ServerEye','Sixsense','SolarWinds Orion','Spiceworks','SuperOps.ai','Supremo','SyncroMSP','Sysaid','Tanium'],
+  ticketing: ['Accelo','ARTIS','Atera','Autotask','BlueFolder','BMC','Centron','CommitCRM','Computicate','ConnectWise Manage','Devrev.ai','Email','EzPSA','FreshService / FreshDesk','HaloPSA','HarmonyPSA','HelpDesk','In-House','Jira','Kaseya BMS','Kayako','Lansweeper','ManageEngine Service Desk Plus','N-Able MSP Manager','Ninja Ticketing','OTRS','PromysPSA','Remedy ITSM','RepairShopr','Salesforce Service Cloud','SchoolDude','ServiceNow','Sherpadesk','SolarWinds Service Desk','SolarWinds WebHelpDesk','Spiceworks','SuperOps.ai','Syncro','Sysaid','TANSS','Tigerpaw','TopDesk','Vorex','Zendesk','Zoho Desk','HappyFox','Rezolve.ai'],
+  backup: ['Acronis','AFI.ai','Ahsay','Amazon AWS','Appassure','Arcserve','Asigra','AvePoint','Axcient','Azure','BackBlaze','BackupAssist','Backup Exec','Barracuda','Beemo','Box','Carbonite','Cloud Ally','Cohesity','Comet','Commvault','Crashplan','Ctera','Datto','Dell Avamar','Did Not Disclose','Dropsuite','Druva','Evault','Gigasoft','Google Cloud','Google Drive','HornetSecurity','HYCU','Hyperoo','iDrive','Infrascale','Intronis','Iperius','Macrium','MagnusBox','Matrix42','MSP360','N-Able Backup','Nakivo','Ninja Backup','No Backup','Nordic Backup','NovaStor','OneDrive','Other','Proxmox','Qnap','Quest Rapid Recovery','Redstore','Replibit','Rubrik','Servosity','ShadowCradle','SkyKick','Slide','SOS','Spanning','Stage2','Storagecraft','Synology','Terra Cloud','Unitrends','UrBackup','Veeam','Vembu','Wasabi','Zerto','Zetta'],
+  saasBackup: ['Acronis','AFI.ai','Ahsay','Amazon AWS','Appassure','Arcserve','Asigra','AvePoint','Axcient','Azure','BackBlaze','BackupAssist','Backup Exec','Barracuda','Beemo','Box','Carbonite','Cloud Ally','Cohesity','Comet','Commvault','Crashplan','Ctera','Datto','Dell Avamar','Did Not Disclose','Dropsuite','Druva','Evault','Gigasoft','Google Cloud','Google Drive','HornetSecurity','HYCU','Hyperoo','iDrive','Infrascale','Intronis','Iperius','Macrium','MagnusBox','Matrix42','MSP360','N-Able Backup','Nakivo','Ninja Backup','No Backup','Nordic Backup','NovaStor','OneDrive','Other','Proxmox','Qnap','Quest Rapid Recovery','Redstore','Replibit','Rubrik','Servosity','ShadowCradle','SkyKick','Slide','SOS','Spanning','Stage2','Storagecraft','Synology','Terra Cloud','Unitrends','UrBackup','Veeam','Vembu','Wasabi','Zerto','Zetta'],
+  remoteAccess: ['AnyDesk','Avast Remote Control','Beyond Trust Remote Support','Bomgar','ConnectWise Control (ScreenConnect)','ConnectWise Control + Backstage','Dameware','FastViewer','GoToAssist','ISL Online','Join.me','LogMeIn','N-Able TakeControl','Ninja Remote','Other','PC Visit','RDP','Remote PC','Splashtop','TeamViewer','UltraVNC','VNC Connect','Zoho Assist'],
+  patching: ['Action1','Automox','Chocolatey','Did Not Disclose','GoverLan','Homebrew','Intune','Ivanti','Matrix42','Microsoft SCCM','Ninite','NinjaOne','No Patch Management Tool','PatchMyPC','Qualys','SolarWinds Patch Manager','Sysaid','Tanium','TeamViewer','Tenable','WSUS'],
+  documentation: ['Atlassian / Confluence / Jira','Clickup','ConnectWise Manage','Document360','Documentation Tool Built into RMM','Documentation in PSA / Ticketing','Docusnap','DokuWiki','Freshdesk / Freshservice','Google Workspace','HUDU','In-House Tool','IT Boost','IT Glue','IT Portal','Keeper','M365 / SharePoint / OneNote','MediaWiki','Ninja Documentation','No Documentation Tool','Notion','Other','Passportal'],
+  mdm: ['42 Gears SureMDM','Addigy','Apptec','Citrix Endpoint Management','Cortado','Did Not Disclose','ESET iOS MDM','Esper','Fleetsmith','Google Workspace','Hexnode','IBM Maas360','Iru','Ivanti MDM','JAMF','JumpCloud','KACE Cloud MDM','Kaspersky','ManageEngine MDM Plus','Meraki System Manager','Microsoft Intune','Miradore','MobileIron','Mosyle','No MDM','Other','Relution','Rippling','Samsung Knox','Scalefusion','SecurePoint','Securly','SimpleMDM','SolarWinds MDM','Sophos','Sophos Mobile Control','SOTI MobiControl','Verizon','VMware Airwatch','Workspace ONE'],
+  networkMonitoring: ['Auvik','Catchpoint','Datadog','Domotz','Entuity','In-House','Kentik','Logic Monitor','ManageEngine OpManager','Micro Focus','Microsoft System Center','Nagios','Ninja Network Monitoring','No Network Monitoring','Other','PRTG','SolarWinds NPM','WhatsUp Gold','Wireshark','Zabbix'],
+  antivirus: ['Avast','AVG','Bitdefender','Carbon Black','Cisco Secure Endpoint','CrowdStrike Falcon','Cylance','ESET','F-Secure','Kaspersky','Malwarebytes','McAfee','Microsoft Defender','No AV Tool','Panda','Sentinel Agent','SentinelOne','Sophos','Symantec','Trend Micro','Webroot','Windows Defender'],
+  itsm: ['BMC','Cherwell','Freshservice','Halo','Hornbill','In-House Tool','Jira','No ITSM','Other','PagerDuty','Salesforce','ServiceNow','SysAid','TeamDynamix','Zendesk'],
+  dns: ['Bitdefender DNS','Cisco OpenDNS','No DNS Tool','Other','Proofpoint','Quad9','Webroot DNS'],
+  productivity: ['Google Workspace','Microsoft 365'],
+  identity: ['Active Directory Federation Services (ADFS)','Auth0','Azure AD','CyberArk','Duo','ESET','ForgeRock','IBM Security Verify','JumpCloud','MicroFocus NetIQ','No Identity Provider','Office 365','Okta','OneLogin','Oracle Access Management'],
+  networkHardware: ['Aruba','Cisco','Cisco Meraki','DrayTek','Extreme Networks','Fortinet','HPE','Juniper','Netgear','No Specific Vendor','Other','Palo Alto','Ubiquiti','Zyxel'],
 }
 
 // ── Empty form state ────────────────────────────────────────────────────────
@@ -52,37 +57,41 @@ export const EMPTY_QUAL = {
   useCase:        [],    // array for multi-select
   msp:            '',
   tools: {
-    rmm: [], patching: [], thirdPartyPatching: [],
-    remoteAccess: [], ticketing: [], mdm: [],
-    backup: [], avEdr: [], monitoring: [], complianceTool: []
+    rmm: [], ticketing: [], backup: [], saasBackup: [],
+    remoteAccess: [], patching: [], documentation: [],
+    mdm: [], networkMonitoring: [], antivirus: [],
+    itsm: [], dns: [], productivity: [], identity: [], networkHardware: []
   }
 }
 
-// Normalise tool value — old string → array, array → array
 function normTool (v) {
   if (Array.isArray(v)) return v
   if (v && typeof v === 'string' && v.trim() && v !== 'None') return [v]
   return []
 }
 
-// Normalise saved data (handles old string useCase, old mobileEndpoints, old string tools)
 function normalise (saved) {
   if (!saved) return EMPTY_QUAL
-  const rawTools = saved.tools || {}
+  const r = saved.tools || {}
   return {
     ...EMPTY_QUAL,
     ...saved,
     tools: {
-      rmm:                normTool(rawTools.rmm),
-      patching:           normTool(rawTools.patching),
-      thirdPartyPatching: normTool(rawTools.thirdPartyPatching),
-      remoteAccess:       normTool(rawTools.remoteAccess),
-      ticketing:          normTool(rawTools.ticketing),
-      mdm:                normTool(rawTools.mdm),
-      backup:             normTool(rawTools.backup),
-      avEdr:              normTool(rawTools.avEdr),
-      monitoring:         normTool(rawTools.monitoring),
-      complianceTool:     normTool(rawTools.complianceTool),
+      rmm:             normTool(r.rmm),
+      ticketing:       normTool(r.ticketing),
+      backup:          normTool(r.backup),
+      saasBackup:      normTool(r.saasBackup),
+      remoteAccess:    normTool(r.remoteAccess),
+      patching:        normTool(r.patching || r.thirdPartyPatching), // backwards compat
+      documentation:   normTool(r.documentation),
+      mdm:             normTool(r.mdm),
+      networkMonitoring: normTool(r.networkMonitoring || r.monitoring),
+      antivirus:       normTool(r.antivirus || r.avEdr),
+      itsm:            normTool(r.itsm),
+      dns:             normTool(r.dns),
+      productivity:    normTool(r.productivity),
+      identity:        normTool(r.identity),
+      networkHardware: normTool(r.networkHardware),
     },
     useCase: Array.isArray(saved.useCase)
       ? saved.useCase
@@ -90,6 +99,47 @@ function normalise (saved) {
     mobileIos:     saved.mobileIos     || '',
     mobileAndroid: saved.mobileAndroid || '',
   }
+}
+
+// ── Basic pricing logic ────────────────────────────────────────────────────
+const MSP_STANDARD_RMMS = [
+  'datto', 'n-able', 'solarwinds', 'connectwise', 'kaseya', 'atera',
+  'manageengine endpoint central', 'endpoint central', 'prtg', 'action1',
+  'syncromsp', 'pulseway', 'matrix42', 'naverisk', 'barracuda', 'superops',
+  'rg system', 'servereye', 'riverbird'
+]
+const QUALIFYING_MDMS = ['jamf', 'manage engine', 'manageengine']
+
+function getBasicPricingInfo (form) {
+  if (!form.prospectType) return null
+
+  if (form.prospectType === 'it') {
+    const eps = parseInt(form.endpoints || '0', 10)
+    if (eps > 0 && eps < 50) return { note: `${eps} endpoints — book as basic` }
+    return null
+  }
+
+  if (form.prospectType === 'msp') {
+    const rmmTools  = (form.tools?.rmm  || []).map(v => v.toLowerCase())
+    const mdmTools  = (form.tools?.mdm  || []).map(v => v.toLowerCase())
+    const noRmm     = rmmTools.length === 0 || rmmTools.some(v => v.includes('no rmm'))
+    const hasPRTG   = rmmTools.some(v => v.includes('prtg'))
+    const hasStdRmm = !noRmm && rmmTools.some(t => MSP_STANDARD_RMMS.some(s => t.includes(s) || s.includes(t)))
+    const hasStdMdm = mdmTools.some(t => QUALIFYING_MDMS.some(s => t.includes(s)))
+
+    if (!hasStdRmm && !hasStdMdm) {
+      const eps = parseInt(form.endpoints || '0', 10)
+      const note = noRmm
+        ? 'No RMM — book as 0/49'
+        : hasPRTG && eps > 0
+          ? `PRTG: ${eps} eps ÷ 5 = ${Math.round(eps / 5)} for pricing`
+          : 'Non-standard RMM — book as 0/49'
+      return { note }
+    }
+    return null
+  }
+
+  return null
 }
 
 export default function QualificationForm ({ session, prospect }) {
@@ -125,16 +175,43 @@ export default function QualificationForm ({ session, prospect }) {
   const set     = (f, v) => setForm(p => ({ ...p, [f]: v }))
   const setTool = (f, v) => setForm(p => ({ ...p, tools: { ...p.tools, [f]: v } }))
 
+  // Basic pricing indicator
+  const basicPricingInfo = getBasicPricingInfo(form)
+
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px', background: 'var(--bg)' }}>
 
       {/* Prospect type */}
       <Block title="Prospect type">
-        <Label text="MSP OR INTERNAL IT?" />
-        <BtnGroup value={form.prospectType} onChange={v => set('prospectType', v)} options={[
-          { value: 'msp', label: 'MSP',          bg: 'var(--blue2)', color: 'var(--blue)', brd: 'var(--blue)' },
-          { value: 'it',  label: 'Internal IT',  bg: 'var(--acc2)',  color: 'var(--acc)',  brd: 'var(--acc)'  }
-        ]} />
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <Label text="MSP OR INTERNAL IT?" />
+            <BtnGroup value={form.prospectType} onChange={v => set('prospectType', v)} options={[
+              { value: 'msp', label: 'MSP',          bg: 'var(--blue2)', color: 'var(--blue)', brd: 'var(--blue)' },
+              { value: 'it',  label: 'Internal IT',  bg: 'var(--acc2)',  color: 'var(--acc)',  brd: 'var(--acc)'  }
+            ]} />
+          </div>
+
+          {/* Basic pricing badge — shows when triggered */}
+          {basicPricingInfo && (
+            <div style={{
+              marginTop: 15, flexShrink: 0,
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'var(--amber2)', border: '1px solid var(--amber)',
+              borderRadius: 8, padding: '7px 12px',
+              fontSize: 12, color: 'var(--amber)', fontWeight: 600,
+              lineHeight: 1.4
+            }}>
+              <span style={{ fontSize: 14 }}>⚡</span>
+              <div>
+                <div>Basic Pricing</div>
+                {basicPricingInfo.note && (
+                  <div style={{ fontSize: 10, fontWeight: 400, opacity: 0.85 }}>{basicPricingInfo.note}</div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
         {form.prospectType === 'it' && (
           <div style={{ marginTop: 10 }}>
             <Label text="DO THEY USE AN MSP?" />
@@ -178,7 +255,7 @@ export default function QualificationForm ({ session, prospect }) {
           <Input value={form.endpoints} onChange={v => set('endpoints', v)} placeholder="Enter number" />
         </div>
         <div style={{ marginTop: 10 }}>
-          <Label text="IMPLEMENTATION TIME (MONTHS)" />
+          <Label text="IMPLEMENTATION TIME (WEEKS)" />
           <select
             className="input"
             value={form.implTime || ''}
@@ -186,11 +263,11 @@ export default function QualificationForm ({ session, prospect }) {
             style={{ fontSize: 13, padding: '9px 12px', cursor: 'pointer' }}
           >
             <option value="">Select timeframe…</option>
-            <option value="0–3 months">0–3 months</option>
-            <option value="3–6 months">3–6 months</option>
-            <option value="6–9 months">6–9 months</option>
-            <option value="9–12 months">9–12 months</option>
-            <option value="12+ months">12+ months</option>
+            <option value="0–3 weeks">0–3 weeks</option>
+            <option value="3–6 weeks">3–6 weeks</option>
+            <option value="6–9 weeks">6–9 weeks</option>
+            <option value="9–12 weeks">9–12 weeks</option>
+            <option value="12+ weeks">12+ weeks</option>
           </select>
         </div>
       </Block>
@@ -265,16 +342,21 @@ export default function QualificationForm ({ session, prospect }) {
       <Block title="Current tool stack">
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
           {[
-            { k: 'rmm',                l: 'RMM / EPM',           c: 'var(--purple)' },
-            { k: 'patching',           l: 'Patching',            c: 'var(--blue)'   },
-            { k: 'thirdPartyPatching', l: '3rd party patching',  c: 'var(--blue)'   },
-            { k: 'remoteAccess',       l: 'Remote access',       c: 'var(--acc)'    },
-            { k: 'ticketing',          l: 'Ticketing',           c: 'var(--amber)'  },
-            { k: 'mdm',                l: 'MDM',                 c: 'var(--coral)'  },
-            { k: 'backup',             l: 'Backup',              c: 'var(--green)'  },
-            { k: 'avEdr',              l: 'AV / EDR',            c: 'var(--red)'    },
-            { k: 'monitoring',         l: 'Monitoring',          c: 'var(--amber)'  },
-            { k: 'complianceTool',     l: 'Compliance tool',     c: 'var(--purple)' },
+            { k: 'rmm',              l: 'RMM Tools',              c: 'var(--purple)' },
+            { k: 'ticketing',        l: 'PSA / Ticketing',        c: 'var(--amber)'  },
+            { k: 'backup',           l: 'Backup',                 c: 'var(--green)'  },
+            { k: 'saasBackup',       l: 'SaaS Backup',            c: 'var(--green)'  },
+            { k: 'remoteAccess',     l: 'Remote Access',          c: 'var(--acc)'    },
+            { k: 'patching',         l: 'Patch Management',       c: 'var(--blue)'   },
+            { k: 'documentation',    l: 'Documentation',          c: 'var(--amber)'  },
+            { k: 'mdm',              l: 'MDM',                    c: 'var(--coral)'  },
+            { k: 'networkMonitoring',l: 'Network Monitoring',     c: 'var(--blue)'   },
+            { k: 'antivirus',        l: 'Anti Virus / EDR',       c: 'var(--red)'    },
+            { k: 'itsm',             l: 'ITSM',                   c: 'var(--purple)' },
+            { k: 'dns',              l: 'DNS Tool',               c: 'var(--acc)'    },
+            { k: 'productivity',     l: 'Productivity',           c: 'var(--blue)'   },
+            { k: 'identity',         l: 'Identity',               c: 'var(--amber)'  },
+            { k: 'networkHardware',  l: 'Network Hardware',       c: 'var(--coral)'  },
           ].map(({ k, l, c }) => (
             <div key={k} style={{ position: 'relative' }}>
               <Label text={l} />

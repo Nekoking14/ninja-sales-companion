@@ -21,6 +21,50 @@
       "notes": null,
       "created_at": "2026-06-24 14:52:53",
       "updated_at": "2026-06-24 14:52:53"
+    },
+    {
+      "id": 3,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-07-27 11:46:55",
+      "updated_at": "2026-07-27 11:46:55"
+    },
+    {
+      "id": 4,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-07-27 12:27:28",
+      "updated_at": "2026-07-27 12:27:28"
+    },
+    {
+      "id": 5,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-07-27 12:53:55",
+      "updated_at": "2026-07-27 12:53:55"
+    },
+    {
+      "id": 6,
+      "name": "CISO",
+      "company": "CISO / Security Leader",
+      "role": "CISO / Security Leader",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-07-27 12:54:10",
+      "updated_at": "2026-07-27 12:54:10"
     }
   ],
   "sessions": [
@@ -39,6 +83,38 @@
       "ended_at": "2026-06-24 14:53:15",
       "duration_sec": 22,
       "qualification_data": "{\"cloudOk\":\"yes\",\"endpoints\":\"123\",\"nameCorrect\":\"update\",\"emailCorrect\":\"update\",\"decisionMaker\":\"dm\",\"mobileEndpoints\":\"123\",\"timeline\":\"123\",\"useCase\":\"123\",\"msp\":\"123\",\"tools\":{\"rmm\":\"123\",\"patching\":\"123\",\"thirdPartyPatching\":\"123\",\"remoteAccess\":\"123\",\"ticketing\":\"123\",\"mdm\":\"123\",\"backup\":\"123\",\"avEdr\":\"123\",\"monitoring\":\"123\",\"complianceTool\":\"123\"},\"notes\":\"123\"}"
+    },
+    {
+      "id": 3,
+      "prospect_id": 3,
+      "started_at": "2026-07-27 11:46:55",
+      "ended_at": "2026-07-27 11:55:24",
+      "duration_sec": 237,
+      "qualification_data": "{\"prospectType\":\"it\",\"usesMsp\":\"no\",\"mspPartner\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"1000\",\"implTime\":\"3–6 months\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"500\",\"mobileAndroid\":\"500\",\"timeline\":\"Q4 \",\"useCase\":[\"Patching compliance gaps\",\"Remote workforce management\",\"Cyber Essentials certification\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"ConnectWise Automate\"],\"patching\":[\"ManageEngine Patch Manager\"],\"thirdPartyPatching\":[\"Heimdal\"],\"remoteAccess\":[],\"ticketing\":[],\"mdm\":[],\"backup\":[],\"avEdr\":[],\"monitoring\":[],\"complianceTool\":[]}}"
+    },
+    {
+      "id": 4,
+      "prospect_id": 4,
+      "started_at": "2026-07-27 12:27:28",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 5,
+      "prospect_id": 5,
+      "started_at": "2026-07-27 12:53:55",
+      "ended_at": "2026-07-27 12:54:08",
+      "duration_sec": 12,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":null,\"endpoints\":\"59\",\"implTime\":\"\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"q3\",\"useCase\":[\"Patching\"],\"msp\":\"idk\",\"tools\":{\"rmm\":[],\"ticketing\":[\"s\"],\"backup\":[\"asd\"],\"saasBackup\":[],\"remoteAccess\":[\"as\"],\"patching\":[\"Intune\"],\"documentation\":[],\"mdm\":[\"asd\"],\"networkMonitoring\":[],\"antivirus\":[\"das\"],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"02\",\"notes\":\"asdasd\"}"
+    },
+    {
+      "id": 6,
+      "prospect_id": 6,
+      "started_at": "2026-07-27 12:54:10",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":\"it\",\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"49\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"\"}"
     }
   ],
   "report_items": [],

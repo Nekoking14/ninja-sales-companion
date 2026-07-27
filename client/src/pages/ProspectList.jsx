@@ -103,11 +103,21 @@ function generateExport (session, persona) {
   ].filter(Boolean) : []
 
   const toolEntries = [
-    ['RMM / EPM',    tv(t.rmm)], ['Patching',     tv(t.patching)],
-    ['3rd Party',    tv(t.thirdPartyPatching)], ['Remote Access', tv(t.remoteAccess)],
-    ['Ticketing',    tv(t.ticketing)], ['MDM',          tv(t.mdm)],
-    ['Backup',       tv(t.backup)], ['AV / EDR',     tv(t.avEdr)],
-    ['Monitoring',   tv(t.monitoring)], ['Compliance',   tv(t.complianceTool)],
+    ['RMM Tools',          tv(t.rmm)],
+    ['PSA / Ticketing',    tv(t.ticketing)],
+    ['Backup',             tv(t.backup)],
+    ['SaaS Backup',        tv(t.saasBackup)],
+    ['Remote Access',      tv(t.remoteAccess)],
+    ['Patch Management',   tv(t.patching || t.thirdPartyPatching)],
+    ['Documentation',      tv(t.documentation)],
+    ['MDM',                tv(t.mdm)],
+    ['Network Monitoring', tv(t.networkMonitoring || t.monitoring)],
+    ['Anti Virus / EDR',   tv(t.antivirus || t.avEdr)],
+    ['ITSM',               tv(t.itsm)],
+    ['DNS Tool',           tv(t.dns)],
+    ['Productivity',       tv(t.productivity)],
+    ['Identity',           tv(t.identity)],
+    ['Network Hardware',   tv(t.networkHardware)],
   ].filter(([, v]) => v)
 
   const toolLines = toolEntries.length ? [
@@ -154,7 +164,16 @@ function QualSummary ({ data }) {
 
   const sc = v => v === 'yes' || v === 'confirmed' || v === 'dm' ? 'var(--green)' : v === 'no' || v === 'update' ? 'var(--red)' : 'var(--amber)'
   const t  = q.tools || {}
-  const tools = [['RMM/EPM', t.rmm], ['Patching', t.patching], ['3rd Party', t.thirdPartyPatching], ['Remote Access', t.remoteAccess], ['Ticketing', t.ticketing], ['MDM', t.mdm], ['Backup', t.backup], ['AV/EDR', t.avEdr], ['Monitoring', t.monitoring], ['Compliance', t.complianceTool]]
+  const tools = [
+    ['RMM', t.rmm], ['PSA/Ticketing', t.ticketing],
+    ['Backup', t.backup], ['SaaS Backup', t.saasBackup],
+    ['Remote Access', t.remoteAccess], ['Patching', t.patching || t.thirdPartyPatching],
+    ['Docs', t.documentation], ['MDM', t.mdm],
+    ['Network Mon.', t.networkMonitoring || t.monitoring], ['AV/EDR', t.antivirus || t.avEdr],
+    ['ITSM', t.itsm], ['DNS', t.dns],
+    ['Productivity', t.productivity], ['Identity', t.identity],
+    ['Network HW', t.networkHardware],
+  ]
     .map(([l, v]) => [l, Array.isArray(v) ? v.join(', ') : v])
     .filter(([, v]) => v)
 
