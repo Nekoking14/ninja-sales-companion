@@ -1,24 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { api } from '../api/index.js'
-import ToolSelect  from './ToolSelect.jsx'
 import MultiSelect from './MultiSelect.jsx'
 
-// ── Preset options ──────────────────────────────────────────────────────────
 const USE_CASE_OPTIONS = [
-  'Patching compliance gaps',
-  'Consolidate from multiple tools',
-  'Remote workforce management',
-  'Security posture improvement',
-  'Cyber Essentials certification',
-  'Reducing ticket volume',
-  'Automating repetitive IT tasks',
-  'Improving device visibility',
-  'Cost reduction / budget optimisation',
-  'MSP service delivery platform',
-  'NIS2 / DORA compliance',
-  'Onboarding / offboarding automation',
-  'Reducing manual patching effort',
-  'Faster incident response',
+  'Patching compliance gaps','Consolidate from multiple tools','Remote workforce management',
+  'Security posture improvement','Cyber Essentials certification','Reducing ticket volume',
+  'Automating repetitive IT tasks','Improving device visibility','Cost reduction / budget optimisation',
+  'MSP service delivery platform','NIS2 / DORA compliance','Onboarding / offboarding automation',
+  'Reducing manual patching effort','Faster incident response',
 ]
 
 const TOOL_OPTIONS = {
@@ -39,23 +28,13 @@ const TOOL_OPTIONS = {
   networkHardware: ['Aruba','Cisco','Cisco Meraki','DrayTek','Extreme Networks','Fortinet','HPE','Juniper','Netgear','No Specific Vendor','Other','Palo Alto','Ubiquiti','Zyxel'],
 }
 
-// ── Empty form state ────────────────────────────────────────────────────────
 export const EMPTY_QUAL = {
-  prospectType:   null,
-  usesMsp:        null,
-  mspPartner:     '',
-  cloudOk:        null,
-  cloudFrankfurt: null,
-  endpoints:      '',
-  implTime:       '',
-  nameCorrect:    null,
-  emailCorrect:   null,
-  decisionMaker:  null,
-  mobileIos:      '',
-  mobileAndroid:  '',
-  timeline:       '',
-  useCase:        [],    // array for multi-select
-  msp:            '',
+  prospectType: null, usesMsp: null, mspPartner: '',
+  cloudOk: null, cloudFrankfurt: null,
+  endpoints: '', implTime: '',
+  nameCorrect: null, emailCorrect: null, decisionMaker: null,
+  mobileIos: '', mobileAndroid: '',
+  timeline: '', useCase: [], msp: '',
   tools: {
     rmm: [], ticketing: [], backup: [], saasBackup: [],
     remoteAccess: [], patching: [], documentation: [],
@@ -64,85 +43,70 @@ export const EMPTY_QUAL = {
   }
 }
 
-function normTool (v) {
+function normTool(v) {
   if (Array.isArray(v)) return v
   if (v && typeof v === 'string' && v.trim() && v !== 'None') return [v]
   return []
 }
 
-function normalise (saved) {
+function normalise(saved) {
   if (!saved) return EMPTY_QUAL
   const r = saved.tools || {}
   return {
-    ...EMPTY_QUAL,
-    ...saved,
+    ...EMPTY_QUAL, ...saved,
     tools: {
-      rmm:             normTool(r.rmm),
-      ticketing:       normTool(r.ticketing),
-      backup:          normTool(r.backup),
-      saasBackup:      normTool(r.saasBackup),
-      remoteAccess:    normTool(r.remoteAccess),
-      patching:        normTool(r.patching || r.thirdPartyPatching), // backwards compat
-      documentation:   normTool(r.documentation),
-      mdm:             normTool(r.mdm),
-      networkMonitoring: normTool(r.networkMonitoring || r.monitoring),
-      antivirus:       normTool(r.antivirus || r.avEdr),
-      itsm:            normTool(r.itsm),
-      dns:             normTool(r.dns),
-      productivity:    normTool(r.productivity),
-      identity:        normTool(r.identity),
-      networkHardware: normTool(r.networkHardware),
+      rmm:              normTool(r.rmm),
+      ticketing:        normTool(r.ticketing),
+      backup:           normTool(r.backup),
+      saasBackup:       normTool(r.saasBackup),
+      remoteAccess:     normTool(r.remoteAccess),
+      patching:         normTool(r.patching || r.thirdPartyPatching),
+      documentation:    normTool(r.documentation),
+      mdm:              normTool(r.mdm),
+      networkMonitoring:normTool(r.networkMonitoring || r.monitoring),
+      antivirus:        normTool(r.antivirus || r.avEdr),
+      itsm:             normTool(r.itsm),
+      dns:              normTool(r.dns),
+      productivity:     normTool(r.productivity),
+      identity:         normTool(r.identity),
+      networkHardware:  normTool(r.networkHardware),
     },
-    useCase: Array.isArray(saved.useCase)
-      ? saved.useCase
-      : (saved.useCase ? [saved.useCase] : []),
+    useCase: Array.isArray(saved.useCase) ? saved.useCase : (saved.useCase ? [saved.useCase] : []),
     mobileIos:     saved.mobileIos     || '',
     mobileAndroid: saved.mobileAndroid || '',
   }
 }
 
-// ── Basic pricing logic ────────────────────────────────────────────────────
-const MSP_STANDARD_RMMS = [
-  'datto', 'n-able', 'solarwinds', 'connectwise', 'kaseya', 'atera',
-  'manageengine endpoint central', 'endpoint central', 'prtg', 'action1',
-  'syncromsp', 'pulseway', 'matrix42', 'naverisk', 'barracuda', 'superops',
-  'rg system', 'servereye', 'riverbird'
-]
-const QUALIFYING_MDMS = ['jamf', 'manage engine', 'manageengine']
+const MSP_STANDARD_RMMS = ['datto','n-able','solarwinds','connectwise','kaseya','atera','manageengine endpoint central','endpoint central','prtg','action1','syncromsp','pulseway','matrix42','naverisk','barracuda','superops','rg system','servereye','riverbird']
+const QUALIFYING_MDMS   = ['jamf','manage engine','manageengine']
 
-function getBasicPricingInfo (form) {
+function getBasicPricingInfo(form) {
   if (!form.prospectType) return null
-
   if (form.prospectType === 'it') {
     const eps = parseInt(form.endpoints || '0', 10)
     if (eps > 0 && eps < 50) return { note: `${eps} endpoints — book as basic` }
     return null
   }
-
   if (form.prospectType === 'msp') {
-    const rmmTools  = (form.tools?.rmm  || []).map(v => v.toLowerCase())
-    const mdmTools  = (form.tools?.mdm  || []).map(v => v.toLowerCase())
-    const noRmm     = rmmTools.length === 0 || rmmTools.some(v => v.includes('no rmm'))
-    const hasPRTG   = rmmTools.some(v => v.includes('prtg'))
+    const rmmTools = (form.tools?.rmm || []).map(v => v.toLowerCase())
+    const mdmTools = (form.tools?.mdm || []).map(v => v.toLowerCase())
+    const noRmm    = rmmTools.length === 0 || rmmTools.some(v => v.includes('no rmm'))
+    const hasPRTG  = rmmTools.some(v => v.includes('prtg'))
     const hasStdRmm = !noRmm && rmmTools.some(t => MSP_STANDARD_RMMS.some(s => t.includes(s) || s.includes(t)))
     const hasStdMdm = mdmTools.some(t => QUALIFYING_MDMS.some(s => t.includes(s)))
-
     if (!hasStdRmm && !hasStdMdm) {
-      const eps = parseInt(form.endpoints || '0', 10)
-      const note = noRmm
-        ? 'No RMM — book as 0/49'
-        : hasPRTG && eps > 0
-          ? `PRTG: ${eps} eps ÷ 5 = ${Math.round(eps / 5)} for pricing`
-          : 'Non-standard RMM — book as 0/49'
+      const eps  = parseInt(form.endpoints || '0', 10)
+      const note = noRmm ? 'No RMM — book as 0/49'
+        : hasPRTG && eps > 0 ? `PRTG: ${eps} eps ÷ 5 = ${Math.round(eps / 5)} for pricing`
+        : 'Non-standard RMM — book as 0/49'
       return { note }
     }
     return null
   }
-
   return null
 }
 
-export default function QualificationForm ({ session, prospect }) {
+export default function QualificationForm({ session, prospect }) {
   const key = `qual_${session?.id || prospect?.id || 'draft'}`
 
   const [form, setForm] = useState(() => {
@@ -175,39 +139,49 @@ export default function QualificationForm ({ session, prospect }) {
   const set     = (f, v) => setForm(p => ({ ...p, [f]: v }))
   const setTool = (f, v) => setForm(p => ({ ...p, tools: { ...p.tools, [f]: v } }))
 
-  // Basic pricing indicator
   const basicPricingInfo = getBasicPricingInfo(form)
+  const disqComplete = form.cloudOk !== null
+    && (form.cloudOk === 'no' || form.cloudFrankfurt !== null)
+    && form.endpoints.trim() !== ''
+
+  const [showDNB, setShowDNB] = useState(false)
+  function handleDM(val) { set('decisionMaker', val); if (val === 'no') setShowDNB(true) }
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px', background: 'var(--bg)' }}>
+    <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px', background: 'var(--bg)', position: 'relative' }}>
 
-      {/* Prospect type */}
+      {/* Do Not Book popup */}
+      {showDNB && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(4,6,18,0.78)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 300 }}>
+          <div style={{ background: '#0F1628', border: '2px solid var(--red)', borderRadius: 16, padding: '32px 28px', maxWidth: 360, textAlign: 'center', boxShadow: '0 24px 60px rgba(0,0,0,0.6)' }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🚫</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--red)', marginBottom: 10 }}>Do Not Book</div>
+            <div style={{ fontSize: 13, color: 'var(--txt2)', lineHeight: 1.6, marginBottom: 24 }}>
+              The contact is not the decision maker. Do not book a demo without the DM present or a confirmed path to the DM.
+            </div>
+            <button onClick={() => setShowDNB(false)} style={{ background: 'var(--red2)', color: 'var(--red)', border: '1px solid var(--red)', borderRadius: 9, padding: '10px 28px', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+              Understood
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 1 — Prospect type */}
       <Block title="Prospect type">
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
           <div style={{ flex: 1, minWidth: 200 }}>
             <Label text="MSP OR INTERNAL IT?" />
             <BtnGroup value={form.prospectType} onChange={v => set('prospectType', v)} options={[
-              { value: 'msp', label: 'MSP',          bg: 'var(--blue2)', color: 'var(--blue)', brd: 'var(--blue)' },
-              { value: 'it',  label: 'Internal IT',  bg: 'var(--acc2)',  color: 'var(--acc)',  brd: 'var(--acc)'  }
+              { value: 'msp', label: 'MSP',         bg: 'var(--blue2)', color: 'var(--blue)', brd: 'var(--blue)' },
+              { value: 'it',  label: 'Internal IT', bg: 'var(--acc2)',  color: 'var(--acc)',  brd: 'var(--acc)'  }
             ]} />
           </div>
-
-          {/* Basic pricing badge — shows when triggered */}
           {basicPricingInfo && (
-            <div style={{
-              marginTop: 15, flexShrink: 0,
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              background: 'var(--amber2)', border: '1px solid var(--amber)',
-              borderRadius: 8, padding: '7px 12px',
-              fontSize: 12, color: 'var(--amber)', fontWeight: 600,
-              lineHeight: 1.4
-            }}>
+            <div style={{ marginTop: 15, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--amber2)', border: '1px solid var(--amber)', borderRadius: 8, padding: '7px 12px', fontSize: 12, color: 'var(--amber)', fontWeight: 600, lineHeight: 1.4 }}>
               <span style={{ fontSize: 14 }}>⚡</span>
               <div>
                 <div>Basic Pricing</div>
-                {basicPricingInfo.note && (
-                  <div style={{ fontSize: 10, fontWeight: 400, opacity: 0.85 }}>{basicPricingInfo.note}</div>
-                )}
+                {basicPricingInfo.note && <div style={{ fontSize: 10, fontWeight: 400, opacity: 0.85 }}>{basicPricingInfo.note}</div>}
               </div>
             </div>
           )}
@@ -216,13 +190,13 @@ export default function QualificationForm ({ session, prospect }) {
           <div style={{ marginTop: 10 }}>
             <Label text="DO THEY USE AN MSP?" />
             <BtnGroup value={form.usesMsp} onChange={v => set('usesMsp', v)} options={[
-              { value: 'yes', label: 'Yes — uses an MSP',   bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' },
-              { value: 'no',  label: 'No — self-managed',   bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' }
+              { value: 'yes', label: 'Yes — uses an MSP', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' },
+              { value: 'no',  label: 'No — self-managed', bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' }
             ]} />
             {form.usesMsp === 'yes' && (
               <div style={{ marginTop: 8 }}>
                 <Label text="MSP NAME" />
-                <Input value={form.mspPartner} onChange={v => set('mspPartner', v)} placeholder="e.g. Computacenter, SHI…" />
+                <input className="input" value={form.mspPartner} onChange={e => set('mspPartner', e.target.value)} placeholder="e.g. Computacenter, SHI…" style={{ fontSize: 13, padding: '9px 12px' }} />
               </div>
             )}
           </div>
@@ -234,45 +208,7 @@ export default function QualificationForm ({ session, prospect }) {
         )}
       </Block>
 
-      {/* Disqualifiers */}
-      <Block title="Disqualifiers — check first">
-        <Label text="CLOUD OK?" />
-        <BtnGroup value={form.cloudOk} onChange={v => set('cloudOk', v)} options={[
-          { value: 'yes', label: 'Yes — cloud fine',      bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
-          { value: 'no',  label: 'No — on-prem required', bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   }
-        ]} />
-        {form.cloudOk === 'yes' && (
-          <div style={{ marginTop: 10 }}>
-            <Label text="CLOUD HOSTED IN FRANKFURT, EU — OK?" />
-            <BtnGroup value={form.cloudFrankfurt} onChange={v => set('cloudFrankfurt', v)} options={[
-              { value: 'yes', label: 'Yes — Frankfurt OK',       bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
-              { value: 'no',  label: 'No — needs other region',  bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
-            ]} />
-          </div>
-        )}
-        <div style={{ marginTop: 10 }}>
-          <Label text="NUMBER OF ENDPOINTS" />
-          <Input value={form.endpoints} onChange={v => set('endpoints', v)} placeholder="Enter number" />
-        </div>
-        <div style={{ marginTop: 10 }}>
-          <Label text="IMPLEMENTATION TIME (WEEKS)" />
-          <select
-            className="input"
-            value={form.implTime || ''}
-            onChange={e => set('implTime', e.target.value)}
-            style={{ fontSize: 13, padding: '9px 12px', cursor: 'pointer' }}
-          >
-            <option value="">Select timeframe…</option>
-            <option value="0–3 weeks">0–3 weeks</option>
-            <option value="3–6 weeks">3–6 weeks</option>
-            <option value="6–9 weeks">6–9 weeks</option>
-            <option value="9–12 weeks">9–12 weeks</option>
-            <option value="12+ weeks">12+ weeks</option>
-          </select>
-        </div>
-      </Block>
-
-      {/* CRM */}
+      {/* 2 — Confirm from CRM */}
       <Block title="Confirm from CRM">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div>
@@ -290,8 +226,8 @@ export default function QualificationForm ({ session, prospect }) {
             ]} />
           </div>
           <div>
-            <Label text="DECISION MAKER?" />
-            <BtnGroup value={form.decisionMaker} onChange={v => set('decisionMaker', v)} options={[
+            <Label text="DECISION MAKER IN IT?" />
+            <BtnGroup value={form.decisionMaker} onChange={handleDM} options={[
               { value: 'dm',         label: 'Yes — DM',   bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
               { value: 'no',         label: 'No',         bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   },
               { value: 'influencer', label: 'Influencer', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
@@ -300,84 +236,107 @@ export default function QualificationForm ({ session, prospect }) {
         </div>
       </Block>
 
-      {/* Qualification */}
-      <Block title="Qualification">
-        {/* Mobile endpoints — split iOS / Android */}
-        <Label text="MOBILE ENDPOINTS" />
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
-          <div>
-            <div style={{ fontSize: 10, color: 'var(--txt3)', marginBottom: 4 }}>iOS devices</div>
-            <Input value={form.mobileIos} onChange={v => set('mobileIos', v)} placeholder="e.g. 50" />
+      {/* 3 — Disqualifiers (RED) */}
+      <div style={{ background: 'rgba(239,68,68,0.06)', border: '1.5px solid var(--red)', borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--red)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+          ⚠ Disqualifiers — check first
+          {disqComplete
+            ? <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--green)', background: 'var(--green2)', padding: '2px 8px', borderRadius: 999 }}>✓ Done</span>
+            : <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--red)', background: 'var(--red2)', padding: '2px 8px', borderRadius: 999 }}>Complete to unlock form</span>
+          }
+        </div>
+        <Label text="CLOUD OK?" />
+        <BtnGroup value={form.cloudOk} onChange={v => set('cloudOk', v)} options={[
+          { value: 'yes', label: 'Yes — cloud fine',      bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
+          { value: 'no',  label: 'No — on-prem required', bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   }
+        ]} />
+        {form.cloudOk === 'yes' && (
+          <div style={{ marginTop: 10 }}>
+            <Label text="CLOUD HOSTED IN FRANKFURT, EU — OK?" />
+            <BtnGroup value={form.cloudFrankfurt} onChange={v => set('cloudFrankfurt', v)} options={[
+              { value: 'yes', label: 'Yes — Frankfurt OK',      bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
+              { value: 'no',  label: 'No — needs other region', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
+            ]} />
           </div>
-          <div>
-            <div style={{ fontSize: 10, color: 'var(--txt3)', marginBottom: 4 }}>Android devices</div>
-            <Input value={form.mobileAndroid} onChange={v => set('mobileAndroid', v)} placeholder="e.g. 30" />
+        )}
+        <div style={{ marginTop: 10 }}>
+          <Label text="NUMBER OF ENDPOINTS" />
+          <input className="input" value={form.endpoints} onChange={e => set('endpoints', e.target.value)} placeholder="Enter number" style={{ fontSize: 13, padding: '9px 12px' }} />
+        </div>
+        <div style={{ marginTop: 8 }}>
+          <Label text="MOBILE ENDPOINTS" />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            <div><div style={{ fontSize: 10, color: 'var(--txt3)', marginBottom: 4 }}>iOS devices</div><input className="input" value={form.mobileIos} onChange={e => set('mobileIos', e.target.value)} placeholder="e.g. 50" style={{ fontSize: 13, padding: '9px 12px' }} /></div>
+            <div><div style={{ fontSize: 10, color: 'var(--txt3)', marginBottom: 4 }}>Android devices</div><input className="input" value={form.mobileAndroid} onChange={e => set('mobileAndroid', e.target.value)} placeholder="e.g. 30" style={{ fontSize: 13, padding: '9px 12px' }} /></div>
           </div>
         </div>
-
-        <div style={{ marginBottom: 10 }}>
-          <Label text="TIMELINE / CONTRACT END" />
-          <Input value={form.timeline} onChange={v => set('timeline', v)} placeholder="e.g. Q3 — contract ends Aug" />
+        <div style={{ marginTop: 10 }}>
+          <Label text="IMPLEMENTATION TIME (WEEKS)" />
+          <select className="input" value={form.implTime || ''} onChange={e => set('implTime', e.target.value)} style={{ fontSize: 13, padding: '9px 12px', cursor: 'pointer' }}>
+            <option value="">Select timeframe…</option>
+            <option value="0–3 weeks">0–3 weeks</option>
+            <option value="3–6 weeks">3–6 weeks</option>
+            <option value="6–9 weeks">6–9 weeks</option>
+            <option value="9–12 weeks">9–12 weeks</option>
+            <option value="12+ weeks">12+ weeks</option>
+          </select>
         </div>
+      </div>
 
-        {/* Use case — multi-select */}
-        <div style={{ marginBottom: 10, position: 'relative' }}>
-          <Label text="USE CASE — DEMO HOOK" />
-          <MultiSelect
-            value={form.useCase}
-            onChange={v => set('useCase', v)}
-            options={USE_CASE_OPTIONS}
-            placeholder="Select use cases…"
-            color="var(--acc)"
-          />
-        </div>
-
-        <div>
-          <Label text="MSP / PROVIDER NAME" />
-          <Input value={form.msp} onChange={v => set('msp', v)} placeholder="MSP name — or Internal IT" />
-        </div>
-      </Block>
-
-      {/* Tool stack */}
-      <Block title="Current tool stack">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-          {[
-            { k: 'rmm',              l: 'RMM Tools',              c: 'var(--purple)' },
-            { k: 'ticketing',        l: 'PSA / Ticketing',        c: 'var(--amber)'  },
-            { k: 'backup',           l: 'Backup',                 c: 'var(--green)'  },
-            { k: 'saasBackup',       l: 'SaaS Backup',            c: 'var(--green)'  },
-            { k: 'remoteAccess',     l: 'Remote Access',          c: 'var(--acc)'    },
-            { k: 'patching',         l: 'Patch Management',       c: 'var(--blue)'   },
-            { k: 'documentation',    l: 'Documentation',          c: 'var(--amber)'  },
-            { k: 'mdm',              l: 'MDM',                    c: 'var(--coral)'  },
-            { k: 'networkMonitoring',l: 'Network Monitoring',     c: 'var(--blue)'   },
-            { k: 'antivirus',        l: 'Anti Virus / EDR',       c: 'var(--red)'    },
-            { k: 'itsm',             l: 'ITSM',                   c: 'var(--purple)' },
-            { k: 'dns',              l: 'DNS Tool',               c: 'var(--acc)'    },
-            { k: 'productivity',     l: 'Productivity',           c: 'var(--blue)'   },
-            { k: 'identity',         l: 'Identity',               c: 'var(--amber)'  },
-            { k: 'networkHardware',  l: 'Network Hardware',       c: 'var(--coral)'  },
-          ].map(({ k, l, c }) => (
-            <div key={k} style={{ position: 'relative' }}>
-              <Label text={l} />
-              <MultiSelect
-                value={form.tools[k]}
-                onChange={v => setTool(k, v)}
-                options={TOOL_OPTIONS[k]}
-                placeholder="Select or type…"
-                color={c}
-              />
+      {/* 4 + 5 — Blurred until disqualifiers complete */}
+      <div style={{ filter: disqComplete ? 'none' : 'blur(3px)', pointerEvents: disqComplete ? 'auto' : 'none', userSelect: disqComplete ? 'auto' : 'none', transition: 'filter 0.3s ease', position: 'relative' }}>
+        {!disqComplete && (
+          <div style={{ position: 'absolute', inset: 0, zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ background: 'var(--card)', border: '1px solid var(--red)', borderRadius: 10, padding: '10px 20px', fontSize: 12, color: 'var(--red)', fontWeight: 600 }}>
+              ⚠ Complete the Disqualifiers section first
             </div>
-          ))}
-        </div>
-      </Block>
+          </div>
+        )}
+
+        <Block title="Qualification">
+          <div style={{ marginBottom: 10 }}>
+            <Label text="TIMELINE / CONTRACT END" />
+            <input className="input" value={form.timeline} onChange={e => set('timeline', e.target.value)} placeholder="e.g. Q3 — contract ends Aug" style={{ fontSize: 13, padding: '9px 12px' }} />
+          </div>
+          <div style={{ position: 'relative' }}>
+            <Label text="USE CASE — DEMO HOOK" />
+            <MultiSelect value={form.useCase} onChange={v => set('useCase', v)} options={USE_CASE_OPTIONS} placeholder="Select use cases…" color="var(--acc)" />
+          </div>
+        </Block>
+
+        <Block title="Current tool stack">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            {[
+              { k: 'rmm',              l: 'RMM Tools',          c: 'var(--purple)' },
+              { k: 'ticketing',        l: 'PSA / Ticketing',    c: 'var(--amber)'  },
+              { k: 'backup',           l: 'Backup',             c: 'var(--green)'  },
+              { k: 'saasBackup',       l: 'SaaS Backup',        c: 'var(--green)'  },
+              { k: 'remoteAccess',     l: 'Remote Access',      c: 'var(--acc)'    },
+              { k: 'patching',         l: 'Patch Management',   c: 'var(--blue)'   },
+              { k: 'documentation',    l: 'Documentation',      c: 'var(--amber)'  },
+              { k: 'mdm',              l: 'MDM',                c: 'var(--coral)'  },
+              { k: 'networkMonitoring',l: 'Network Monitoring', c: 'var(--blue)'   },
+              { k: 'antivirus',        l: 'Anti Virus / EDR',   c: 'var(--red)'    },
+              { k: 'itsm',             l: 'ITSM',               c: 'var(--purple)' },
+              { k: 'dns',              l: 'DNS Tool',           c: 'var(--acc)'    },
+              { k: 'productivity',     l: 'Productivity',       c: 'var(--blue)'   },
+              { k: 'identity',         l: 'Identity',           c: 'var(--amber)'  },
+              { k: 'networkHardware',  l: 'Network Hardware',   c: 'var(--coral)'  },
+            ].map(({ k, l, c }) => (
+              <div key={k} style={{ position: 'relative' }}>
+                <Label text={l} />
+                <MultiSelect value={form.tools[k]} onChange={v => setTool(k, v)} options={TOOL_OPTIONS[k]} placeholder="Select or type…" color={c} />
+              </div>
+            ))}
+          </div>
+        </Block>
+      </div>
 
     </div>
   )
 }
 
-/* ── Helpers ─────────────────────────────────────────────────────────────── */
-function Block ({ title, children }) {
+function Block({ title, children }) {
   return (
     <div style={{ background: 'var(--card)', border: '1px solid var(--brd)', borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
       <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--txt3)', marginBottom: 12 }}>{title}</div>
@@ -385,23 +344,18 @@ function Block ({ title, children }) {
     </div>
   )
 }
-function Label ({ text }) {
+function Label({ text }) {
   return <div style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--txt3)', marginBottom: 5 }}>{text}</div>
 }
-function Input ({ value, onChange, placeholder }) {
-  return <input className="input" value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} style={{ fontSize: 13, padding: '9px 12px' }} />
-}
-function BtnGroup ({ options, value, onChange }) {
+function BtnGroup({ options, value, onChange }) {
   return (
     <div style={{ display: 'flex', gap: 6 }}>
       {options.map(opt => {
         const active = value === opt.value
         return (
-          <button key={opt.value} type="button" onClick={() => onChange(active ? null : opt.value)} style={{
-            flex: 1, padding: '8px 10px', borderRadius: 8, fontSize: 12, fontWeight: active ? 600 : 400,
-            background: active ? opt.bg : 'var(--card2)', color: active ? opt.color : 'var(--txt2)',
-            border: `1px solid ${active ? opt.brd : 'var(--brd2)'}`, transition: 'all 0.12s', cursor: 'pointer'
-          }}>{opt.label}</button>
+          <button key={opt.value} type="button" onClick={() => onChange(active ? null : opt.value)} style={{ flex: 1, padding: '8px 10px', borderRadius: 8, fontSize: 12, fontWeight: active ? 600 : 400, background: active ? opt.bg : 'var(--card2)', color: active ? opt.color : 'var(--txt2)', border: `1px solid ${active ? opt.brd : 'var(--brd2)'}`, transition: 'all 0.12s', cursor: 'pointer' }}>
+            {opt.label}
+          </button>
         )
       })}
     </div>

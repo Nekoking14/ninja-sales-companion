@@ -65,6 +65,28 @@
       "notes": null,
       "created_at": "2026-07-27 12:54:10",
       "updated_at": "2026-07-27 12:54:10"
+    },
+    {
+      "id": 7,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-03 09:22:46",
+      "updated_at": "2026-08-03 09:22:46"
+    },
+    {
+      "id": 8,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-03 10:17:31",
+      "updated_at": "2026-08-03 10:17:31"
     }
   ],
   "sessions": [
@@ -114,7 +136,23 @@
       "started_at": "2026-07-27 12:54:10",
       "ended_at": null,
       "duration_sec": null,
-      "qualification_data": "{\"prospectType\":\"it\",\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"49\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"\"}"
+      "qualification_data": "{\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"49\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"\"}"
+    },
+    {
+      "id": 7,
+      "prospect_id": 7,
+      "started_at": "2026-08-03 09:22:46",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":\"msp\",\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"update\",\"decisionMaker\":\"no\",\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"asd\"}"
+    },
+    {
+      "id": 8,
+      "prospect_id": 8,
+      "started_at": "2026-08-03 10:17:31",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":\"msp\",\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"no\",\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
     }
   ],
   "report_items": [],
