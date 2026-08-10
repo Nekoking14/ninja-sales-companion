@@ -156,8 +156,8 @@ export const FRAMEWORKS = [
     color: 'var(--amber)',
     tag: 'Competitors',
     title: 'Battlecards',
-    desc: 'Displacement intel for 8 competitors',
-    count: 8,
+    desc: '81 competitors across RMM, MDM, Backup, Remote Access, PSA and AV',
+    count: 81,
     tabs: [
       { label: 'Atera',        items: [
         { pain: 'Poor & inefficient Windows & 3rd party patching',      question: 'How\'s Atera\'s Windows and 3rd party patching working out for you?',                    value: 'NinjaOne supports 4k+ 3rd party apps, Windows/Mac/Linux/Android/iOS. #1 patching tool 7 quarters on G2.' },

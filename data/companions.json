@@ -109,6 +109,226 @@
       "notes": null,
       "created_at": "2026-08-03 11:06:33",
       "updated_at": "2026-08-03 11:06:33"
+    },
+    {
+      "id": 11,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-06 13:13:06",
+      "updated_at": "2026-08-06 13:13:06"
+    },
+    {
+      "id": 12,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-06 13:13:33",
+      "updated_at": "2026-08-06 13:13:33"
+    },
+    {
+      "id": 13,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-06 13:21:43",
+      "updated_at": "2026-08-06 13:21:43"
+    },
+    {
+      "id": 14,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-06 13:37:02",
+      "updated_at": "2026-08-06 13:37:02"
+    },
+    {
+      "id": 15,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-07 11:55:02",
+      "updated_at": "2026-08-07 11:55:02"
+    },
+    {
+      "id": 16,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-07 20:53:35",
+      "updated_at": "2026-08-07 20:53:35"
+    },
+    {
+      "id": 17,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-09 23:39:06",
+      "updated_at": "2026-08-09 23:39:06"
+    },
+    {
+      "id": 18,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-09 23:39:29",
+      "updated_at": "2026-08-09 23:39:29"
+    },
+    {
+      "id": 19,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 00:54:00",
+      "updated_at": "2026-08-10 00:54:00"
+    },
+    {
+      "id": 20,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 12:23:57",
+      "updated_at": "2026-08-10 12:23:57"
+    },
+    {
+      "id": 21,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:12:23",
+      "updated_at": "2026-08-10 13:12:23"
+    },
+    {
+      "id": 22,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:31:19",
+      "updated_at": "2026-08-10 13:31:19"
+    },
+    {
+      "id": 23,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:33:58",
+      "updated_at": "2026-08-10 13:33:58"
+    },
+    {
+      "id": 24,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:35:36",
+      "updated_at": "2026-08-10 13:35:36"
+    },
+    {
+      "id": 25,
+      "name": "Head of IT",
+      "company": "Director / Head of IT",
+      "role": "Director / Head of IT",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:47:56",
+      "updated_at": "2026-08-10 13:47:56"
+    },
+    {
+      "id": 26,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:50:05",
+      "updated_at": "2026-08-10 13:50:05"
+    },
+    {
+      "id": 27,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:52:17",
+      "updated_at": "2026-08-10 13:52:17"
+    },
+    {
+      "id": 28,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:55:13",
+      "updated_at": "2026-08-10 13:55:13"
+    },
+    {
+      "id": 29,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:55:39",
+      "updated_at": "2026-08-10 13:55:39"
+    },
+    {
+      "id": 30,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-10 13:58:15",
+      "updated_at": "2026-08-10 13:58:15"
     }
   ],
   "sessions": [
@@ -191,6 +411,166 @@
       "ended_at": null,
       "duration_sec": null,
       "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 11,
+      "prospect_id": 11,
+      "started_at": "2026-08-06 13:13:06",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 12,
+      "prospect_id": 12,
+      "started_at": "2026-08-06 13:13:33",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"\"}"
+    },
+    {
+      "id": 13,
+      "prospect_id": 13,
+      "started_at": "2026-08-06 13:21:43",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"\"}"
+    },
+    {
+      "id": 14,
+      "prospect_id": 14,
+      "started_at": "2026-08-06 13:37:02",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"\"}"
+    },
+    {
+      "id": 15,
+      "prospect_id": 15,
+      "started_at": "2026-08-07 11:55:02",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"\"}"
+    },
+    {
+      "id": 16,
+      "prospect_id": 16,
+      "started_at": "2026-08-07 20:53:35",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 17,
+      "prospect_id": 17,
+      "started_at": "2026-08-09 23:39:06",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 18,
+      "prospect_id": 18,
+      "started_at": "2026-08-09 23:39:29",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":\"update\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"no\",\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mobileEndpoints\":\"\",\"notes\":\"\"}"
+    },
+    {
+      "id": 19,
+      "prospect_id": 19,
+      "started_at": "2026-08-10 00:54:00",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 20,
+      "prospect_id": 20,
+      "started_at": "2026-08-10 12:23:57",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 21,
+      "prospect_id": 21,
+      "started_at": "2026-08-10 13:12:23",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"mspInhouse\":\"no\",\"mspInhouseWhy\":\"\"}"
+    },
+    {
+      "id": 22,
+      "prospect_id": 22,
+      "started_at": "2026-08-10 13:31:19",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 23,
+      "prospect_id": 23,
+      "started_at": "2026-08-10 13:33:58",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 24,
+      "prospect_id": 24,
+      "started_at": "2026-08-10 13:35:36",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 25,
+      "prospect_id": 25,
+      "started_at": "2026-08-10 13:47:56",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 26,
+      "prospect_id": 26,
+      "started_at": "2026-08-10 13:50:05",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 27,
+      "prospect_id": 27,
+      "started_at": "2026-08-10 13:52:17",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 28,
+      "prospect_id": 28,
+      "started_at": "2026-08-10 13:55:13",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 29,
+      "prospect_id": 29,
+      "started_at": "2026-08-10 13:55:39",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"\",\"mspInhouse\":\"yes\",\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"500\",\"implTime\":\"\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 30,
+      "prospect_id": 30,
+      "started_at": "2026-08-10 13:58:15",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
     }
   ],
   "report_items": [],

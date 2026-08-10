@@ -5,10 +5,10 @@ import { api } from '../api/index.js'
 import { useFrameworks } from '../hooks/useFrameworks.js'
 import { computeCallScore } from '../utils/scoring.js'
 import Topbar             from '../components/Topbar.jsx'
-import Sidebar            from '../components/Sidebar.jsx'
 import FrameworkCard      from '../components/FrameworkCard.jsx'
 import FrameworkQuickList from '../components/FrameworkQuickList.jsx'
 import FrameworkPanel     from '../components/FrameworkPanel.jsx'
+import BattleCardFull    from '../components/BattleCardFull.jsx'
 import QualificationForm  from '../components/QualificationForm.jsx'
 import RightPanel         from '../components/RightPanel.jsx'
 
@@ -121,8 +121,6 @@ export default function Dashboard () {
     <div className="app-shell">
       <Topbar onEndCall={handleEndCall} callScore={callScore} />
       <div className="body-shell">
-        <Sidebar session={currentSession} prospect={currentProspect} />
-
         {/* Grid view */}
         {!openWidget && (
           <div className="main-scroll">
@@ -155,15 +153,19 @@ export default function Dashboard () {
         {/* Framework detail view */}
         {openWidget && (
           <>
-            <FrameworkQuickList
-              frameworks={frameworks}
-              active={openWidget}
-              onSelect={setOpenWidget}
-              addedCounts={addedPerFramework}
-              onClose={() => setOpenWidget(null)}
-            />
+            {openWidget.id !== 'bc' && (
+              <FrameworkQuickList
+                frameworks={frameworks}
+                active={openWidget}
+                onSelect={setOpenWidget}
+                addedCounts={addedPerFramework}
+                onClose={() => setOpenWidget(null)}
+              />
+            )}
             {openWidget.id === 'qual' ? (
               <QualificationForm session={currentSession} prospect={currentProspect} />
+            ) : openWidget.id === 'bc' ? (
+              <BattleCardFull key="bc" widget={openWidget} onClose={() => setOpenWidget(null)} />
             ) : (
               <FrameworkPanel
                 key={panelKey}
