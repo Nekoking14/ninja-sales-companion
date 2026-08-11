@@ -1,7 +1,6 @@
 const { app, BrowserWindow, shell, ipcMain } = require('electron')
 const path  = require('path')
 const fs    = require('fs')
-const https = require('https')
 
 const isDev = !app.isPackaged
 const PORT  = 3001
@@ -24,7 +23,6 @@ function startServer() {
   }
 
   try { fs.writeFileSync(logPath, '') } catch (_) {}
-
   log('resourcesPath: ' + process.resourcesPath)
   log('serverPath exists: ' + fs.existsSync(serverPath))
   log('better-sqlite3 exists: ' + fs.existsSync(sqlitePath))
@@ -35,7 +33,6 @@ function startServer() {
     log('ERROR: ' + startupError)
     return false
   }
-
   try {
     require(serverPath)
     log('Server started OK')
@@ -47,60 +44,61 @@ function startServer() {
   }
 }
 
-// ── Check GitHub for a newer release ──────────────────────────────────────
-function checkForUpdates() {
-  const currentVersion = app.getVersion()  // comes from package.json at build time
-
-  const options = {
-    hostname: 'api.github.com',
-    path: '/repos/Nekoking14/ninja-sales-companion/releases/latest',
-    headers: {
-      'User-Agent': 'ninja-sales-companion-updater',
-      'Accept': 'application/vnd.github.v3+json'
-    }
+// ── Auto updater ───────────────────────────────────────────────────────────
+function setupAutoUpdater() {
+  if (isDev) {
+    setTimeout(() => {
+      launcherWindow?.webContents?.send('update-current', { version: app.getVersion() + ' (dev)' })
+    }, 1000)
+    return
   }
 
-  https.get(options, (res) => {
-    let data = ''
-    res.on('data', chunk => data += chunk)
-    res.on('end', () => {
-      try {
-        const release = JSON.parse(data)
-        const latestTag = (release.tag_name || '').replace(/^v/, '')  // "1.0.45"
+  const { autoUpdater } = require('electron-updater')
+  autoUpdater.autoDownload         = false
+  autoUpdater.autoInstallOnAppQuit = true
 
-        if (!latestTag || !release.html_url) return
-
-        const [lMaj, lMin, lPatch] = latestTag.split('.').map(Number)
-        const [cMaj, cMin, cPatch] = currentVersion.split('.').map(Number)
-
-        const isNewer =
-          lMaj > cMaj ||
-          (lMaj === cMaj && lMin > cMin) ||
-          (lMaj === cMaj && lMin === cMin && lPatch > cPatch)
-
-        if (isNewer) {
-          launcherWindow?.webContents?.send('update-available', {
-            version: latestTag,
-            url: release.html_url
-          })
-        }
-      } catch (_) {}
+  autoUpdater.on('update-available',    (info) => {
+    launcherWindow?.webContents?.send('update-available', { version: info.version })
+  })
+  autoUpdater.on('update-not-available', () => {
+    launcherWindow?.webContents?.send('update-current', { version: app.getVersion() })
+  })
+  autoUpdater.on('download-progress', (p) => {
+    launcherWindow?.webContents?.send('download-progress', {
+      percent: Math.round(p.percent),
+      speed:   Math.round(p.bytesPerSecond / 1024)
     })
-  }).on('error', () => {})  // silent — no internet or API error
+  })
+  autoUpdater.on('update-downloaded', () => {
+    launcherWindow?.webContents?.send('update-downloaded')
+  })
+  autoUpdater.on('error', (err) => {
+    console.error('Updater error:', err.message)
+    launcherWindow?.webContents?.send('update-current', { version: app.getVersion() })
+  })
+
+  setTimeout(() => autoUpdater.checkForUpdates(), 2500)
+
+  ipcMain.on('start-download',  ()  => autoUpdater.downloadUpdate())
+  ipcMain.on('install-update',  ()  => autoUpdater.quitAndInstall(false, true))
 }
 
 // ── IPC ────────────────────────────────────────────────────────────────────
-ipcMain.on('open-app',      () => shell.openExternal(`http://localhost:${PORT}`))
-ipcMain.on('open-log',      () => shell.openPath(path.join(app.getPath('userData'), 'startup.log')))
-ipcMain.on('open-release',  (_, url) => shell.openExternal(url))
-ipcMain.on('quit',          () => app.quit())
+ipcMain.on('open-app', () => shell.openExternal(`http://localhost:${PORT}`))
+ipcMain.on('open-log', () => shell.openPath(path.join(app.getPath('userData'), 'startup.log')))
+ipcMain.on('quit',     () => app.quit())
 
 // ── Launcher window ────────────────────────────────────────────────────────
 function createLauncher(serverOk) {
+  const iconPath = isDev
+    ? path.join(__dirname, '../build/icon.ico')
+    : path.join(process.resourcesPath, '../build/icon.ico')
+
   launcherWindow = new BrowserWindow({
-    width: 420, height: serverOk ? 200 : 290,
+    width: 420, height: serverOk ? 220 : 310,
     resizable: false,
     title: 'NinjaOne Sales Companion',
+    icon: iconPath,
     webPreferences: { nodeIntegration: true, contextIsolation: false },
     backgroundColor: '#08091A',
     show: false
@@ -110,37 +108,39 @@ function createLauncher(serverOk) {
 
   const dot   = serverOk ? '#22C55E' : '#EF4444'
   const label = serverOk ? `Server running on port ${PORT}` : 'Server failed to start'
-
   const errorBlock = serverOk ? '' : `
-    <div class="err">${startupError.replace(/</g, '&lt;').replace(/\n/g, '<br>')}</div>
+    <div class="err">${startupError.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>
     <button class="log" onclick="openLog()">Open error log</button>`
 
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{background:#08091A;color:#E2E8F5;font-family:system-ui,sans-serif;
          display:flex;flex-direction:column;align-items:center;justify-content:center;
-         height:100vh;gap:12px;padding:16px;user-select:none}
+         height:100vh;gap:10px;padding:16px;user-select:none}
     .row{display:flex;align-items:center;gap:10px}
     .logo{width:32px;height:32px;background:#05C49A;border-radius:8px;display:flex;
           align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#042D22}
     .title{font-size:15px;font-weight:600}
-    .version{font-size:10px;color:#3D4D70;margin-left:2px}
+    .version{font-size:10px;color:#3D4D70}
     .status{display:flex;align-items:center;gap:7px;font-size:12px;color:#8A9CC0}
-    .dot{width:8px;height:8px;border-radius:50%;background:${dot};animation:p 2s infinite}
+    .sdot{width:8px;height:8px;border-radius:50%;background:${dot};animation:p 2s infinite}
     @keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
-    .update-banner{display:none;width:100%;padding:8px 12px;background:#F59E0B18;
-                   border:1px solid #F59E0B40;border-radius:8px;
-                   font-size:11px;color:#F59E0B;text-align:center;cursor:pointer;
-                   transition:background 0.12s}
-    .update-banner:hover{background:#F59E0B28}
+    .urow{display:flex;align-items:center;gap:8px;width:100%;padding:8px 12px;
+          background:#1E2A4430;border:1px solid #1E2A44;border-radius:8px;
+          font-size:11px;transition:all 0.3s;min-height:36px}
+    .urow.clickable{cursor:pointer}
+    .urow.clickable:hover{opacity:.85}
+    .udot{font-size:12px;color:#3D4D70;flex-shrink:0;width:14px;text-align:center}
+    .utext{flex:1;color:#8A9CC0;line-height:1.4}
+    .pbar{width:100%;height:4px;background:#1E2A44;border-radius:2px;margin-top:5px;overflow:hidden;display:none}
+    .pfill{height:100%;background:#4B8EF5;border-radius:2px;transition:width 0.4s;width:0%}
     .err{background:#1E2A44;border:1px solid #EF444440;border-radius:8px;padding:10px 12px;
-         font-size:10px;color:#EF4444;line-height:1.5;width:100%;word-break:break-all;
-         max-height:80px;overflow:auto}
-    .btns{display:flex;gap:8px;margin-top:4px}
-    button{padding:7px 16px;border-radius:8px;border:none;font-size:12px;font-weight:500;
+         font-size:10px;color:#EF4444;line-height:1.5;width:100%;word-break:break-all;max-height:80px;overflow:auto}
+    .btns{display:flex;gap:8px;width:100%}
+    button{padding:8px 16px;border-radius:8px;border:none;font-size:12px;font-weight:500;
            cursor:pointer;font-family:inherit;transition:opacity .15s}
     button:hover{opacity:.85}
-    .open{background:#05C49A;color:#042D22;font-weight:700}
+    .open{background:#05C49A;color:#042D22;font-weight:700;flex:1}
     .quit{background:#1E2A44;color:#8A9CC0}
     .log{background:#1E2A44;color:#F59E0B;width:100%;padding:7px}
   </style></head><body>
@@ -151,29 +151,81 @@ function createLauncher(serverOk) {
         <div class="version">v${app.getVersion()}</div>
       </div>
     </div>
-    <div class="status"><div class="dot"></div><span>${label}</span></div>
+    <div class="status"><div class="sdot"></div><span>${label}</span></div>
     ${errorBlock}
-    <div class="update-banner" id="updateBanner" onclick="openRelease()">
-      ⬆ Update available — click to download
+
+    <div class="urow" id="urow">
+      <span class="udot" id="udot">◌</span>
+      <div style="flex:1">
+        <div class="utext" id="utext">Checking for updates…</div>
+        <div class="pbar" id="pbar"><div class="pfill" id="pfill"></div></div>
+      </div>
     </div>
+
     <div class="btns">
       ${serverOk ? '<button class="open" onclick="openApp()">Open in browser</button>' : ''}
       <button class="quit" onclick="quit()">Quit</button>
     </div>
+
     <script>
-      const { ipcRenderer } = require('electron')
-      let releaseUrl = ''
+      const {ipcRenderer} = require('electron')
+      const urow = document.getElementById('urow')
+      const udot = document.getElementById('udot')
+      const utext = document.getElementById('utext')
+      const pbar = document.getElementById('pbar')
+      const pfill = document.getElementById('pfill')
 
-      function openApp()     { ipcRenderer.send('open-app') }
-      function openLog()     { ipcRenderer.send('open-log') }
-      function openRelease() { ipcRenderer.send('open-release', releaseUrl) }
-      function quit()        { ipcRenderer.send('quit') }
+      function openApp() { ipcRenderer.send('open-app') }
+      function openLog() { ipcRenderer.send('open-log') }
+      function quit()    { ipcRenderer.send('quit') }
 
-      ipcRenderer.on('update-available', (_, data) => {
-        releaseUrl = data.url
-        const banner = document.getElementById('updateBanner')
-        banner.textContent = '⬆  v' + data.version + ' available — click to download'
-        banner.style.display = 'block'
+      ipcRenderer.on('update-current', (_, d) => {
+        udot.textContent = '✓'
+        udot.style.color = '#22C55E'
+        utext.style.color = '#22C55E'
+        utext.textContent = 'Up to date (v' + d.version + ')'
+      })
+
+      ipcRenderer.on('update-available', (_, d) => {
+        udot.textContent = '⬆'
+        udot.style.color = '#F59E0B'
+        utext.style.color = '#F59E0B'
+        utext.style.fontWeight = '600'
+        utext.textContent = 'v' + d.version + ' available — click to update'
+        urow.style.background = '#F59E0B10'
+        urow.style.borderColor = '#F59E0B50'
+        urow.classList.add('clickable')
+        urow.onclick = () => {
+          urow.classList.remove('clickable')
+          urow.onclick = null
+          utext.textContent = 'Starting download…'
+          ipcRenderer.send('start-download')
+        }
+      })
+
+      ipcRenderer.on('download-progress', (_, d) => {
+        udot.textContent = '⬇'
+        udot.style.color = '#4B8EF5'
+        utext.style.color = '#4B8EF5'
+        utext.style.fontWeight = '400'
+        utext.textContent = 'Downloading… ' + d.percent + '%  (' + d.speed + ' KB/s)'
+        urow.style.background = '#4B8EF510'
+        urow.style.borderColor = '#4B8EF540'
+        pbar.style.display = 'block'
+        pfill.style.width = d.percent + '%'
+      })
+
+      ipcRenderer.on('update-downloaded', () => {
+        udot.textContent = '✓'
+        udot.style.color = '#22C55E'
+        utext.style.color = '#22C55E'
+        utext.style.fontWeight = '700'
+        utext.textContent = 'Ready — click to restart and install'
+        pbar.style.display = 'none'
+        urow.style.background = '#22C55E10'
+        urow.style.borderColor = '#22C55E50'
+        urow.classList.add('clickable')
+        urow.onclick = () => ipcRenderer.send('install-update')
       })
     </script>
   </body></html>`
@@ -192,8 +244,7 @@ app.whenReady().then(() => {
     const url = isDev ? 'http://localhost:5173' : `http://localhost:${PORT}`
     setTimeout(() => shell.openExternal(url), 1500)
   }
-  // Check for updates after a short delay (non-blocking)
-  setTimeout(checkForUpdates, 3000)
+  setupAutoUpdater()
 })
 
 app.on('window-all-closed', () => app.quit())
