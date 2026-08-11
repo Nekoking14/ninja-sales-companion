@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { BATTLECARD_DATA } from '../data/battlecardData.js'
 
-// ─── All static product/scenario data extracted from Discovery Assistant ─────
+// ─── All static product/scenario data extracted from Discovery Assistant heloo test ────
 
 const PRODUCTS = ['Vuln. Manager','Backup','MDM','Ticketing','M365 Backup','IT Asset Mgmt','Patching']
 
@@ -115,7 +115,6 @@ export default function BattleCardFull({ widget, onClose }) {
   const [role,     setRole]      = useState('IT Manager')
   const [competitor, setCompetitor] = useState(null)
   const [openObj,  setOpenObj]   = useState(null)
-
 
   // Auto-select first competitor in category when product changes
   const bcCat = PRODUCT_BC_CAT[product]
@@ -239,7 +238,6 @@ export default function BattleCardFull({ widget, onClose }) {
             ))}
           </div>
         </div>
-
 
         {/* ─── RIGHT: Battle card ─── */}
         <div style={{ borderLeft: '1px solid var(--brd)', overflowY: 'auto', background: 'var(--surf)', display: 'flex', flexDirection: 'column' }}>
