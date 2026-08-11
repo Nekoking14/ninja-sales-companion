@@ -6,140 +6,99 @@ const https = require('https')
 const isDev = !app.isPackaged
 const PORT  = 3001
 let launcherWindow
-let downloadedInstallerPath = null
-let latestReleaseInfo       = null
+let startupError = ''
 
-// ── GitHub update config ───────────────────────────────────────────────────
-const REPO_OWNER = 'Nekoking14'
-const REPO_NAME  = 'ninja-sales-companion'
-const GH_TOKEN   = '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'
-const CURRENT_VERSION = app.getVersion()
-
-// ── Server ──────────────────────────────────────────────────────────────────
-function startServer () {
+// ── Start Express server inline ────────────────────────────────────────────
+function startServer() {
   process.env.PORT     = String(PORT)
   process.env.NODE_ENV = 'production'
   process.env.DB_PATH  = path.join(app.getPath('userData'), 'companions.db')
+
+  const serverPath = path.join(process.resourcesPath, 'server/index.js')
+  const sqlitePath = path.join(process.resourcesPath, 'server/node_modules/better-sqlite3')
+
+  const logPath = path.join(app.getPath('userData'), 'startup.log')
+  const log = (msg) => {
+    fs.appendFileSync(logPath, new Date().toISOString() + '  ' + msg + '\n')
+    console.log(msg)
+  }
+
+  try { fs.writeFileSync(logPath, '') } catch (_) {}
+
+  log('resourcesPath: ' + process.resourcesPath)
+  log('serverPath exists: ' + fs.existsSync(serverPath))
+  log('better-sqlite3 exists: ' + fs.existsSync(sqlitePath))
+  log('DB_PATH: ' + process.env.DB_PATH)
+
+  if (!fs.existsSync(serverPath)) {
+    startupError = 'server/index.js not found at:\n' + serverPath
+    log('ERROR: ' + startupError)
+    return false
+  }
+
   try {
-    require(path.join(process.resourcesPath, 'server/index.js'))
+    require(serverPath)
+    log('Server started OK')
     return true
   } catch (err) {
-    console.error('[server failed]', err)
+    startupError = err.message
+    log('ERROR requiring server: ' + err.stack)
     return false
   }
 }
 
-// ── GitHub API helper ───────────────────────────────────────────────────────
-function ghRequest (apiPath) {
-  return new Promise((resolve, reject) => {
-    https.get({
-      hostname: 'api.github.com',
-      path: apiPath,
-      headers: {
-        'User-Agent':    'NinjaOne-Sales-Companion',
-        'Authorization': `token ${GH_TOKEN}`,
-        'Accept':        'application/vnd.github+json'
-      }
-    }, res => {
-      let data = ''
-      res.on('data', c => data += c)
-      res.on('end', () => {
-        try { resolve({ status: res.statusCode, json: JSON.parse(data) }) }
-        catch (e) { reject(e) }
-      })
-    }).on('error', reject)
-  })
-}
+// ── Check GitHub for a newer release ──────────────────────────────────────
+function checkForUpdates() {
+  const currentVersion = app.getVersion()  // comes from package.json at build time
 
-function compareVersions (a, b) {
-  const pa = a.replace(/^v/, '').split('.').map(Number)
-  const pb = b.replace(/^v/, '').split('.').map(Number)
-  for (let i = 0; i < 3; i++) {
-    if ((pa[i] || 0) > (pb[i] || 0)) return 1
-    if ((pa[i] || 0) < (pb[i] || 0)) return -1
-  }
-  return 0
-}
-
-async function checkForUpdate () {
-  try {
-    const { status, json } = await ghRequest(`/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest`)
-    if (status !== 200) return null
-    const remoteVersion = json.tag_name
-    if (compareVersions(remoteVersion, CURRENT_VERSION) <= 0) return null
-    const asset = (json.assets || []).find(a => a.name.endsWith('.exe'))
-    if (!asset) return null
-    latestReleaseInfo = { version: remoteVersion, assetUrl: asset.url, assetName: asset.name }
-    return latestReleaseInfo
-  } catch (e) {
-    console.error('[update check failed]', e)
-    return null
-  }
-}
-
-// ── Download release asset (follows GitHub's S3 redirect) ──────────────────
-function downloadAsset (asset, onProgress) {
-  return new Promise((resolve, reject) => {
-    const destPath = path.join(app.getPath('temp'), asset.assetName)
-    const file = fs.createWriteStream(destPath)
-
-    function get (url, includeAuth) {
-      https.get(url, {
-        headers: {
-          'User-Agent': 'NinjaOne-Sales-Companion',
-          'Accept':     'application/octet-stream',
-          ...(includeAuth ? { 'Authorization': `token ${GH_TOKEN}` } : {})
-        }
-      }, res => {
-        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-          return get(res.headers.location, false) // S3 redirect — no auth header
-        }
-        if (res.statusCode !== 200) return reject(new Error(`Download failed: ${res.statusCode}`))
-
-        const total = parseInt(res.headers['content-length'] || '0', 10)
-        let downloaded = 0
-        res.on('data', chunk => {
-          downloaded += chunk.length
-          if (total) onProgress(Math.round((downloaded / total) * 100))
-        })
-        res.pipe(file)
-        file.on('finish', () => { file.close(); resolve(destPath) })
-      }).on('error', reject)
+  const options = {
+    hostname: 'api.github.com',
+    path: '/repos/Nekoking14/ninja-sales-companion/releases/latest',
+    headers: {
+      'User-Agent': 'ninja-sales-companion-updater',
+      'Accept': 'application/vnd.github.v3+json'
     }
-    get(asset.assetUrl, true)
-  })
+  }
+
+  https.get(options, (res) => {
+    let data = ''
+    res.on('data', chunk => data += chunk)
+    res.on('end', () => {
+      try {
+        const release = JSON.parse(data)
+        const latestTag = (release.tag_name || '').replace(/^v/, '')  // "1.0.45"
+
+        if (!latestTag || !release.html_url) return
+
+        const [lMaj, lMin, lPatch] = latestTag.split('.').map(Number)
+        const [cMaj, cMin, cPatch] = currentVersion.split('.').map(Number)
+
+        const isNewer =
+          lMaj > cMaj ||
+          (lMaj === cMaj && lMin > cMin) ||
+          (lMaj === cMaj && lMin === cMin && lPatch > cPatch)
+
+        if (isNewer) {
+          launcherWindow?.webContents?.send('update-available', {
+            version: latestTag,
+            url: release.html_url
+          })
+        }
+      } catch (_) {}
+    })
+  }).on('error', () => {})  // silent — no internet or API error
 }
 
 // ── IPC ────────────────────────────────────────────────────────────────────
-ipcMain.on('open-app', () => shell.openExternal(`http://localhost:${PORT}`))
-ipcMain.on('quit',     () => app.quit())
-
-ipcMain.handle('check-update', async () => checkForUpdate())
-
-ipcMain.on('download-update', async () => {
-  if (!latestReleaseInfo) return
-  try {
-    const filePath = await downloadAsset(latestReleaseInfo, pct => {
-      launcherWindow?.webContents.send('update-progress', pct)
-    })
-    downloadedInstallerPath = filePath
-    launcherWindow?.webContents.send('update-ready')
-  } catch (e) {
-    launcherWindow?.webContents.send('update-error', e.message)
-  }
-})
-
-ipcMain.on('restart-update', async () => {
-  if (downloadedInstallerPath) {
-    await shell.openPath(downloadedInstallerPath)
-  }
-  setTimeout(() => app.quit(), 800) // small delay so shell has time to launch installer
-})
+ipcMain.on('open-app',      () => shell.openExternal(`http://localhost:${PORT}`))
+ipcMain.on('open-log',      () => shell.openPath(path.join(app.getPath('userData'), 'startup.log')))
+ipcMain.on('open-release',  (_, url) => shell.openExternal(url))
+ipcMain.on('quit',          () => app.quit())
 
 // ── Launcher window ────────────────────────────────────────────────────────
-function createLauncher (serverOk) {
+function createLauncher(serverOk) {
   launcherWindow = new BrowserWindow({
-    width: 360, height: serverOk ? 240 : 250,
+    width: 420, height: serverOk ? 200 : 290,
     resizable: false,
     title: 'NinjaOne Sales Companion',
     webPreferences: { nodeIntegration: true, contextIsolation: false },
@@ -150,130 +109,71 @@ function createLauncher (serverOk) {
   launcherWindow.setMenuBarVisibility(false)
 
   const dot   = serverOk ? '#22C55E' : '#EF4444'
-  const label = serverOk ? `Server running on port ${PORT}` : 'Failed to start — check console'
+  const label = serverOk ? `Server running on port ${PORT}` : 'Server failed to start'
+
+  const errorBlock = serverOk ? '' : `
+    <div class="err">${startupError.replace(/</g, '&lt;').replace(/\n/g, '<br>')}</div>
+    <button class="log" onclick="openLog()">Open error log</button>`
 
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{background:#08091A;color:#E2E8F5;font-family:system-ui,sans-serif;
          display:flex;flex-direction:column;align-items:center;justify-content:center;
-         height:100vh;gap:12px;user-select:none;padding:16px}
+         height:100vh;gap:12px;padding:16px;user-select:none}
     .row{display:flex;align-items:center;gap:10px}
     .logo{width:32px;height:32px;background:#05C49A;border-radius:8px;display:flex;
           align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#042D22}
     .title{font-size:15px;font-weight:600}
+    .version{font-size:10px;color:#3D4D70;margin-left:2px}
     .status{display:flex;align-items:center;gap:7px;font-size:12px;color:#8A9CC0}
     .dot{width:8px;height:8px;border-radius:50%;background:${dot};animation:p 2s infinite}
     @keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
-    .update-wrap{display:flex;flex-direction:column;gap:5px;width:100%}
-    .update-row{display:flex;align-items:center;gap:7px}
-    .update-dot{width:7px;height:7px;border-radius:50%;background:#3D4D70;flex-shrink:0}
-    .update-dot.checking{animation:p 1s infinite}
-    .update-dot.ok{background:#22C55E}
-    .update-dot.available{background:#F59E0B}
-    .update-label{font-size:11px;color:#8A9CC0;flex:1}
-    .progress-bar{width:100%;height:4px;background:#1E2A44;border-radius:999px;overflow:hidden;display:none}
-    .progress-fill{height:100%;width:0%;background:#05C49A;transition:width .2s}
-    .btns{display:flex;gap:8px;width:100%}
-    button{padding:8px 16px;border-radius:8px;border:none;font-size:12px;font-weight:500;
-           cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
-    button:hover:not(:disabled){opacity:.85}
-    button:disabled{cursor:default;opacity:0.45}
+    .update-banner{display:none;width:100%;padding:8px 12px;background:#F59E0B18;
+                   border:1px solid #F59E0B40;border-radius:8px;
+                   font-size:11px;color:#F59E0B;text-align:center;cursor:pointer;
+                   transition:background 0.12s}
+    .update-banner:hover{background:#F59E0B28}
+    .err{background:#1E2A44;border:1px solid #EF444440;border-radius:8px;padding:10px 12px;
+         font-size:10px;color:#EF4444;line-height:1.5;width:100%;word-break:break-all;
+         max-height:80px;overflow:auto}
+    .btns{display:flex;gap:8px;margin-top:4px}
+    button{padding:7px 16px;border-radius:8px;border:none;font-size:12px;font-weight:500;
+           cursor:pointer;font-family:inherit;transition:opacity .15s}
+    button:hover{opacity:.85}
     .open{background:#05C49A;color:#042D22;font-weight:700}
     .quit{background:#1E2A44;color:#8A9CC0}
-    .updbtn{background:#1E2A44;color:#8A9CC0;flex:1}
+    .log{background:#1E2A44;color:#F59E0B;width:100%;padding:7px}
   </style></head><body>
     <div class="row">
       <div class="logo">N</div>
-      <div class="title">NinjaOne Sales Companion</div>
+      <div>
+        <div class="title">NinjaOne Sales Companion</div>
+        <div class="version">v${app.getVersion()}</div>
+      </div>
     </div>
     <div class="status"><div class="dot"></div><span>${label}</span></div>
-
-    <div class="update-wrap">
-      <div class="update-row">
-        <div class="update-dot checking" id="updDot"></div>
-        <span class="update-label" id="updLabel">Checking for updates…</span>
-      </div>
-      <div class="progress-bar" id="progressBar">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
+    ${errorBlock}
+    <div class="update-banner" id="updateBanner" onclick="openRelease()">
+      ⬆ Update available — click to download
     </div>
-
     <div class="btns">
-      ${serverOk ? '<button class="open" onclick="o()">Open in browser</button>' : ''}
-      <button class="updbtn" id="updateBtn" disabled onclick="onUpdateClick()">Checking…</button>
-      <button class="quit" onclick="q()">Quit</button>
+      ${serverOk ? '<button class="open" onclick="openApp()">Open in browser</button>' : ''}
+      <button class="quit" onclick="quit()">Quit</button>
     </div>
-
     <script>
-      const {ipcRenderer} = require('electron')
-      let updateState = 'checking'
+      const { ipcRenderer } = require('electron')
+      let releaseUrl = ''
 
-      function o(){ ipcRenderer.send('open-app') }
-      function q(){ ipcRenderer.send('quit') }
+      function openApp()     { ipcRenderer.send('open-app') }
+      function openLog()     { ipcRenderer.send('open-log') }
+      function openRelease() { ipcRenderer.send('open-release', releaseUrl) }
+      function quit()        { ipcRenderer.send('quit') }
 
-      function onUpdateClick () {
-        if (updateState === 'available') {
-          updateState = 'downloading'
-          document.getElementById('updateBtn').disabled = true
-          document.getElementById('updateBtn').textContent = 'Downloading…'
-          document.getElementById('progressBar').style.display = 'block'
-          ipcRenderer.send('download-update')
-        } else if (updateState === 'ready') {
-          ipcRenderer.send('restart-update')
-        }
-      }
-
-      ipcRenderer.invoke('check-update').then(info => {
-        const dot   = document.getElementById('updDot')
-        const label = document.getElementById('updLabel')
-        const btn   = document.getElementById('updateBtn')
-        dot.classList.remove('checking')
-        if (info) {
-          updateState = 'available'
-          dot.classList.add('available')
-          label.textContent = 'Update available — ' + info.version
-          label.style.color = '#F59E0B'
-          btn.textContent = 'Update to ' + info.version
-          btn.style.background = '#F59E0B'
-          btn.style.color = '#2A1B00'
-          btn.style.fontWeight = '700'
-          btn.disabled = false
-        } else {
-          updateState = 'uptodate'
-          dot.classList.add('ok')
-          label.textContent = 'App is up to date'
-          btn.textContent = 'Up to date'
-          btn.disabled = true
-        }
-      }).catch(() => {
-        document.getElementById('updDot').classList.remove('checking')
-        document.getElementById('updLabel').textContent = 'Could not check for updates'
-        document.getElementById('updateBtn').textContent = 'Check failed'
-        document.getElementById('updateBtn').disabled = true
-      })
-
-      ipcRenderer.on('update-progress', (_e, pct) => {
-        document.getElementById('progressFill').style.width = pct + '%'
-        document.getElementById('updLabel').textContent = 'Downloading… ' + pct + '%'
-      })
-
-      ipcRenderer.on('update-ready', () => {
-        updateState = 'ready'
-        document.getElementById('progressBar').style.display = 'none'
-        document.getElementById('updDot').classList.remove('available')
-        document.getElementById('updDot').classList.add('ok')
-        document.getElementById('updLabel').textContent = 'Update downloaded — ready to install'
-        document.getElementById('updLabel').style.color = '#22C55E'
-        const btn = document.getElementById('updateBtn')
-        btn.textContent = 'Restart to update'
-        btn.style.background = '#22C55E'
-        btn.style.color = '#042D22'
-        btn.disabled = false
-      })
-
-      ipcRenderer.on('update-error', (_e, msg) => {
-        document.getElementById('updLabel').textContent = 'Download failed — try again later'
-        document.getElementById('updateBtn').textContent = 'Update failed'
+      ipcRenderer.on('update-available', (_, data) => {
+        releaseUrl = data.url
+        const banner = document.getElementById('updateBanner')
+        banner.textContent = '⬆  v' + data.version + ' available — click to download'
+        banner.style.display = 'block'
       })
     </script>
   </body></html>`
@@ -285,13 +185,15 @@ function createLauncher (serverOk) {
 
 // ── Lifecycle ──────────────────────────────────────────────────────────────
 app.whenReady().then(() => {
-  let ok = true
-  if (!isDev) ok = startServer()
-  createLauncher(ok)
-  if (ok) {
+  let serverOk = true
+  if (!isDev) serverOk = startServer()
+  createLauncher(serverOk)
+  if (serverOk) {
     const url = isDev ? 'http://localhost:5173' : `http://localhost:${PORT}`
-    setTimeout(() => shell.openExternal(url), 1200)
+    setTimeout(() => shell.openExternal(url), 1500)
   }
+  // Check for updates after a short delay (non-blocking)
+  setTimeout(checkForUpdates, 3000)
 })
 
 app.on('window-all-closed', () => app.quit())

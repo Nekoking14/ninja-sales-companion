@@ -1,7 +1,7 @@
 {
   "name": "ninja-sales-companion",
   "version": "0.1.0",
-  "description": "NinjaOne Sales Companion — local call dashboard",
+  "description": "NinjaOne Sales Companion \u2014 local call dashboard",
   "author": "NinjaOne Sales Team",
   "main": "electron/main.js",
   "scripts": {
@@ -11,6 +11,9 @@
     "build": "npm --prefix client run build",
     "start": "cross-env NODE_ENV=production electron .",
     "pack": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3"
   },
   "devDependencies": {
     "electron": "^28.3.3",
@@ -24,27 +27,48 @@
     "productName": "NinjaOne Sales Companion",
     "asar": false,
     "files": [
-      "electron/**"
+      "electron/**",
+      "node_modules/better-sqlite3/**"
     ],
     "extraResources": [
       {
         "from": "server",
         "to": "server",
-        "filter": ["**/*", "!node_modules/.cache/**", "!node_modules/.bin/**"]
+        "filter": [
+          "**/*",
+          "!node_modules/.cache/**",
+          "!node_modules/.bin/**"
+        ]
       },
       {
         "from": "client/dist",
         "to": "client/dist"
+      },
+      {
+        "from": "node_modules/better-sqlite3",
+        "to": "server/node_modules/better-sqlite3"
       }
     ],
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }]
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Nekoking14",
+      "repo": "ninja-sales-companion"
     }
   }
 }
