@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { BATTLECARD_DATA } from '../data/battlecardData.js'
 
-// ─── All static product/scenario data extracted from Discovery Assistant heloo test ────
+// ─── All static product/scenario data extracted from Discovery Assistant Nhi Hao ────
 
 const PRODUCTS = ['Vuln. Manager','Backup','MDM','Ticketing','M365 Backup','IT Asset Mgmt','Patching']
 
