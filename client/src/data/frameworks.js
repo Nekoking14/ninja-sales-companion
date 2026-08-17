@@ -53,10 +53,10 @@ export const FRAMEWORKS = [
         ]
       },
       {
-        label: 'CISO',
+        label: 'C-Level',
         description: 'Cares about: risk mitigation, security posture, attack surface, alert fatigue.',
         items: [
-          'We help CISOs reduce risk by automating baseline security processes and providing 360° visibility into the IT portfolio. How are you automating device patching and compliance reporting today?',
+          'We help C-Level executives reduce risk by automating baseline security processes and providing 360° visibility into the IT portfolio. How are you automating device patching and compliance reporting today?',
           'How are you automating patching and device inventories?',
           'Are you monitoring endpoint configuration changes for compliance?',
           'How many tools make up your IT management stack?',
@@ -248,8 +248,8 @@ export const FRAMEWORKS = [
         'Discovery: "Which tasks are still handled manually that you wish were automated?"',
         'Pain signal: Scripts breaking or requiring constant maintenance. Spending evenings on failed patches.'
       ]},
-      { label: 'CISO',         description: 'Medium fit (can be detractor) · CISO, CSO, VP of Cybersecurity · Cares about: risk mitigation, security posture, attack surface, alert fatigue.', items: [
-        'Opener: "We help CISOs reduce risk by automating baseline security processes and providing 360° visibility into the IT portfolio."',
+      { label: 'C-Level',         description: 'Medium fit (can be detractor) · C-Level, CEO, CFO, COO · Cares about: risk mitigation, security posture, attack surface, alert fatigue.', items: [
+        'Opener: "We help C-Level executives reduce risk by automating baseline security processes and providing 360° visibility into the IT portfolio."',
         'Key selling point: Ninja reduces risk by automating patching, maintenance and device configuration',
         'Key selling point: Ninja replaces point solutions, reducing environmental complexity and attack surface',
         'Discovery: "How are you automating patching and device inventories?"',
@@ -373,11 +373,11 @@ export const FRAMEWORKS = [
     color: 'var(--blue)',
     tag: 'Qualification',
     title: 'Qualification',
-    desc: 'BANT, environment fit, decision process & disqualifiers',
+    desc: 'SPIN, environment fit, decision process & disqualifiers',
     count: 4,
     tabs: [
       {
-        label: 'BANT',
+        label: 'SPIN',
         description: 'Qualify Budget, Authority, Need and Timeline before investing further time.',
         items: [
           'BUDGET — "Do you have a budget allocated for endpoint management tooling this year?"',

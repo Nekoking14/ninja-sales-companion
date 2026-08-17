@@ -2,10 +2,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useApp } from '../context/AppContext.jsx'
 import { scoreColor, scoreLabel } from '../utils/scoring.js'
 
-const PERSONAS = [
-  'Head of IT', 'IT Manager', 'Service Desk', 'SysAdmin', 'CISO', 'Technician'
-]
-
 const NAV = [
   { path: '/dashboard', label: 'Dashboard',       icon: '⊞' },
   { path: '/prospects', label: 'Sessions',         icon: '☰' },
@@ -20,7 +16,7 @@ function formatTime(sec) {
 
 export default function Topbar({ onEndCall, callScore = 0 }) {
   const { state, dispatch } = useApp()
-  const { currentProspect, currentSession, callSeconds, activePersona, darkMode } = state
+  const { currentProspect, currentSession, callSeconds, darkMode } = state
   const navigate   = useNavigate()
   const { pathname } = useLocation()
 
@@ -110,26 +106,6 @@ export default function Topbar({ onEndCall, callScore = 0 }) {
             {callScore}
           </span>
           <span style={{ fontSize: 10, fontWeight: 600, color: scoreColor(callScore) }}>{scoreLabel(callScore)}</span>
-        </div>
-      )}
-
-      {/* Persona selector */}
-      {currentSession && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 11, color: 'var(--txt3)' }}>Persona</span>
-          <select
-            value={activePersona || ''}
-            onChange={e => dispatch({ type: 'SET_PERSONA', payload: e.target.value || null })}
-            style={{
-              background: 'var(--card2)', border: '1px solid var(--brd2)', borderRadius: 8,
-              color: activePersona ? 'var(--acc)' : 'var(--txt2)', fontSize: 12,
-              fontWeight: activePersona ? 500 : 400, padding: '5px 10px',
-              outline: 'none', cursor: 'pointer', fontFamily: 'inherit'
-            }}
-          >
-            <option value="">— select —</option>
-            {PERSONAS.map(p => <option key={p} value={p}>{p}</option>)}
-          </select>
         </div>
       )}
 

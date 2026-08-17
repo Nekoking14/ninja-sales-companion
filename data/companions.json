@@ -329,6 +329,83 @@
       "notes": null,
       "created_at": "2026-08-10 13:58:15",
       "updated_at": "2026-08-10 13:58:15"
+    },
+    {
+      "id": 31,
+      "name": "IT Manager",
+      "company": "IT Manager",
+      "role": "IT Manager",
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-17 21:51:54",
+      "updated_at": "2026-08-17 21:51:54"
+    },
+    {
+      "id": 32,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-17 22:12:55",
+      "updated_at": "2026-08-17 22:12:55"
+    },
+    {
+      "id": 33,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-17 22:55:16",
+      "updated_at": "2026-08-17 22:55:16"
+    },
+    {
+      "id": 34,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-17 23:01:47",
+      "updated_at": "2026-08-17 23:01:47"
+    },
+    {
+      "id": 35,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-17 23:09:44",
+      "updated_at": "2026-08-17 23:09:44"
+    },
+    {
+      "id": 36,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-17 23:13:44",
+      "updated_at": "2026-08-17 23:13:44"
+    },
+    {
+      "id": 37,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-17 23:23:25",
+      "updated_at": "2026-08-17 23:23:25"
     }
   ],
   "sessions": [
@@ -571,6 +648,62 @@
       "ended_at": null,
       "duration_sec": null,
       "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 31,
+      "prospect_id": 31,
+      "started_at": "2026-08-17 21:51:54",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"implTime\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 32,
+      "prospect_id": 32,
+      "started_at": "2026-08-17 22:12:55",
+      "ended_at": "2026-08-17 22:48:30",
+      "duration_sec": 601,
+      "qualification_data": "{\"persona\":\"HI\",\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"blah\",\"mspInhouse\":\"yes\",\"mspInhouseWhy\":\"blah\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"500\",\"implTime\":\"1–3 months\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"123\",\"mobileAndroid\":\"123\",\"timeline\":\"\",\"useCase\":[\"Cyber Essentials certification\",\"Reducing ticket volume\",\"Security posture improvement\"],\"msp\":\"\",\"spinSituation\":true,\"spinPain\":true,\"spinImplication\":true,\"tools\":{\"rmm\":[\"Atera\"],\"ticketing\":[\"ARTIS\"],\"backup\":[\"AFI.ai\"],\"saasBackup\":[\"Acronis\"],\"remoteAccess\":[\"Avast Remote Control\"],\"patching\":[\"Action1\"],\"documentation\":[\"Atlassian / Confluence / Jira\"],\"mdm\":[\"42 Gears SureMDM\"],\"networkMonitoring\":[\"Catchpoint\"],\"antivirus\":[\"Bitdefender\"],\"itsm\":[\"Cherwell\"],\"dns\":[\"Cisco OpenDNS\"],\"productivity\":[\"Google Workspace\"],\"identity\":[\"Azure AD\"],\"networkHardware\":[\"Cisco Meraki\"]},\"notes\":\"asdajskldjaksjdlkahslkdhlkahsdklh\",\"notesSituation\":\"auoidawioh\",\"notesPain\":\"asodijaoisd\",\"notesImplication\":\"asdihaosd\"}"
+    },
+    {
+      "id": 33,
+      "prospect_id": 33,
+      "started_at": "2026-08-17 22:55:16",
+      "ended_at": "2026-08-17 23:01:46",
+      "duration_sec": 2,
+      "qualification_data": "{\"persona\":\"IT Manager\",\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"aSasasdaasd\",\"mspInhouse\":\"yes\",\"mspInhouseWhy\":\"aSDASDas\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"12312\",\"implTime\":\"3–6 months\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"123asd\",\"mobileAndroid\":\"123asd\",\"timeline\":\"123\",\"useCase\":[\"Patching compliance gaps\",\"Consolidate from multiple tools\",\"Remote workforce management\"],\"msp\":\"\",\"notesSituation\":\"123qsadfsdhsalkd\",\"notesPain\":\"123asdasdasdlkhas\",\"notesImplication\":\"asdasd123asdklh\",\"tools\":{\"rmm\":[\"ACMP\"],\"ticketing\":[\"Accelo\"],\"backup\":[\"AFI.ai\"],\"saasBackup\":[\"AFI.ai\"],\"remoteAccess\":[\"Avast Remote Control\"],\"patching\":[\"Did Not Disclose\"],\"documentation\":[\"ConnectWise Manage\"],\"mdm\":[\"Addigy\"],\"networkMonitoring\":[\"Datadog\"],\"antivirus\":[\"AVG\"],\"itsm\":[\"Cherwell\"],\"dns\":[\"Bitdefender DNS\"],\"productivity\":[\"Google Workspace\"],\"identity\":[\"Active Directory Federation Services (ADFS)\"],\"networkHardware\":[\"Cisco Meraki\"]}}"
+    },
+    {
+      "id": 34,
+      "prospect_id": 34,
+      "started_at": "2026-08-17 23:01:47",
+      "ended_at": "2026-08-17 23:09:43",
+      "duration_sec": 79,
+      "qualification_data": "{\"persona\":\"Head of IT\",\"prospectType\":\"it\",\"usesMsp\":\"no\",\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"500\",\"implTime\":\"3–6 months\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"250\",\"mobileAndroid\":\"250\",\"timeline\":\"Q3\",\"useCase\":[\"Consolidate from multiple tools\",\"Security posture improvement\",\"Remote workforce management\"],\"msp\":\"\",\"notesSituation\":\"somtehing\",\"notesPain\":\"asasd d\",\"notesImplication\":\"asdasd\",\"tools\":{\"rmm\":[\"ACMP\",\"Acronis\"],\"ticketing\":[\"ARTIS\"],\"backup\":[\"Ahsay\"],\"saasBackup\":[\"Ahsay\"],\"remoteAccess\":[\"Avast Remote Control\"],\"patching\":[],\"documentation\":[],\"mdm\":[\"42 Gears SureMDM\"],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 35,
+      "prospect_id": 35,
+      "started_at": "2026-08-17 23:09:44",
+      "ended_at": "2026-08-17 23:13:42",
+      "duration_sec": 236,
+      "qualification_data": "{\"persona\":\"Head of IT\",\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"asd\",\"mspInhouse\":\"yes\",\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"123\",\"implTime\":\"1–3 months\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"123\",\"mobileAndroid\":\"123\",\"timeline\":\"123\",\"useCase\":[\"Patching compliance gaps\",\"Consolidate from multiple tools\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"ACMP\",\"Acronis\"],\"ticketing\":[\"Atera\",\"ARTIS\"],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[\"Beyond Trust Remote Support\",\"Avast Remote Control\"],\"patching\":[\"Chocolatey\",\"Did Not Disclose\"],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"notesSituation\":\"12312312\",\"notesPain\":\"12312312\",\"notesImplication\":\"12312312\"}"
+    },
+    {
+      "id": 36,
+      "prospect_id": 36,
+      "started_at": "2026-08-17 23:13:44",
+      "ended_at": "2026-08-17 23:23:24",
+      "duration_sec": 580,
+      "qualification_data": "{\"persona\":\"SysAdmin\",\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"asdasd\",\"mspInhouse\":\"yes\",\"mspInhouseWhy\":\"asdasd\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"123123\",\"implTime\":\"1–3 months\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"123\",\"mobileAndroid\":\"123\",\"timeline\":\"123123\",\"useCase\":[\"Patching compliance gaps\",\"Remote workforce management\",\"Security posture improvement\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"ACMP\",\"Acronis\"],\"ticketing\":[\"Atera\",\"Autotask\"],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"notesSituation\":\"123132213\",\"notesPain\":\"123123123\",\"notesImplication\":\"123123123\"}"
+    },
+    {
+      "id": 37,
+      "prospect_id": 37,
+      "started_at": "2026-08-17 23:23:25",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"persona\":\"qweddads\",\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"asdasd\",\"mspInhouse\":\"yes\",\"mspInhouseWhy\":\"asdads\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"asdasd\",\"implTime\":\"1–3 months\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"asdasd\",\"mobileAndroid\":\"asdads\",\"timeline\":\"asd\",\"useCase\":[\"Patching compliance gaps\",\"Remote workforce management\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"ACMP\",\"Acronis\"],\"ticketing\":[\"Accelo\"],\"backup\":[\"Acronis\"],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"notesSituation\":\"asdasd\",\"notesPain\":\"asdasd\",\"notesImplication\":\"asdasdas\"}"
     }
   ],
   "report_items": [],

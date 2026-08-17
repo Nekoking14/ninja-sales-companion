@@ -39,7 +39,7 @@ export default function Dashboard () {
       try {
         const key  = `qual_${currentSession?.id || currentProspect?.id || 'draft'}`
         const qual = JSON.parse(localStorage.getItem(key)) || {}
-        setCallScore(computeCallScore(qual, qual.notes || ''))
+        setCallScore(computeCallScore(qual))
       } catch {}
     }
     compute()

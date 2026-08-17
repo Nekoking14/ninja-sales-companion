@@ -2,6 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import { api } from '../api/index.js'
 import QualificationForm from './QualificationForm.jsx'
 
+const SPIN_SECTIONS = [
+  { key: 'notesSituation',   label: 'S — Situation',   color: 'var(--blue)',  pts: 15, placeholder: 'What is their current state? What tools, team size, processes are in place today?' },
+  { key: 'notesPain',        label: 'P — Pain',        color: 'var(--amber)', pts: 15, placeholder: 'What problems are they experiencing? What is frustrating or broken right now?' },
+  { key: 'notesImplication', label: 'I — Implication', color: 'var(--red)',   pts: 20, placeholder: 'What happens if this stays unsolved? What is the cost, risk or impact of inaction?' },
+]
+
 export default function RightPanel({ prospect, session, callSeconds }) {
   const initials = prospect?.name
     ? prospect.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
@@ -10,27 +16,47 @@ export default function RightPanel({ prospect, session, callSeconds }) {
   const key = `qual_${session?.id || prospect?.id || 'draft'}`
 
   // ── Notes state ────────────────────────────────────────────────────────────
-  const [notes, setNotes] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(key))?.notes || '' } catch { return '' }
+  const [notes, setNotes] = useState({
+    notesSituation:   '',
+    notesPain:        '',
+    notesImplication: ''
   })
+  const [notesOpen, setNotesOpen] = useState(true)
 
   useEffect(() => {
-    try { setNotes(JSON.parse(localStorage.getItem(key))?.notes || '') } catch { setNotes('') }
+    try {
+      const saved = JSON.parse(localStorage.getItem(key)) || {}
+      setNotes({
+        notesSituation:   saved.notesSituation   || '',
+        notesPain:        saved.notesPain        || '',
+        notesImplication: saved.notesImplication || '',
+      })
+    } catch {}
   }, [key])
 
   const noteDebounce = useRef(null)
-  function handleNotesChange(val) {
-    setNotes(val)
+
+  function handleNoteChange(field, val) {
+    const updated = { ...notes, [field]: val }
+    setNotes(updated)
     try {
       const saved = JSON.parse(localStorage.getItem(key)) || {}
-      localStorage.setItem(key, JSON.stringify({ ...saved, notes: val }))
+      localStorage.setItem(key, JSON.stringify({ ...saved, ...updated }))
     } catch {}
     if (!session?.id) return
     clearTimeout(noteDebounce.current)
     noteDebounce.current = setTimeout(() => {
-      api.sessions.saveQualification(session.id, { notes: val }).catch(() => {})
+      api.sessions.saveQualification(session.id, updated).catch(() => {})
     }, 1000)
   }
+
+  // Score indicators
+  const pts = {
+    notesSituation:   (notes.notesSituation   || '').trim().length > 5 ? 15 : 0,
+    notesPain:        (notes.notesPain        || '').trim().length > 5 ? 15 : 0,
+    notesImplication: (notes.notesImplication || '').trim().length > 5 ? 20 : 0,
+  }
+  const totalPts = Object.values(pts).reduce((a, b) => a + b, 0)
 
   return (
     <aside style={{
@@ -74,52 +100,96 @@ export default function RightPanel({ prospect, session, callSeconds }) {
         padding: '9px 16px', borderBottom: '1px solid var(--brd)',
         fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
         letterSpacing: '0.08em', color: 'var(--txt3)',
-        flexShrink: 0, background: 'var(--surf)'
+        flexShrink: 0
       }}>
         Qualification
       </div>
 
-      {/* Qual form — scrollable, takes all remaining space */}
+      {/* Qual form — scrollable */}
       <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
         <QualificationForm session={session} prospect={prospect} />
       </div>
 
-      {/* Notes — always visible, pinned to bottom */}
+      {/* ── SPIN Notes — collapsible ── */}
       <div style={{
         flexShrink: 0,
-        height: 200,
         borderTop: '2px solid var(--brd)',
+        background: 'var(--surf)',
         display: 'flex',
         flexDirection: 'column',
-        background: 'var(--surf)',
       }}>
-        <div style={{
-          padding: '7px 14px 4px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          flexShrink: 0
-        }}>
-          <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--txt3)' }}>
-            📝 Notes
-          </span>
-          {notes.length > 0 && (
-            <span style={{ fontSize: 10, color: 'var(--txt3)' }}>{notes.length} chars</span>
-          )}
-        </div>
-        <textarea
-          className="input"
-          value={notes}
-          onChange={e => handleNotesChange(e.target.value)}
-          placeholder="Pain points, objections, contract dates, follow-up flags…"
+
+        {/* Notes header — click to collapse/expand */}
+        <button
+          onClick={() => setNotesOpen(o => !o)}
           style={{
-            flex: 1,
-            margin: '0 12px 10px',
-            resize: 'none',
-            fontSize: 12,
-            lineHeight: 1.65,
-            padding: '9px 11px',
-            overflowY: 'auto',
+            display: 'flex', alignItems: 'center', gap: 8,
+            padding: '9px 14px', background: 'none', border: 'none',
+            cursor: 'pointer', width: '100%', flexShrink: 0,
+            borderBottom: notesOpen ? '1px solid var(--brd)' : 'none',
           }}
-        />
+        >
+          <span style={{ fontSize: 12 }}>📝</span>
+          <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--txt3)', flex: 1, textAlign: 'left' }}>
+            SPIN Notes
+          </span>
+          {/* Points earned indicator */}
+          <span style={{
+            fontSize: 10, fontWeight: 700,
+            color: totalPts > 0 ? 'var(--green)' : 'var(--txt3)',
+            background: totalPts > 0 ? 'var(--green2)' : 'var(--card2)',
+            padding: '2px 7px', borderRadius: 99,
+            transition: 'all 0.2s'
+          }}>
+            {totalPts}/50 pts
+          </span>
+          <span style={{ fontSize: 10, color: 'var(--txt3)', marginLeft: 4 }}>
+            {notesOpen ? '▲' : '▼'}
+          </span>
+        </button>
+
+        {/* Notes sections */}
+        {notesOpen && (
+          <div style={{ padding: '8px 12px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {SPIN_SECTIONS.map(({ key: field, label, color, pts: maxPts, placeholder }) => {
+              const earned  = pts[field]
+              const hasText = (notes[field] || '').trim().length > 5
+              return (
+                <div key={field}>
+                  {/* Section label + pts */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color }}>
+                      {label}
+                    </span>
+                    <span style={{
+                      fontSize: 9, fontWeight: 700,
+                      color: hasText ? 'var(--green)' : 'var(--txt3)',
+                      background: hasText ? 'var(--green2)' : 'var(--card2)',
+                      padding: '1px 6px', borderRadius: 99, transition: 'all 0.2s'
+                    }}>
+                      {hasText ? `+${maxPts}` : `+${maxPts} pts`}
+                    </span>
+                  </div>
+                  <textarea
+                    value={notes[field] || ''}
+                    onChange={e => handleNoteChange(field, e.target.value)}
+                    placeholder={placeholder}
+                    style={{
+                      width: '100%', fontSize: 11.5, lineHeight: 1.6,
+                      padding: '8px 10px', borderRadius: 8,
+                      background: 'var(--card)',
+                      border: `1px solid ${hasText ? color + '50' : 'var(--brd)'}`,
+                      color: 'var(--txt)', resize: 'vertical',
+                      minHeight: 60, fontFamily: 'inherit',
+                      transition: 'border-color 0.2s',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        )}
       </div>
 
     </aside>
