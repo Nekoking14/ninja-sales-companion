@@ -6,11 +6,13 @@ import MultiSelect from './MultiSelect.jsx'
 const PERSONA_PRESETS = ['Head of IT', 'IT Manager', 'Service Desk', 'SysAdmin', 'Technician', 'C-Level']
 
 const USE_CASE_OPTIONS = [
-  'Patching compliance gaps','Consolidate from multiple tools','Remote workforce management',
-  'Security posture improvement','Cyber Essentials certification','Reducing ticket volume',
-  'Automating repetitive IT tasks','Improving device visibility','Cost reduction / budget optimisation',
-  'MSP service delivery platform','NIS2 / DORA compliance','Onboarding / offboarding automation',
-  'Reducing manual patching effort','Faster incident response',
+  'Patching compliance gaps','Reducing manual patching effort',
+  'Vulnerability management','MDM','Software deployment',
+  'Backup','IT documentation','Ticketing',
+  'Consolidate from multiple tools','Remote workforce management',
+  'Cyber Essentials certification','Automating repetitive IT tasks',
+  'Improving device visibility','Cost reduction / budget optimisation',
+  'MSP service delivery platform','NIS2 / DORA compliance','Faster incident response',
 ]
 
 const TOOL_OPTIONS = {
@@ -35,7 +37,7 @@ const EMPTY_QUAL = {
   persona: '',
   prospectType: null, usesMsp: null, mspPartner: '', mspInhouse: null, mspInhouseWhy: '',
   cloudOk: null, cloudFrankfurt: null,
-  endpoints: '', implTime: '',
+  endpoints: '',
   nameCorrect: null, emailCorrect: null, decisionMaker: null,
   mobileIos: '', mobileAndroid: '',
   timeline: '', useCase: [], msp: '',
@@ -344,17 +346,7 @@ export default function QualificationForm({ session, prospect }) {
             <div><div style={{ fontSize: 10, color: 'var(--txt3)', marginBottom: 4 }}>Android</div><input className="input" value={form.mobileAndroid} onChange={e => set('mobileAndroid', e.target.value)} placeholder="e.g. 30" style={{ fontSize: 13, padding: '9px 12px' }} /></div>
           </div>
         </div>
-        <div style={{ marginTop: 10 }}>
-          <Label text="IMPLEMENTATION TIME" />
-          <select className="input" value={form.implTime || ''} onChange={e => set('implTime', e.target.value)} style={{ fontSize: 13, padding: '9px 12px', cursor: 'pointer' }}>
-            <option value="">Select timeframe…</option>
-            <option value="0–1 month">0–1 month</option>
-            <option value="1–3 months">1–3 months</option>
-            <option value="3–6 months">3–6 months</option>
-            <option value="6–12 months">6–12 months</option>
-            <option value="12+ months">12+ months</option>
-          </select>
-        </div>
+
       </div>
 
       {/* 4 + 5 — Blurred until disqualifiers complete */}
@@ -369,8 +361,29 @@ export default function QualificationForm({ session, prospect }) {
 
         <Block title="Qualification">
           <div style={{ marginBottom: 10 }}>
-            <Label text="TIMELINE / CONTRACT END (MONTHS)" />
-            <input className="input" value={form.timeline} onChange={e => set('timeline', e.target.value)} placeholder="e.g. 3 months — contract ends Oct" style={{ fontSize: 13, padding: '9px 12px' }} />
+            <Label text="TIMELINE / CONTRACT END" />
+            <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
+              {['1 month','1–3 months','3–6 months','6–12 months','12+ months'].map(opt => {
+                const active = form.timeline === opt
+                return (
+                  <button key={opt} type="button" onClick={() => set('timeline', active ? '' : opt)} style={{
+                    padding: '5px 11px', borderRadius: 20, fontSize: 11,
+                    fontWeight: active ? 600 : 400,
+                    background: active ? 'var(--acc2)' : 'var(--card2)',
+                    color: active ? 'var(--acc)' : 'var(--txt2)',
+                    border: `1px solid ${active ? 'var(--acc)' : 'var(--brd2)'}`,
+                    transition: 'all 0.12s', cursor: 'pointer'
+                  }}>{opt}</button>
+                )
+              })}
+            </div>
+            <input
+              className="input"
+              value={['1 month','1–3 months','3–6 months','6–12 months','12+ months'].includes(form.timeline) ? '' : form.timeline}
+              onChange={e => set('timeline', e.target.value)}
+              placeholder="Custom — e.g. contract ends Oct, 8 months…"
+              style={{ fontSize: 13, padding: '9px 12px' }}
+            />
           </div>
           <div style={{ position: 'relative' }}>
             <Label text="USE CASE — DEMO HOOK" />
