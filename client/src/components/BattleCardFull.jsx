@@ -6,7 +6,7 @@ import { BATTLECARD_DATA } from '../data/battlecardData.js'
 const PRODUCTS = ['Vuln. Manager','Backup','MDM','Ticketing','M365 Backup','IT Asset Mgmt','Patching']
 
 const PRODUCT_LABEL = {
-  'Vuln. Manager': 'Vulnerability Manager',
+  'Vuln. Manager': 'RMM',
   'Backup':        'Backup',
   'MDM':           'MDM',
   'Ticketing':     'Ticketing',
