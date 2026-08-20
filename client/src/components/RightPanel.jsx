@@ -5,7 +5,7 @@ import QualificationForm from './QualificationForm.jsx'
 
 const SPIN_SECTIONS = [
   { key: 'notesSituation', label: 'S — Situation', color: 'var(--blue)',  pts: 15, placeholder: 'What is their current state? What tools, team size, processes are in place today?' },
-  { key: 'notesPain',      label: 'P — Pain',      color: 'var(--amber)', pts: 15, placeholder: 'What problems are they experiencing? What is frustrating or broken right now?' },
+  { key: 'notesPain',      label: 'P — Pain',      color: 'var(--amber)', pts: 15, placeholder: '* Operational / business pain\n- Frustration, time, money — what is causing it\n- Always ask why / what !!!' },
 ]
 
 export default function RightPanel({ prospect, session, callSeconds }) {

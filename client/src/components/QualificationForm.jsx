@@ -335,6 +335,10 @@ export default function QualificationForm({ session, prospect }) {
 
         <Block title="Qualification">
           <div style={{ marginBottom: 10 }}>
+            <Label text="USE CASE — DEMO HOOK" />
+            <MultiSelect value={form.useCase} onChange={v => set('useCase', v)} options={USE_CASE_OPTIONS} placeholder="Select use cases…" color="var(--acc)" />
+          </div>
+          <div>
             <Label text="TIMELINE / CONTRACT END" />
             <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
               {['1 month','1–3 months','3–6 months','6–12 months','12+ months'].map(opt => {
@@ -358,10 +362,6 @@ export default function QualificationForm({ session, prospect }) {
               placeholder="Custom — e.g. contract ends Oct, 8 months…"
               style={{ fontSize: 13, padding: '9px 12px' }}
             />
-          </div>
-          <div style={{ position: 'relative' }}>
-            <Label text="USE CASE — DEMO HOOK" />
-            <MultiSelect value={form.useCase} onChange={v => set('useCase', v)} options={USE_CASE_OPTIONS} placeholder="Select use cases…" color="var(--acc)" />
           </div>
         </Block>
 

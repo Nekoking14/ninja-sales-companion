@@ -148,15 +148,13 @@ export default function Dashboard () {
             </div>
           ) : (
             <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-              {openWidget.id !== 'bc' && (
-                <FrameworkQuickList
-                  frameworks={frameworks}
-                  active={openWidget}
-                  onSelect={setOpenWidget}
-                  addedCounts={addedPerFramework}
-                  onClose={() => setOpenWidget(null)}
-                />
-              )}
+              <FrameworkQuickList
+                frameworks={frameworks}
+                active={openWidget}
+                onSelect={setOpenWidget}
+                addedCounts={addedPerFramework}
+                onClose={() => setOpenWidget(null)}
+              />
               {openWidget.id === 'bc' ? (
                 <BattleCardFull key="bc" widget={openWidget} onClose={() => setOpenWidget(null)} />
               ) : (

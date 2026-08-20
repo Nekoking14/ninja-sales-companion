@@ -798,7 +798,7 @@
       "started_at": "2026-08-20 12:57:10",
       "ended_at": null,
       "duration_sec": null,
-      "qualification_data": "{\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+      "qualification_data": "{\"persona\":\"Head of IT\",\"prospectType\":\"it\",\"usesMsp\":\"no\",\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"500\",\"nameCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"4000\",\"mobileAndroid\":\"300\",\"timeline\":\"1–3 months\",\"useCase\":[\"Patching compliance gaps\",\"Reducing manual patching effort\",\"Vulnerability management\",\"MDM\"],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
     }
   ],
   "report_items": [],
