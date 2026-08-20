@@ -22,7 +22,7 @@ function getDefaultTab (widgetId, persona) {
 
 export default function Dashboard () {
   const { state, dispatch } = useApp()
-  const { currentProspect, currentSession, callSeconds, activePersona } = state
+  const { currentProspect, currentSession, callSeconds, activePersona, spinNotes } = state
   const navigate     = useNavigate()
   const frameworks   = useFrameworks()
 
@@ -32,20 +32,16 @@ export default function Dashboard () {
   const [addedIds,    setAddedIds]    = useState(new Set())
   const [callScore,   setCallScore]   = useState(0)
 
-  // Poll localStorage every 2s to keep call quality score live
+  // Recompute score whenever qual form data changes (localStorage) or notes change (AppContext)
   useEffect(() => {
     if (!currentSession?.id && !currentProspect?.id) return
-    const compute = () => {
-      try {
-        const key  = `qual_${currentSession?.id || currentProspect?.id || 'draft'}`
-        const qual = JSON.parse(localStorage.getItem(key)) || {}
-        setCallScore(computeCallScore(qual))
-      } catch {}
-    }
-    compute()
-    const t = setInterval(compute, 2000)
-    return () => clearInterval(t)
-  }, [currentSession?.id, currentProspect?.id])
+    try {
+      const key  = `qual_${currentSession?.id || currentProspect?.id || 'draft'}`
+      const qual = JSON.parse(localStorage.getItem(key)) || {}
+      // Merge spinNotes from AppContext — updates instantly when user types
+      setCallScore(computeCallScore({ ...qual, ...spinNotes }))
+    } catch {}
+  }, [currentSession?.id, currentProspect?.id, spinNotes])
 
   useEffect(() => {
     if (!currentProspect) navigate('/', { replace: true })
@@ -121,64 +117,64 @@ export default function Dashboard () {
     <div className="app-shell">
       <Topbar onEndCall={handleEndCall} callScore={callScore} />
       <div className="body-shell">
-        {/* Grid view */}
-        {!openWidget && (
-          <div className="main-scroll">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-              <span style={{ fontSize: 13, fontWeight: 500 }}>Sales frameworks</span>
-              <span style={{ background: 'var(--card2)', border: '1px solid var(--brd)', color: 'var(--txt2)', fontSize: 11, padding: '2px 10px', borderRadius: 999 }}>
-                {frameworks.length} modules
-              </span>
-            </div>
-            {activePersona && (
-              <div style={{ marginBottom: 14, padding: '8px 14px', background: 'var(--acc3)', border: '1px solid var(--acc)', borderRadius: 9, fontSize: 12, color: 'var(--acc)', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontWeight: 600 }}>Persona: {activePersona}</span>
-                <span style={{ color: 'var(--txt2)' }}>— Opener and Personas jump to the matching tab automatically</span>
+
+        {/* ── LEFT HALF — Frameworks (50%) ── */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRight: '1px solid var(--brd)' }}>
+          {!openWidget ? (
+            <div className="main-scroll">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                <span style={{ fontSize: 13, fontWeight: 500 }}>Sales frameworks</span>
+                <span style={{ background: 'var(--card2)', border: '1px solid var(--brd)', color: 'var(--txt2)', fontSize: 11, padding: '2px 10px', borderRadius: 999 }}>
+                  {frameworks.length} modules
+                </span>
               </div>
-            )}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-              {frameworks.map(widget => (
-                <FrameworkCard
-                  key={widget.id}
-                  widget={widget}
-                  isActive={false}
-                  addedCount={addedPerFramework(widget.id)}
-                  onClick={() => setOpenWidget(widget)}
-                />
-              ))}
+              {activePersona && (
+                <div style={{ marginBottom: 14, padding: '8px 14px', background: 'var(--acc3)', border: '1px solid var(--acc)', borderRadius: 9, fontSize: 12, color: 'var(--acc)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontWeight: 600 }}>Persona: {activePersona}</span>
+                  <span style={{ color: 'var(--txt2)' }}>— frameworks highlight the matching persona tab</span>
+                </div>
+              )}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+                {frameworks.map(widget => (
+                  <FrameworkCard
+                    key={widget.id}
+                    widget={widget}
+                    isActive={false}
+                    addedCount={addedPerFramework(widget.id)}
+                    onClick={() => setOpenWidget(widget)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          ) : (
+            <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+              {openWidget.id !== 'bc' && (
+                <FrameworkQuickList
+                  frameworks={frameworks}
+                  active={openWidget}
+                  onSelect={setOpenWidget}
+                  addedCounts={addedPerFramework}
+                  onClose={() => setOpenWidget(null)}
+                />
+              )}
+              {openWidget.id === 'bc' ? (
+                <BattleCardFull key="bc" widget={openWidget} onClose={() => setOpenWidget(null)} />
+              ) : (
+                <FrameworkPanel
+                  key={panelKey}
+                  widget={openWidget}
+                  onAddItem={handleAddItem}
+                  addedIds={addedIds}
+                  defaultTab={getDefaultTab(openWidget.id, activePersona)}
+                />
+              )}
+            </div>
+          )}
+        </div>
 
-        {/* Framework detail view */}
-        {openWidget && (
-          <>
-            {openWidget.id !== 'bc' && (
-              <FrameworkQuickList
-                frameworks={frameworks}
-                active={openWidget}
-                onSelect={setOpenWidget}
-                addedCounts={addedPerFramework}
-                onClose={() => setOpenWidget(null)}
-              />
-            )}
-            {openWidget.id === 'qual' ? (
-              <QualificationForm session={currentSession} prospect={currentProspect} />
-            ) : openWidget.id === 'bc' ? (
-              <BattleCardFull key="bc" widget={openWidget} onClose={() => setOpenWidget(null)} />
-            ) : (
-              <FrameworkPanel
-                key={panelKey}
-                widget={openWidget}
-                onAddItem={handleAddItem}
-                addedIds={addedIds}
-                defaultTab={getDefaultTab(openWidget.id, activePersona)}
-              />
-            )}
-          </>
-        )}
-
+        {/* ── RIGHT HALF — Qualification + SPIN notes (50%) ── */}
         <RightPanel prospect={currentProspect} session={currentSession} callSeconds={callSeconds} />
+
       </div>
     </div>
   )

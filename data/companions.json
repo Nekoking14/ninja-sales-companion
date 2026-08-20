@@ -428,6 +428,39 @@
       "notes": null,
       "created_at": "2026-08-19 12:32:04",
       "updated_at": "2026-08-19 12:32:04"
+    },
+    {
+      "id": 40,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-20 12:38:19",
+      "updated_at": "2026-08-20 12:38:19"
+    },
+    {
+      "id": 41,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-20 12:55:20",
+      "updated_at": "2026-08-20 12:55:20"
+    },
+    {
+      "id": 42,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-20 12:57:10",
+      "updated_at": "2026-08-20 12:57:10"
     }
   ],
   "sessions": [
@@ -739,9 +772,33 @@
       "id": 39,
       "prospect_id": 39,
       "started_at": "2026-08-19 12:32:04",
+      "ended_at": "2026-08-20 12:38:18",
+      "duration_sec": 434,
+      "qualification_data": "{\"persona\":\"Head of IT\",\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"\",\"mspInhouse\":\"yes\",\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"500\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"123\",\"mobileAndroid\":\"123\",\"timeline\":\"1 month\",\"useCase\":[\"Patching compliance gaps\",\"MDM\",\"Vulnerability management\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"ACMP\",\"Addigy\"],\"ticketing\":[\"Accelo\"],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"notesSituation\":\"alskdj\",\"notesPain\":\"laksdasd\",\"notesImplication\":\"asdaskdlh\"}"
+    },
+    {
+      "id": 40,
+      "prospect_id": 40,
+      "started_at": "2026-08-20 12:38:19",
       "ended_at": null,
       "duration_sec": null,
-      "qualification_data": "{\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"emailCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+      "qualification_data": "{\"persona\":\"Technician\",\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":\"no\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"qwe\",\"nameCorrect\":\"confirmed\",\"emailCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 41,
+      "prospect_id": 41,
+      "started_at": "2026-08-20 12:55:20",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": null
+    },
+    {
+      "id": 42,
+      "prospect_id": 42,
+      "started_at": "2026-08-20 12:57:10",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
     }
   ],
   "report_items": [],

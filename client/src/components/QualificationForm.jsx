@@ -38,7 +38,7 @@ const EMPTY_QUAL = {
   prospectType: null, usesMsp: null, mspPartner: '', mspInhouse: null, mspInhouseWhy: '',
   cloudOk: null, cloudFrankfurt: null,
   endpoints: '',
-  nameCorrect: null, emailCorrect: null, decisionMaker: null,
+  nameCorrect: null, decisionMaker: null,
   mobileIos: '', mobileAndroid: '',
   timeline: '', useCase: [], msp: '',
   tools: {
@@ -159,17 +159,13 @@ export default function QualificationForm({ session, prospect }) {
   }
 
   const basicPricingInfo = getBasicPricingInfo(form)
-  const disqComplete = form.cloudOk !== null
-    && (form.cloudOk === 'no' || form.cloudFrankfurt !== null)
-    && form.endpoints.trim() !== ''
-
   const [showDNB,    setShowDNB]    = useState(false)
   const [showMspDNB, setShowMspDNB] = useState(false)
   function handleDM(val)         { set('decisionMaker', val); if (val === 'no') setShowDNB(true) }
   function handleMspInhouse(val) { set('mspInhouse', val);    if (val === 'no') setShowMspDNB(true) }
 
   return (
-    <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px', background: 'var(--bg)', position: 'relative' }}>
+    <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 20px', background: 'var(--bg)', position: 'relative' }}>
 
       {/* Do Not Book popups */}
       {showDNB && (
@@ -197,9 +193,11 @@ export default function QualificationForm({ session, prospect }) {
         </div>
       )}
 
-      {/* 0 — Persona (first question) */}
-      <Block title="Persona">
-        <Label text="WHO ARE YOU SPEAKING WITH?" />
+      {/* Combined: Persona + CRM confirmation + Prospect type */}
+      <Block title="Who are you speaking with?">
+
+        {/* Persona */}
+        <Label text="PERSONA" />
         <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
           {PERSONA_PRESETS.map(p => {
             const active = form.persona === p
@@ -215,7 +213,7 @@ export default function QualificationForm({ session, prospect }) {
             )
           })}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '10px 0 8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '6px 0 8px' }}>
           <div style={{ flex: 1, height: 1, background: 'var(--brd)' }} />
           <span style={{ fontSize: 10, color: 'var(--txt3)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>or enter custom</span>
           <div style={{ flex: 1, height: 1, background: 'var(--brd)' }} />
@@ -225,22 +223,39 @@ export default function QualificationForm({ session, prospect }) {
           value={PERSONA_PRESETS.includes(form.persona) ? '' : form.persona}
           onChange={e => setPersona(e.target.value)}
           placeholder="e.g. IT Director, Head of Infrastructure…"
-          style={{ fontSize: 13, padding: '9px 12px' }}
+          style={{ fontSize: 13, padding: '9px 12px', marginBottom: 14 }}
         />
-      </Block>
 
-      {/* 1 — Prospect type */}
-      <Block title="Prospect type">
+        {/* CRM confirmation */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 14 }}>
+          <div>
+            <Label text="NAME & TITLE CORRECT?" />
+            <BtnGroup value={form.nameCorrect} onChange={v => set('nameCorrect', v)} options={[
+              { value: 'confirmed', label: 'Confirmed',     bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
+              { value: 'update',    label: 'Update needed', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
+            ]} />
+          </div>
+          <div>
+            <Label text="DECISION MAKER IN IT?" />
+            <BtnGroup value={form.decisionMaker} onChange={handleDM} options={[
+              { value: 'dm',         label: 'Yes — DM',   bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
+              { value: 'no',         label: 'No',         bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   },
+              { value: 'influencer', label: 'Influencer', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
+            ]} />
+          </div>
+        </div>
+
+        {/* Prospect type */}
+        <Label text="MSP OR INTERNAL IT?" />
         <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, flexWrap: 'wrap' }}>
           <div style={{ flex: 1, minWidth: 200 }}>
-            <Label text="MSP OR INTERNAL IT?" />
             <BtnGroup value={form.prospectType} onChange={v => set('prospectType', v)} options={[
               { value: 'msp', label: 'MSP',         bg: 'var(--blue2)', color: 'var(--blue)', brd: 'var(--blue)' },
               { value: 'it',  label: 'Internal IT', bg: 'var(--acc2)',  color: 'var(--acc)',  brd: 'var(--acc)'  }
             ]} />
           </div>
           {basicPricingInfo && (
-            <div style={{ marginTop: 15, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--amber2)', border: '1px solid var(--amber)', borderRadius: 8, padding: '7px 12px', fontSize: 12, color: 'var(--amber)', fontWeight: 600 }}>
+            <div style={{ marginTop: 2, flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 6, background: 'var(--amber2)', border: '1px solid var(--amber)', borderRadius: 8, padding: '7px 12px', fontSize: 12, color: 'var(--amber)', fontWeight: 600 }}>
               <span>⚡</span>
               <div>
                 <div>Basic Pricing</div>
@@ -284,42 +299,10 @@ export default function QualificationForm({ session, prospect }) {
         )}
       </Block>
 
-      {/* 2 — Confirm from CRM */}
-      <Block title="Confirm from CRM">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div>
-            <Label text="NAME & TITLE CORRECT?" />
-            <BtnGroup value={form.nameCorrect} onChange={v => set('nameCorrect', v)} options={[
-              { value: 'confirmed', label: 'Confirmed',     bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
-              { value: 'update',    label: 'Update needed', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
-            ]} />
-          </div>
-          <div>
-            <Label text="EMAIL CORRECT?" />
-            <BtnGroup value={form.emailCorrect} onChange={v => set('emailCorrect', v)} options={[
-              { value: 'confirmed', label: 'Confirmed',     bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
-              { value: 'update',    label: 'Update needed', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
-            ]} />
-          </div>
-          <div>
-            <Label text="DECISION MAKER IN IT?" />
-            <BtnGroup value={form.decisionMaker} onChange={handleDM} options={[
-              { value: 'dm',         label: 'Yes — DM',   bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
-              { value: 'no',         label: 'No',         bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   },
-              { value: 'influencer', label: 'Influencer', bg: 'var(--amber2)', color: 'var(--amber)', brd: 'var(--amber)' }
-            ]} />
-          </div>
-        </div>
-      </Block>
-
       {/* 3 — Disqualifiers */}
       <div style={{ background: 'rgba(239,68,68,0.06)', border: '1.5px solid var(--red)', borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--red)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
           ⚠ Disqualifiers — check first
-          {disqComplete
-            ? <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--green)', background: 'var(--green2)', padding: '2px 8px', borderRadius: 999 }}>✓ Done</span>
-            : <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--red)', background: 'var(--red2)', padding: '2px 8px', borderRadius: 999 }}>Complete to unlock form</span>
-          }
         </div>
         <Label text="CLOUD OK?" />
         <BtnGroup value={form.cloudOk} onChange={v => set('cloudOk', v)} options={[
@@ -349,15 +332,6 @@ export default function QualificationForm({ session, prospect }) {
 
       </div>
 
-      {/* 4 + 5 — Blurred until disqualifiers complete */}
-      <div style={{ filter: disqComplete ? 'none' : 'blur(3px)', pointerEvents: disqComplete ? 'auto' : 'none', userSelect: disqComplete ? 'auto' : 'none', transition: 'filter 0.3s ease', position: 'relative' }}>
-        {!disqComplete && (
-          <div style={{ position: 'absolute', inset: 0, zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ background: 'var(--card)', border: '1px solid var(--red)', borderRadius: 10, padding: '10px 20px', fontSize: 12, color: 'var(--red)', fontWeight: 600 }}>
-              ⚠ Complete the Disqualifiers section first
-            </div>
-          </div>
-        )}
 
         <Block title="Qualification">
           <div style={{ marginBottom: 10 }}>
@@ -417,7 +391,6 @@ export default function QualificationForm({ session, prospect }) {
             ))}
           </div>
         </Block>
-      </div>
     </div>
   )
 }

@@ -1,13 +1,12 @@
-// ── New scoring system (100 points total) ──────────────────────────────────
+// ── Scoring system (100 points total) ─────────────────────────────────────
 //
 //  Base qualification   30 pts  (core fields completed)
 //  Use case             10 pts  (at least one use case selected)
 //  Tool stack           10 pts  (tools filled in)
-//  Situation            15 pts  (SPIN — situation captured)
-//  Pain                 15 pts  (SPIN — pain identified)
-//  Implication          20 pts  (SPIN — implication explored)
-//  ─────────────────────────────────────────────────────
-//  Total               100 pts
+//  Situation notes      15 pts  (something written in the Situation box)
+//  Pain notes           15 pts  (something written in the Pain box)
+//  ─────────────────────────────────────────────────────────────────────
+//  Total                80 pts
 
 export function computeQualScore(qual) {
   if (!qual) return 0
@@ -21,7 +20,6 @@ export function computeQualScore(qual) {
   if (qual.decisionMaker === 'dm')              pts += 8
   else if (qual.decisionMaker === 'influencer') pts += 4
   if (qual.nameCorrect === 'confirmed')         pts += 3
-  if (qual.emailCorrect === 'confirmed')        pts += 2
   if (qual.timeline?.trim())                    pts += 2
 
   // ── Use case (10 pts) ─────────────────────────────────────────────────────
@@ -35,20 +33,17 @@ export function computeQualScore(qual) {
   if (filledTools >= 3)      pts += 10
   else if (filledTools >= 1) pts += Math.round(filledTools * 3.3)
 
-  // ── SPIN discovery (50 pts) ───────────────────────────────────────────────
-  if (qual.spinSituation)  pts += 15
-  if (qual.spinPain)       pts += 15
-  if (qual.spinImplication) pts += 20
+  // ── SPIN notes (50 pts) — scored from written content ────────────────────
+  if ((qual.notesSituation || '').trim().length > 0) pts += 15
+  if ((qual.notesPain       || '').trim().length > 0) pts += 15
 
   return Math.round(Math.min(pts, 100))
 }
 
-// ── Combined call quality score (same as qual score now) ──────────────────
 export function computeCallScore(qual) {
   return computeQualScore(qual)
 }
 
-// ── Display helpers ────────────────────────────────────────────────────────
 export function scoreColor(score) {
   if (score >= 71) return 'var(--green)'
   if (score >= 41) return 'var(--amber)'

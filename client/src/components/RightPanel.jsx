@@ -1,36 +1,35 @@
 import { useState, useEffect, useRef } from 'react'
 import { api } from '../api/index.js'
+import { useApp } from '../context/AppContext.jsx'
 import QualificationForm from './QualificationForm.jsx'
 
 const SPIN_SECTIONS = [
-  { key: 'notesSituation',   label: 'S — Situation',   color: 'var(--blue)',  pts: 15, placeholder: 'What is their current state? What tools, team size, processes are in place today?' },
-  { key: 'notesPain',        label: 'P — Pain',        color: 'var(--amber)', pts: 15, placeholder: 'What problems are they experiencing? What is frustrating or broken right now?' },
-  { key: 'notesImplication', label: 'I — Implication', color: 'var(--red)',   pts: 20, placeholder: 'What happens if this stays unsolved? What is the cost, risk or impact of inaction?' },
+  { key: 'notesSituation', label: 'S — Situation', color: 'var(--blue)',  pts: 15, placeholder: 'What is their current state? What tools, team size, processes are in place today?' },
+  { key: 'notesPain',      label: 'P — Pain',      color: 'var(--amber)', pts: 15, placeholder: 'What problems are they experiencing? What is frustrating or broken right now?' },
 ]
 
 export default function RightPanel({ prospect, session, callSeconds }) {
+  const { dispatch } = useApp()
+
   const initials = prospect?.name
     ? prospect.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
     : '??'
 
   const key = `qual_${session?.id || prospect?.id || 'draft'}`
 
-  // ── Notes state ────────────────────────────────────────────────────────────
-  const [notes, setNotes] = useState({
-    notesSituation:   '',
-    notesPain:        '',
-    notesImplication: ''
-  })
+  // ── SPIN notes state ───────────────────────────────────────────────────────
+  const [notes, setNotes] = useState({ notesSituation: '', notesPain: '' })
   const [notesOpen, setNotesOpen] = useState(true)
 
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(key)) || {}
-      setNotes({
-        notesSituation:   saved.notesSituation   || '',
-        notesPain:        saved.notesPain        || '',
-        notesImplication: saved.notesImplication || '',
-      })
+      const loaded = {
+        notesSituation: saved.notesSituation || '',
+        notesPain:      saved.notesPain      || '',
+      }
+      setNotes(loaded)
+      dispatch({ type: 'SET_SPIN_NOTES', payload: loaded })
     } catch {}
   }, [key])
 
@@ -39,6 +38,7 @@ export default function RightPanel({ prospect, session, callSeconds }) {
   function handleNoteChange(field, val) {
     const updated = { ...notes, [field]: val }
     setNotes(updated)
+    dispatch({ type: 'SET_SPIN_NOTES', payload: updated })
     try {
       const saved = JSON.parse(localStorage.getItem(key)) || {}
       localStorage.setItem(key, JSON.stringify({ ...saved, ...updated }))
@@ -50,26 +50,22 @@ export default function RightPanel({ prospect, session, callSeconds }) {
     }, 1000)
   }
 
-  // Score indicators
   const pts = {
-    notesSituation:   (notes.notesSituation   || '').trim().length > 5 ? 15 : 0,
-    notesPain:        (notes.notesPain        || '').trim().length > 5 ? 15 : 0,
-    notesImplication: (notes.notesImplication || '').trim().length > 5 ? 20 : 0,
+    notesSituation: (notes.notesSituation || '').trim().length > 0 ? 15 : 0,
+    notesPain:      (notes.notesPain      || '').trim().length > 0 ? 15 : 0,
   }
-  const totalPts = Object.values(pts).reduce((a, b) => a + b, 0)
+  const totalPts = pts.notesSituation + pts.notesPain
 
   return (
-    <aside style={{
-      width: 'var(--panel-w)',
-      background: 'var(--surf)',
-      borderLeft: '1px solid var(--brd)',
+    <div style={{
+      flex: 1,
       display: 'flex',
       flexDirection: 'column',
-      flexShrink: 0,
       overflow: 'hidden',
+      background: 'var(--surf)',
     }}>
 
-      {/* Prospect strip */}
+      {/* Prospect strip — spans full width */}
       <div style={{
         padding: '10px 16px', borderBottom: '1px solid var(--brd)',
         display: 'flex', alignItems: 'center', gap: 10,
@@ -95,104 +91,103 @@ export default function RightPanel({ prospect, session, callSeconds }) {
         )}
       </div>
 
-      {/* Qualification label */}
-      <div style={{
-        padding: '9px 16px', borderBottom: '1px solid var(--brd)',
-        fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
-        letterSpacing: '0.08em', color: 'var(--txt3)',
-        flexShrink: 0
-      }}>
-        Qualification
-      </div>
+      {/* Main row: Qual form + SPIN notes */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
 
-      {/* Qual form — scrollable */}
-      <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
-        <QualificationForm session={session} prospect={prospect} />
-      </div>
-
-      {/* ── SPIN Notes — collapsible ── */}
-      <div style={{
-        flexShrink: 0,
-        borderTop: '2px solid var(--brd)',
-        background: 'var(--surf)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
-
-        {/* Notes header — click to collapse/expand */}
-        <button
-          onClick={() => setNotesOpen(o => !o)}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            padding: '9px 14px', background: 'none', border: 'none',
-            cursor: 'pointer', width: '100%', flexShrink: 0,
-            borderBottom: notesOpen ? '1px solid var(--brd)' : 'none',
-          }}
-        >
-          <span style={{ fontSize: 12 }}>📝</span>
-          <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--txt3)', flex: 1, textAlign: 'left' }}>
-            SPIN Notes
-          </span>
-          {/* Points earned indicator */}
-          <span style={{
-            fontSize: 10, fontWeight: 700,
-            color: totalPts > 0 ? 'var(--green)' : 'var(--txt3)',
-            background: totalPts > 0 ? 'var(--green2)' : 'var(--card2)',
-            padding: '2px 7px', borderRadius: 99,
-            transition: 'all 0.2s'
-          }}>
-            {totalPts}/50 pts
-          </span>
-          <span style={{ fontSize: 10, color: 'var(--txt3)', marginLeft: 4 }}>
-            {notesOpen ? '▲' : '▼'}
-          </span>
-        </button>
-
-        {/* Notes sections */}
-        {notesOpen && (
-          <div style={{ padding: '8px 12px 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {SPIN_SECTIONS.map(({ key: field, label, color, pts: maxPts, placeholder }) => {
-              const earned  = pts[field]
-              const hasText = (notes[field] || '').trim().length > 5
-              return (
-                <div key={field}>
-                  {/* Section label + pts */}
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                    <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color }}>
-                      {label}
-                    </span>
-                    <span style={{
-                      fontSize: 9, fontWeight: 700,
-                      color: hasText ? 'var(--green)' : 'var(--txt3)',
-                      background: hasText ? 'var(--green2)' : 'var(--card2)',
-                      padding: '1px 6px', borderRadius: 99, transition: 'all 0.2s'
-                    }}>
-                      {hasText ? `+${maxPts}` : `+${maxPts} pts`}
-                    </span>
-                  </div>
-                  <textarea
-                    value={notes[field] || ''}
-                    onChange={e => handleNoteChange(field, e.target.value)}
-                    placeholder={placeholder}
-                    style={{
-                      width: '100%', fontSize: 11.5, lineHeight: 1.6,
-                      padding: '8px 10px', borderRadius: 8,
-                      background: 'var(--card)',
-                      border: `1px solid ${hasText ? color + '50' : 'var(--brd)'}`,
-                      color: 'var(--txt)', resize: 'vertical',
-                      minHeight: 60, fontFamily: 'inherit',
-                      transition: 'border-color 0.2s',
-                      boxSizing: 'border-box',
-                    }}
-                  />
-                </div>
-              )
-            })}
+        {/* Qualification form */}
+        <div style={{ flex: '0 0 58%', display: 'flex', flexDirection: 'column', overflow: 'hidden', borderRight: '1px solid var(--brd)', minWidth: 0 }}>
+          <div style={{ padding: '8px 16px', borderBottom: '1px solid var(--brd)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--txt3)', flexShrink: 0 }}>
+            Qualification
           </div>
-        )}
-      </div>
+          <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+            <QualificationForm session={session} prospect={prospect} />
+          </div>
+        </div>
 
-    </aside>
+        {/* SPIN notes — right column, 42% width */}
+        <div style={{
+          flex: '0 0 42%',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          background: 'var(--surf)',
+          minWidth: 0,
+        }}>
+
+          {/* Notes header */}
+          <button
+            onClick={() => setNotesOpen(o => !o)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '9px 12px', background: 'none', border: 'none',
+              borderBottom: '1px solid var(--brd)',
+              cursor: 'pointer', width: '100%', flexShrink: 0,
+            }}
+          >
+            <span style={{ fontSize: 12 }}>📝</span>
+            <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--txt3)', flex: 1, textAlign: 'left' }}>
+              SPIN Notes
+            </span>
+            <span style={{
+              fontSize: 10, fontWeight: 700,
+              color: totalPts > 0 ? 'var(--green)' : 'var(--txt3)',
+              background: totalPts > 0 ? 'var(--green2)' : 'var(--card2)',
+              padding: '2px 6px', borderRadius: 99, transition: 'all 0.2s'
+            }}>
+              {totalPts}/30
+            </span>
+            <span style={{ fontSize: 10, color: 'var(--txt3)', marginLeft: 4 }}>
+              {notesOpen ? '▲' : '▼'}
+            </span>
+          </button>
+
+          {/* Notes sections */}
+          {notesOpen && (
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
+              {SPIN_SECTIONS.map(({ key: field, label, color, pts: maxPts, placeholder }, idx) => {
+                const hasText = (notes[field] || '').trim().length > 0
+                return (
+                  <div key={field} style={{
+                    flex: 1, display: 'flex', flexDirection: 'column',
+                    padding: '10px 12px',
+                    borderTop: idx > 0 ? '1px solid var(--brd)' : 'none',
+                    minHeight: 0,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6, flexShrink: 0 }}>
+                      <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color }}>{label}</span>
+                      <span style={{
+                        fontSize: 9, fontWeight: 700,
+                        color: hasText ? 'var(--green)' : 'var(--txt3)',
+                        background: hasText ? 'var(--green2)' : 'var(--card2)',
+                        padding: '1px 6px', borderRadius: 99, transition: 'all 0.2s'
+                      }}>
+                        {hasText ? `+${maxPts}` : `+${maxPts} pts`}
+                      </span>
+                    </div>
+                    <textarea
+                      value={notes[field] || ''}
+                      onChange={e => handleNoteChange(field, e.target.value)}
+                      placeholder={placeholder}
+                      style={{
+                        flex: 1, width: '100%', fontSize: 12, lineHeight: 1.6,
+                        padding: '8px 10px', borderRadius: 8,
+                        background: 'var(--card)',
+                        border: `1px solid ${hasText ? color + '50' : 'var(--brd)'}`,
+                        color: 'var(--txt)', resize: 'none',
+                        fontFamily: 'inherit',
+                        transition: 'border-color 0.2s',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
   )
 }
 
