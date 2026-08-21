@@ -299,6 +299,38 @@ export default function QualificationForm({ session, prospect }) {
         )}
       </Block>
 
+        <Block title="Qualification">
+          <div style={{ marginBottom: 10 }}>
+            <Label text="USE CASE — DEMO HOOK" />
+            <MultiSelect value={form.useCase} onChange={v => set('useCase', v)} options={USE_CASE_OPTIONS} placeholder="Select use cases…" color="var(--acc)" />
+          </div>
+          <div>
+            <Label text="TIMELINE / CONTRACT END" />
+            <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
+              {['1 month','1–3 months','3–6 months','6–12 months','12+ months'].map(opt => {
+                const active = form.timeline === opt
+                return (
+                  <button key={opt} type="button" onClick={() => set('timeline', active ? '' : opt)} style={{
+                    padding: '5px 11px', borderRadius: 20, fontSize: 11,
+                    fontWeight: active ? 600 : 400,
+                    background: active ? 'var(--acc2)' : 'var(--card2)',
+                    color: active ? 'var(--acc)' : 'var(--txt2)',
+                    border: `1px solid ${active ? 'var(--acc)' : 'var(--brd2)'}`,
+                    transition: 'all 0.12s', cursor: 'pointer'
+                  }}>{opt}</button>
+                )
+              })}
+            </div>
+            <input
+              className="input"
+              value={['1 month','1–3 months','3–6 months','6–12 months','12+ months'].includes(form.timeline) ? '' : form.timeline}
+              onChange={e => set('timeline', e.target.value)}
+              placeholder="Custom — e.g. contract ends Oct, 8 months…"
+              style={{ fontSize: 13, padding: '9px 12px' }}
+            />
+          </div>
+        </Block>
+
       {/* 3 — Disqualifiers */}
       <div style={{ background: 'rgba(239,68,68,0.06)', border: '1.5px solid var(--red)', borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--red)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -332,38 +364,6 @@ export default function QualificationForm({ session, prospect }) {
 
       </div>
 
-
-        <Block title="Qualification">
-          <div style={{ marginBottom: 10 }}>
-            <Label text="USE CASE — DEMO HOOK" />
-            <MultiSelect value={form.useCase} onChange={v => set('useCase', v)} options={USE_CASE_OPTIONS} placeholder="Select use cases…" color="var(--acc)" />
-          </div>
-          <div>
-            <Label text="TIMELINE / CONTRACT END" />
-            <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
-              {['1 month','1–3 months','3–6 months','6–12 months','12+ months'].map(opt => {
-                const active = form.timeline === opt
-                return (
-                  <button key={opt} type="button" onClick={() => set('timeline', active ? '' : opt)} style={{
-                    padding: '5px 11px', borderRadius: 20, fontSize: 11,
-                    fontWeight: active ? 600 : 400,
-                    background: active ? 'var(--acc2)' : 'var(--card2)',
-                    color: active ? 'var(--acc)' : 'var(--txt2)',
-                    border: `1px solid ${active ? 'var(--acc)' : 'var(--brd2)'}`,
-                    transition: 'all 0.12s', cursor: 'pointer'
-                  }}>{opt}</button>
-                )
-              })}
-            </div>
-            <input
-              className="input"
-              value={['1 month','1–3 months','3–6 months','6–12 months','12+ months'].includes(form.timeline) ? '' : form.timeline}
-              onChange={e => set('timeline', e.target.value)}
-              placeholder="Custom — e.g. contract ends Oct, 8 months…"
-              style={{ fontSize: 13, padding: '9px 12px' }}
-            />
-          </div>
-        </Block>
 
         <Block title="Current tool stack">
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
