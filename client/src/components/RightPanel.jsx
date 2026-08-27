@@ -22,6 +22,8 @@ export default function RightPanel({ prospect, session, callSeconds }) {
   // ── SPIN notes state ───────────────────────────────────────────────────────
   const [notes, setNotes] = useState({ notesSituation: '', notesPain: '', notesImplication: '' })
   const [notesOpen, setNotesOpen] = useState(true)
+  const [resetKey, setResetKey] = useState(0)
+  const [confirmClear, setConfirmClear] = useState(false)
 
   useEffect(() => {
     try {
@@ -51,6 +53,21 @@ export default function RightPanel({ prospect, session, callSeconds }) {
     noteDebounce.current = setTimeout(() => {
       api.sessions.saveQualification(session.id, updated).catch(() => {})
     }, 1000)
+  }
+
+  function clearAll() {
+    // Wipe localStorage for this session (keep callType)
+    try {
+      const saved = JSON.parse(localStorage.getItem(key)) || {}
+      localStorage.setItem(key, JSON.stringify({ callType: saved.callType }))
+    } catch {}
+    // Reset SPIN notes in AppContext
+    dispatch({ type: 'SET_SPIN_NOTES', payload: { notesSituation: '', notesPain: '', notesImplication: '' } })
+    // Reset notes UI
+    setNotes({ notesSituation: '', notesPain: '', notesImplication: '' })
+    // Remount QualificationForm with fresh state
+    setResetKey(k => k + 1)
+    setConfirmClear(false)
   }
 
   const pts = {
@@ -93,6 +110,23 @@ export default function RightPanel({ prospect, session, callSeconds }) {
             {fmt(callSeconds)}
           </div>
         )}
+        {/* Clear button */}
+        {!confirmClear ? (
+          <button
+            onClick={() => setConfirmClear(true)}
+            style={{ padding: '6px 14px', borderRadius: 8, fontSize: 12, fontWeight: 600, background: 'var(--card2)', color: 'var(--txt2)', border: '1px solid var(--brd)', cursor: 'pointer', flexShrink: 0, transition: 'all 0.12s' }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--red)'; e.currentTarget.style.borderColor = 'var(--red)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--txt2)'; e.currentTarget.style.borderColor = 'var(--brd)' }}
+          >
+            Clear
+          </button>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+            <span style={{ fontSize: 11, color: 'var(--txt2)' }}>Reset all?</span>
+            <button onClick={clearAll} style={{ padding: '5px 11px', borderRadius: 8, fontSize: 12, fontWeight: 700, background: 'var(--red2)', color: 'var(--red)', border: '1px solid var(--red)', cursor: 'pointer' }}>Yes</button>
+            <button onClick={() => setConfirmClear(false)} style={{ padding: '5px 11px', borderRadius: 8, fontSize: 12, fontWeight: 600, background: 'var(--card2)', color: 'var(--txt2)', border: '1px solid var(--brd)', cursor: 'pointer' }}>No</button>
+          </div>
+        )}
       </div>
 
       {/* Main row: Qual form + SPIN notes */}
@@ -104,7 +138,7 @@ export default function RightPanel({ prospect, session, callSeconds }) {
             Qualification
           </div>
           <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-            <QualificationForm session={session} prospect={prospect} />
+            <QualificationForm key={resetKey} session={session} prospect={prospect} />
           </div>
         </div>
 
