@@ -34,8 +34,9 @@ export function computeQualScore(qual) {
   else if (filledTools >= 1) pts += Math.round(filledTools * 3.3)
 
   // ── SPIN notes (50 pts) — scored from written content ────────────────────
-  if ((qual.notesSituation || '').trim().length > 0) pts += 15
-  if ((qual.notesPain       || '').trim().length > 0) pts += 15
+  if ((qual.notesSituation      || '').trim().length > 0) pts += 15
+  if ((qual.notesPain           || '').trim().length > 0) pts += 15
+  if ((qual.notesImplication || '').trim().length > 0) pts += 20
 
   return Math.round(Math.min(pts, 100))
 }

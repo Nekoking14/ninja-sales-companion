@@ -3,13 +3,15 @@ import { api } from '../api/index.js'
 import { useApp } from '../context/AppContext.jsx'
 import QualificationForm from './QualificationForm.jsx'
 
-const SPIN_SECTIONS = [
-  { key: 'notesSituation', label: 'S — Situation', color: 'var(--blue)',  pts: 15, placeholder: 'What is their current state? What tools, team size, processes are in place today?' },
-  { key: 'notesPain',      label: 'P — Pain',      color: 'var(--amber)', pts: 15, placeholder: '* Operational / business pain\n- Frustration, time, money — what is causing it\n- Always ask why / what !!!' },
+const ALL_SPIN_SECTIONS = [
+  { key: 'notesSituation',      label: 'S — Situation',      color: 'var(--blue)',  pts: 15, inbound: false, placeholder: 'What is their current state? What tools, team size, processes are in place today?' },
+  { key: 'notesPain',           label: 'P — Pain',           color: 'var(--amber)', pts: 15, inbound: false, placeholder: '* Operational / business pain\n- Frustration, time, money — what is causing it\n- Always ask why / what !!!' },
+  { key: 'notesImplication', label: 'I — Implication', color: 'var(--acc)',   pts: 20, inbound: true,  placeholder: 'What happens if this stays unsolved? What is the cost, risk or impact of inaction?' },
 ]
 
 export default function RightPanel({ prospect, session, callSeconds }) {
-  const { dispatch } = useApp()
+  const { state, dispatch } = useApp()
+  const { callType } = state
 
   const initials = prospect?.name
     ? prospect.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
@@ -18,15 +20,16 @@ export default function RightPanel({ prospect, session, callSeconds }) {
   const key = `qual_${session?.id || prospect?.id || 'draft'}`
 
   // ── SPIN notes state ───────────────────────────────────────────────────────
-  const [notes, setNotes] = useState({ notesSituation: '', notesPain: '' })
+  const [notes, setNotes] = useState({ notesSituation: '', notesPain: '', notesImplication: '' })
   const [notesOpen, setNotesOpen] = useState(true)
 
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(key)) || {}
       const loaded = {
-        notesSituation: saved.notesSituation || '',
-        notesPain:      saved.notesPain      || '',
+        notesSituation:      saved.notesSituation      || '',
+        notesPain:           saved.notesPain           || '',
+        notesImplication: saved.notesImplication || '',
       }
       setNotes(loaded)
       dispatch({ type: 'SET_SPIN_NOTES', payload: loaded })
@@ -51,10 +54,11 @@ export default function RightPanel({ prospect, session, callSeconds }) {
   }
 
   const pts = {
-    notesSituation: (notes.notesSituation || '').trim().length > 0 ? 15 : 0,
-    notesPain:      (notes.notesPain      || '').trim().length > 0 ? 15 : 0,
+    notesSituation:      (notes.notesSituation      || '').trim().length > 0 ? 15 : 0,
+    notesPain:           (notes.notesPain           || '').trim().length > 0 ? 15 : 0,
+    notesImplication: callType === 'inbound' && (notes.notesImplication || '').trim().length > 0 ? 20 : 0,
   }
-  const totalPts = pts.notesSituation + pts.notesPain
+  const totalPts = pts.notesSituation + pts.notesPain + pts.notesImplication
 
   return (
     <div style={{
@@ -134,7 +138,7 @@ export default function RightPanel({ prospect, session, callSeconds }) {
               background: totalPts > 0 ? 'var(--green2)' : 'var(--card2)',
               padding: '2px 6px', borderRadius: 99, transition: 'all 0.2s'
             }}>
-              {totalPts}/30
+              {totalPts}/{callType === 'inbound' ? 50 : 30}
             </span>
             <span style={{ fontSize: 10, color: 'var(--txt3)', marginLeft: 4 }}>
               {notesOpen ? '▲' : '▼'}
@@ -144,7 +148,7 @@ export default function RightPanel({ prospect, session, callSeconds }) {
           {/* Notes sections */}
           {notesOpen && (
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', minHeight: 0 }}>
-              {SPIN_SECTIONS.map(({ key: field, label, color, pts: maxPts, placeholder }, idx) => {
+              {ALL_SPIN_SECTIONS.filter(s => !s.inbound || callType === 'inbound').map(({ key: field, label, color, pts: maxPts, placeholder }, idx) => {
                 const hasText = (notes[field] || '').trim().length > 0
                 return (
                   <div key={field} style={{

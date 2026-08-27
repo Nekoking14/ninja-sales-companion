@@ -140,6 +140,7 @@ function generateExport (session, persona) {
     'NINJAONE CALL SUMMARY',
     sep2,
     '',
+    line('Account',        q?.accountName),
     line('Persona',        q?.persona || persona || session.name),
     line('Prospect type',   q?.prospectType === 'msp' ? 'MSP' : q?.prospectType === 'it' ? 'Internal IT' : null),
     line('Endpoints',       q?.endpoints),
@@ -272,13 +273,29 @@ export default function ProspectList () {
   const [expandedData, setExpandedData] = useState(null)
   const [loadingExp,   setLoadingExp]   = useState(false)
   const [copied,       setCopied]       = useState(false)
+  const [callTypeMap,   setCallTypeMap]   = useState({})
 
   useEffect(() => { load() }, [])
 
   async function load () {
     setLoading(true)
-    try { setProspects(await api.prospects.list()) }
-    finally { setLoading(false) }
+    try {
+      const list = await api.prospects.list()
+      setProspects(list)
+      // Load callType from each prospect's latest session in parallel
+      const entries = await Promise.all(list.map(async p => {
+        try {
+          const full = await api.prospects.get(p.id)
+          const s = full.sessions?.[0]
+          if (!s) return [p.id, null]
+          const q = s.qualification_data
+            ? (typeof s.qualification_data === 'string' ? JSON.parse(s.qualification_data) : s.qualification_data)
+            : null
+          return [p.id, q?.callType || null]
+        } catch { return [p.id, null] }
+      }))
+      setCallTypeMap(Object.fromEntries(entries))
+    } finally { setLoading(false) }
   }
 
   async function continueCall (prospect) {
@@ -396,6 +413,11 @@ export default function ProspectList () {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
                         <span style={{ fontSize: 14, fontWeight: 600 }}>{p.name}</span>
+                        {callTypeMap[p.id] && (
+                          <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 99, background: callTypeMap[p.id] === 'inbound' ? 'var(--acc2)' : 'var(--blue2)', color: callTypeMap[p.id] === 'inbound' ? 'var(--acc)' : 'var(--blue)', flexShrink: 0 }}>
+                            {callTypeMap[p.id] === 'inbound' ? '📥 Inbound' : '📤 Outbound'}
+                          </span>
+                        )}
                         <span className="tag" style={{ background: color + '18', color }}>{p.company || p.role || 'Persona'}</span>
                       </div>
                       {/* Date + time ago */}
@@ -454,6 +476,11 @@ export default function ProspectList () {
                                     <span style={{ fontSize: 12, fontWeight: 600 }}>{fmtDate(sd.started_at)}</span>
                                     <span style={{ fontSize: 12, color: 'var(--txt2)', marginLeft: 10 }}>{fmtTime(sd.started_at)}</span>
                                   </div>
+                                  {qual?.callType && (
+                                    <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 99, background: qual.callType === 'inbound' ? 'var(--acc2)' : 'var(--blue2)', color: qual.callType === 'inbound' ? 'var(--acc)' : 'var(--blue)' }}>
+                                      {qual.callType === 'inbound' ? '📥 Inbound' : '📤 Outbound'}
+                                    </span>
+                                  )}
                                   {sd.duration_sec && (
                                     <span style={{ fontSize: 11, color: 'var(--txt3)', marginLeft: 8 }}>
                                       Duration: {fmtDuration(sd.duration_sec)}

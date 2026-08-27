@@ -472,6 +472,116 @@
       "notes": null,
       "created_at": "2026-08-21 13:24:02",
       "updated_at": "2026-08-21 13:24:02"
+    },
+    {
+      "id": 44,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:37:16",
+      "updated_at": "2026-08-27 12:37:16"
+    },
+    {
+      "id": 45,
+      "name": "Samsung",
+      "company": "Samsung",
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:40:07",
+      "updated_at": "2026-08-27 12:40:11"
+    },
+    {
+      "id": 46,
+      "name": "Apple",
+      "company": "Apple",
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:45:26",
+      "updated_at": "2026-08-27 12:45:37"
+    },
+    {
+      "id": 47,
+      "name": "meow",
+      "company": "meow",
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:49:29",
+      "updated_at": "2026-08-27 12:49:37"
+    },
+    {
+      "id": 48,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:54:47",
+      "updated_at": "2026-08-27 12:54:47"
+    },
+    {
+      "id": 49,
+      "name": "samunsakjd",
+      "company": "samunsakjd",
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:54:50",
+      "updated_at": "2026-08-27 12:54:53"
+    },
+    {
+      "id": 50,
+      "name": "kfc",
+      "company": "kfc",
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:55:03",
+      "updated_at": "2026-08-27 12:55:09"
+    },
+    {
+      "id": 51,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:56:29",
+      "updated_at": "2026-08-27 12:56:29"
+    },
+    {
+      "id": 52,
+      "name": "alks",
+      "company": "alks",
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 12:59:18",
+      "updated_at": "2026-08-27 12:59:28"
+    },
+    {
+      "id": 53,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-27 13:17:45",
+      "updated_at": "2026-08-27 13:17:45"
     }
   ],
   "sessions": [
@@ -818,6 +928,86 @@
       "ended_at": null,
       "duration_sec": null,
       "qualification_data": "{\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 44,
+      "prospect_id": 44,
+      "started_at": "2026-08-27 12:37:16",
+      "ended_at": "2026-08-27 12:37:23",
+      "duration_sec": 6,
+      "qualification_data": "{\"accountName\":\"Samsung\",\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 45,
+      "prospect_id": 45,
+      "started_at": "2026-08-27 12:40:07",
+      "ended_at": "2026-08-27 12:40:24",
+      "duration_sec": 17,
+      "qualification_data": "{\"accountName\":\"Samsung\",\"persona\":\"asdas\",\"prospectType\":\"it\",\"usesMsp\":\"yes\",\"mspPartner\":\"asd\",\"mspInhouse\":\"yes\",\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[\"Patching compliance gaps\",\"Reducing manual patching effort\"],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 46,
+      "prospect_id": 46,
+      "started_at": "2026-08-27 12:45:26",
+      "ended_at": "2026-08-27 12:47:00",
+      "duration_sec": 94,
+      "qualification_data": "{\"accountName\":\"Apple\",\"callType\":\"inbound\",\"persona\":\"Head of IT\",\"prospectType\":\"it\",\"usesMsp\":\"no\",\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"120391\",\"nameCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"12930\",\"mobileAndroid\":\"asd\",\"timeline\":\"1–3 months\",\"useCase\":[\"Patching compliance gaps\",\"Reducing manual patching effort\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"Action1\",\"Atera\"],\"ticketing\":[\"ARTIS\",\"Autotask\"],\"backup\":[\"Amazon AWS\",\"Ahsay\"],\"saasBackup\":[\"Amazon AWS\",\"Arcserve\"],\"remoteAccess\":[\"ConnectWise Control + Backstage\",\"Dameware\"],\"patching\":[\"Automox\",\"Chocolatey\"],\"documentation\":[],\"mdm\":[\"Addigy\"],\"networkMonitoring\":[\"Catchpoint\",\"Domotz\"],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"notesSituation\":\"aslkdhalskdasdas\",\"notesPain\":\"asdhalksdhlkasd\",\"notesImplementation\":\"asdhlashdlahskldasd\"}"
+    },
+    {
+      "id": 47,
+      "prospect_id": 47,
+      "started_at": "2026-08-27 12:49:29",
+      "ended_at": "2026-08-27 12:50:18",
+      "duration_sec": 49,
+      "qualification_data": "{\"accountName\":\"meow\",\"callType\":\"inbound\",\"persona\":\"Head of IT\",\"prospectType\":\"it\",\"usesMsp\":\"no\",\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"123123\",\"nameCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"123123\",\"mobileAndroid\":\"123123\",\"timeline\":\"1–3 months\",\"useCase\":[\"Reducing manual patching effort\",\"Vulnerability management\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"Acronis\",\"Action1\"],\"ticketing\":[\"Atera\",\"ARTIS\"],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[\"AnyDesk\",\"Avast Remote Control\"],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"notesSituation\":\"asdlkas\",\"notesPain\":\"asldknjaklsdasdasd\",\"notesImplementation\":\"aslkdjlaksdasdasd\"}"
+    },
+    {
+      "id": 48,
+      "prospect_id": 48,
+      "started_at": "2026-08-27 12:54:47",
+      "ended_at": "2026-08-27 12:54:49",
+      "duration_sec": 1,
+      "qualification_data": "{\"accountName\":\"\",\"callType\":\"outbound\",\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 49,
+      "prospect_id": 49,
+      "started_at": "2026-08-27 12:54:50",
+      "ended_at": "2026-08-27 12:54:54",
+      "duration_sec": 3,
+      "qualification_data": "{\"accountName\":\"samunsakjd\",\"callType\":\"outbound\",\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 50,
+      "prospect_id": 50,
+      "started_at": "2026-08-27 12:55:03",
+      "ended_at": "2026-08-27 12:56:27",
+      "duration_sec": 3,
+      "qualification_data": "{\"accountName\":\"kfc\",\"callType\":\"inbound\",\"persona\":\"Head of IT\",\"prospectType\":\"it\",\"usesMsp\":\"no\",\"mspPartner\":\"\",\"mspInhouse\":\"no\",\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"808000\",\"nameCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"808\",\"mobileAndroid\":\"8080\",\"timeline\":\"1–3 months\",\"useCase\":[\"Reducing manual patching effort\",\"Vulnerability management\",\"MDM\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"Acronis\"],\"ticketing\":[\"Autotask\",\"BlueFolder\"],\"backup\":[\"Ahsay\",\"AFI.ai\"],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"notesSituation\":\"alkshdlaslkdaskdhlasd\",\"notesPain\":\"lakshdlkalakshdlkhahsldk\",\"notesImplementation\":\"lkashlhaslkdhklashdllaskld\"}"
+    },
+    {
+      "id": 51,
+      "prospect_id": 51,
+      "started_at": "2026-08-27 12:56:29",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"accountName\":\"\",\"callType\":\"outbound\",\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 52,
+      "prospect_id": 52,
+      "started_at": "2026-08-27 12:59:18",
+      "ended_at": "2026-08-27 12:59:56",
+      "duration_sec": 37,
+      "qualification_data": "{\"accountName\":\"alks\",\"callType\":\"inbound\",\"persona\":\"Head of IT\",\"prospectType\":\"it\",\"usesMsp\":\"no\",\"mspPartner\":\"\",\"mspInhouse\":\"no\",\"mspInhouseWhy\":\"\",\"cloudOk\":\"yes\",\"cloudFrankfurt\":\"yes\",\"endpoints\":\"12312\",\"nameCorrect\":\"confirmed\",\"decisionMaker\":\"dm\",\"mobileIos\":\"12312\",\"mobileAndroid\":\"123123\",\"timeline\":\"1–3 months\",\"useCase\":[\"Vulnerability management\",\"Software deployment\"],\"msp\":\"\",\"tools\":{\"rmm\":[\"Acronis\",\"Atera\"],\"ticketing\":[\"Atera\",\"BMC\"],\"backup\":[],\"saasBackup\":[\"Ahsay\",\"Appassure\"],\"remoteAccess\":[],\"patching\":[\"Automox\",\"Action1\"],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]},\"notesSituation\":\"ASHDKJASHDKJ\",\"notesPain\":\"ASDHASKJDHKAS\",\"notesImplication\":\"lihlhlhSSALHDLKASD\"}"
+    },
+    {
+      "id": 53,
+      "prospect_id": 53,
+      "started_at": "2026-08-27 13:17:45",
+      "ended_at": "2026-08-27 13:20:18",
+      "duration_sec": 153,
+      "qualification_data": "{\"accountName\":\"\",\"callType\":\"outbound\",\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
     }
   ],
   "report_items": [],

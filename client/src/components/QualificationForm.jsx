@@ -34,6 +34,7 @@ const TOOL_OPTIONS = {
 }
 
 const EMPTY_QUAL = {
+  accountName: '', callType: null,
   persona: '',
   prospectType: null, usesMsp: null, mspPartner: '', mspInhouse: null, mspInhouseWhy: '',
   cloudOk: null, cloudFrankfurt: null,
@@ -79,6 +80,8 @@ function normalise(saved) {
       identity:          normTool(r.identity),
       networkHardware:   normTool(r.networkHardware),
     },
+    accountName:     saved.accountName     || '',
+    callType:        saved.callType        || null,
     persona:         saved.persona         || '',
     useCase:         Array.isArray(saved.useCase) ? saved.useCase : (saved.useCase ? [saved.useCase] : []),
     mspInhouse:      saved.mspInhouse      ?? null,
@@ -118,7 +121,8 @@ function getBasicPricingInfo(form) {
 }
 
 export default function QualificationForm({ session, prospect }) {
-  const { dispatch } = useApp()
+  const { state, dispatch } = useApp()
+  const { callType } = state
   const key = `qual_${session?.id || prospect?.id || 'draft'}`
 
   const [form, setForm] = useState(() => {
@@ -127,9 +131,14 @@ export default function QualificationForm({ session, prospect }) {
   })
 
   useEffect(() => {
-    try { setForm(normalise(JSON.parse(localStorage.getItem(key)))) }
-    catch { setForm(EMPTY_QUAL) }
-  }, [key])
+    try {
+      const saved = JSON.parse(localStorage.getItem(key))
+      const f = normalise(saved)
+      // Sync callType from AppContext into form
+      setForm({ ...f, callType: callType || f.callType || null })
+    }
+    catch { setForm({ ...EMPTY_QUAL, callType: callType || null }) }
+  }, [key, callType])
 
   useEffect(() => {
     try {
@@ -151,6 +160,23 @@ export default function QualificationForm({ session, prospect }) {
   }, [form, session?.id])
 
   const set     = (f, v) => setForm(p => ({ ...p, [f]: v }))
+
+  // When accountName changes, update the prospect record so sessions show the right name
+  const prospectDebounce = useRef(null)
+  function setAccountName(val) {
+    set('accountName', val)
+    // Update AppContext so topbar shows new name instantly
+    if (prospect?.id) {
+      dispatch({ type: 'UPDATE_PROSPECT', payload: { name: val || 'New Prospect', company: val || '' } })
+    }
+    // Sync to API with debounce
+    clearTimeout(prospectDebounce.current)
+    prospectDebounce.current = setTimeout(() => {
+      if (prospect?.id && val?.trim()) {
+        api.prospects.update(prospect.id, { name: val.trim(), company: val.trim(), callType: prospect?.callType }).catch(() => {})
+      }
+    }, 800)
+  }
   const setTool = (f, v) => setForm(p => ({ ...p, tools: { ...p.tools, [f]: v } }))
 
   function setPersona(p) {
@@ -192,6 +218,20 @@ export default function QualificationForm({ session, prospect }) {
           </div>
         </div>
       )}
+
+      {/* Account name */}
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--acc)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+          🏢 Account name
+        </div>
+        <input
+          className="input"
+          value={form.accountName}
+          onChange={e => setAccountName(e.target.value)}
+          placeholder="Company / account name…"
+          style={{ fontSize: 14, padding: '10px 12px', fontWeight: 600 }}
+        />
+      </div>
 
       {/* Combined: Persona + CRM confirmation + Prospect type */}
       <Block title="Who are you speaking with?">
