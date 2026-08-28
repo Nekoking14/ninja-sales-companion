@@ -41,7 +41,7 @@ const EMPTY_QUAL = {
   endpoints: '',
   nameCorrect: null, decisionMaker: null,
   mobileIos: '', mobileAndroid: '',
-  timeline: '', useCase: [], msp: '',
+  timeline: '', useCase: [], msp: '', mspContract: '', mspContractCustom: '',
   tools: {
     rmm: [], ticketing: [], backup: [], saasBackup: [],
     remoteAccess: [], patching: [], documentation: [],
@@ -82,6 +82,8 @@ function normalise(saved) {
     },
     accountName:     saved.accountName     || '',
     callType:        saved.callType        || null,
+    mspContract:       saved.mspContract       || '',
+    mspContractCustom: saved.mspContractCustom || '',
     persona:         saved.persona         || '',
     useCase:         Array.isArray(saved.useCase) ? saved.useCase : (saved.useCase ? [saved.useCase] : []),
     mspInhouse:      saved.mspInhouse      ?? null,
@@ -344,6 +346,34 @@ export default function QualificationForm({ session, prospect }) {
             <Label text="USE CASE — DEMO HOOK" />
             <MultiSelect value={form.useCase} onChange={v => set('useCase', v)} options={USE_CASE_OPTIONS} placeholder="Select use cases…" color="var(--acc)" />
           </div>
+          {form.prospectType === 'msp' && (
+            <div style={{ marginBottom: 10 }}>
+              <Label text="MSP CONTRACT TYPE" />
+              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>
+                {['Monthly MSP', 'Yearly MSP', 'Break-fix'].map(opt => {
+                  const active = form.mspContract === opt
+                  return (
+                    <button key={opt} type="button" onClick={() => set('mspContract', active ? '' : opt)} style={{
+                      padding: '5px 11px', borderRadius: 20, fontSize: 11,
+                      fontWeight: active ? 600 : 400,
+                      background: active ? 'var(--blue2)' : 'var(--card2)',
+                      color: active ? 'var(--blue)' : 'var(--txt2)',
+                      border: `1px solid ${active ? 'var(--blue)' : 'var(--brd2)'}`,
+                      transition: 'all 0.12s', cursor: 'pointer'
+                    }}>{opt}</button>
+                  )
+                })}
+              </div>
+              <input
+                className="input"
+                value={['Monthly MSP', 'Yearly MSP', 'Break-fix'].includes(form.mspContract) ? '' : form.mspContract}
+                onChange={e => set('mspContract', e.target.value)}
+                placeholder="Custom contract type…"
+                style={{ fontSize: 13, padding: '9px 12px' }}
+              />
+            </div>
+          )}
+
           <div>
             <Label text="TIMELINE / CONTRACT END" />
             <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 8 }}>

@@ -85,6 +85,7 @@ function generateExport (session, persona) {
     '', '',
     'QUALIFICATION',
     sep,
+    line('MSP contract',   q?.mspContract),
     line('Decision maker', statusLabel(q.decisionMaker, 'dm', 'no')),
     line('Name correct',   statusLabel(q.nameCorrect, 'confirmed', 'update')),
     line('Email correct',  statusLabel(q.emailCorrect, 'confirmed', 'update')),
@@ -188,6 +189,12 @@ function QualSummary ({ data }) {
             <span style={{ fontSize: 11, fontWeight: 600, color: q.prospectType === 'msp' ? 'var(--blue)' : 'var(--acc)' }}>
               {q.prospectType === 'msp' ? 'MSP' : 'Internal IT'}
             </span>
+          </div>
+        )}
+        {q.mspContract && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid var(--brd)' }}>
+            <span style={{ fontSize: 12, color: 'var(--txt2)' }}>MSP contract</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--blue)' }}>{q.mspContract}</span>
           </div>
         )}
         {[['Uses an MSP', q.usesMsp], ['Cloud OK', q.cloudOk], ['Frankfurt OK', q.cloudFrankfurt], ['Name correct', q.nameCorrect], ['Email correct', q.emailCorrect], ['Decision maker', q.decisionMaker]].filter(([, v]) => v).map(([l, v]) => (
