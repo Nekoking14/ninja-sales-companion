@@ -406,7 +406,7 @@ export default function QualificationForm({ session, prospect }) {
         <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.09em', color: 'var(--red)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
           ⚠ Disqualifiers — check first
         </div>
-        <Label text="CLOUD OK?" />
+        <Label text="ARE YOU OK WITH CLOUD BASED AGENT?" />
         <BtnGroup value={form.cloudOk} onChange={v => set('cloudOk', v)} options={[
           { value: 'yes', label: 'Yes — cloud fine',      bg: 'var(--green2)', color: 'var(--green)', brd: 'var(--green)' },
           { value: 'no',  label: 'No — on-prem required', bg: 'var(--red2)',   color: 'var(--red)',   brd: 'var(--red)'   }
