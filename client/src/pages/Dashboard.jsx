@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext.jsx'
 import { api } from '../api/index.js'
 import { useFrameworks } from '../hooks/useFrameworks.js'
-import { computeCallScore } from '../utils/scoring.js'
 import Topbar             from '../components/Topbar.jsx'
 import FrameworkCard      from '../components/FrameworkCard.jsx'
 import FrameworkQuickList from '../components/FrameworkQuickList.jsx'
@@ -30,19 +29,6 @@ export default function Dashboard () {
   const [reportItems, setReportItems] = useState([])
   const [notes,       setNotes]       = useState([])
   const [addedIds,    setAddedIds]    = useState(new Set())
-  const [callScore,   setCallScore]   = useState(0)
-
-  // Recompute score whenever qual form data changes (localStorage) or notes change (AppContext)
-  useEffect(() => {
-    if (!currentSession?.id && !currentProspect?.id) return
-    try {
-      const key  = `qual_${currentSession?.id || currentProspect?.id || 'draft'}`
-      const qual = JSON.parse(localStorage.getItem(key)) || {}
-      // Merge spinNotes from AppContext — updates instantly when user types
-      setCallScore(computeCallScore({ ...qual, ...spinNotes }))
-    } catch {}
-  }, [currentSession?.id, currentProspect?.id, spinNotes])
-
   useEffect(() => {
     if (!currentProspect) navigate('/', { replace: true })
   }, [currentProspect, navigate])
@@ -115,7 +101,7 @@ export default function Dashboard () {
 
   return (
     <div className="app-shell">
-      <Topbar onEndCall={handleEndCall} callScore={callScore} />
+      <Topbar onEndCall={handleEndCall} />
       <div className="body-shell">
 
         {/* ── LEFT HALF — Frameworks (50%) ── */}

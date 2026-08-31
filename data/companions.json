@@ -659,6 +659,28 @@
       "notes": null,
       "created_at": "2026-08-31 12:11:21",
       "updated_at": "2026-08-31 12:11:21"
+    },
+    {
+      "id": 61,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-31 12:18:57",
+      "updated_at": "2026-08-31 12:18:57"
+    },
+    {
+      "id": 62,
+      "name": "New Prospect",
+      "company": null,
+      "role": null,
+      "industry": null,
+      "current_tool": null,
+      "notes": null,
+      "created_at": "2026-08-31 12:31:27",
+      "updated_at": "2026-08-31 12:31:27"
     }
   ],
   "sessions": [
@@ -1141,6 +1163,22 @@
       "ended_at": null,
       "duration_sec": null,
       "qualification_data": "{\"accountName\":\"\",\"callType\":\"outbound\",\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"mspContract\":\"\",\"mspContractCustom\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 61,
+      "prospect_id": 61,
+      "started_at": "2026-08-31 12:18:57",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"accountName\":\"\",\"callType\":\"inbound\",\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"mspContract\":\"\",\"mspContractCustom\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
+    },
+    {
+      "id": 62,
+      "prospect_id": 62,
+      "started_at": "2026-08-31 12:31:27",
+      "ended_at": null,
+      "duration_sec": null,
+      "qualification_data": "{\"accountName\":\"\",\"callType\":\"inbound\",\"persona\":\"\",\"prospectType\":null,\"usesMsp\":null,\"mspPartner\":\"\",\"mspInhouse\":null,\"mspInhouseWhy\":\"\",\"cloudOk\":null,\"cloudFrankfurt\":null,\"endpoints\":\"\",\"nameCorrect\":null,\"decisionMaker\":null,\"mobileIos\":\"\",\"mobileAndroid\":\"\",\"timeline\":\"\",\"useCase\":[],\"msp\":\"\",\"mspContract\":\"\",\"mspContractCustom\":\"\",\"tools\":{\"rmm\":[],\"ticketing\":[],\"backup\":[],\"saasBackup\":[],\"remoteAccess\":[],\"patching\":[],\"documentation\":[],\"mdm\":[],\"networkMonitoring\":[],\"antivirus\":[],\"itsm\":[],\"dns\":[],\"productivity\":[],\"identity\":[],\"networkHardware\":[]}}"
     }
   ],
   "report_items": [],

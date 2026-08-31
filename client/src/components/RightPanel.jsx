@@ -70,13 +70,6 @@ export default function RightPanel({ prospect, session, callSeconds }) {
     setConfirmClear(false)
   }
 
-  const pts = {
-    notesSituation:      (notes.notesSituation      || '').trim().length > 0 ? 15 : 0,
-    notesPain:           (notes.notesPain           || '').trim().length > 0 ? 15 : 0,
-    notesImplication: callType === 'inbound' && (notes.notesImplication || '').trim().length > 0 ? 20 : 0,
-  }
-  const totalPts = pts.notesSituation + pts.notesPain + pts.notesImplication
-
   return (
     <div style={{
       flex: 1,
@@ -166,14 +159,7 @@ export default function RightPanel({ prospect, session, callSeconds }) {
             <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--txt3)', flex: 1, textAlign: 'left' }}>
               SPIN Notes
             </span>
-            <span style={{
-              fontSize: 10, fontWeight: 700,
-              color: totalPts > 0 ? 'var(--green)' : 'var(--txt3)',
-              background: totalPts > 0 ? 'var(--green2)' : 'var(--card2)',
-              padding: '2px 6px', borderRadius: 99, transition: 'all 0.2s'
-            }}>
-              {totalPts}/{callType === 'inbound' ? 50 : 30}
-            </span>
+            
             <span style={{ fontSize: 10, color: 'var(--txt3)', marginLeft: 4 }}>
               {notesOpen ? '▲' : '▼'}
             </span>
@@ -192,16 +178,7 @@ export default function RightPanel({ prospect, session, callSeconds }) {
                     minHeight: 0,
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6, flexShrink: 0 }}>
-                      <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color }}>{label}</span>
-                      <span style={{
-                        fontSize: 9, fontWeight: 700,
-                        color: hasText ? 'var(--green)' : 'var(--txt3)',
-                        background: hasText ? 'var(--green2)' : 'var(--card2)',
-                        padding: '1px 6px', borderRadius: 99, transition: 'all 0.2s'
-                      }}>
-                        {hasText ? `+${maxPts}` : `+${maxPts} pts`}
-                      </span>
-                    </div>
+                      </div>
                     <textarea
                       value={notes[field] || ''}
                       onChange={e => handleNoteChange(field, e.target.value)}
